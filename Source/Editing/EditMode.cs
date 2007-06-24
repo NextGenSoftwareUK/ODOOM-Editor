@@ -28,6 +28,7 @@ using CodeImp.DoomBuilder.Interface;
 using CodeImp.DoomBuilder.IO;
 using CodeImp.DoomBuilder.Map;
 using CodeImp.DoomBuilder.Rendering;
+using System.Diagnostics;
 
 #endregion
 
@@ -81,6 +82,31 @@ namespace CodeImp.DoomBuilder.Editing
 			}
 		}
 
+		#endregion
+
+		#region ================== Static Methods
+
+		// This creates an instance of a specific mode
+		public static EditMode Create(Type modetype, object[] args)
+		{
+			try
+			{
+				// Create new mode
+				return (EditMode)General.ThisAssembly.CreateInstance(modetype.FullName, false,
+					BindingFlags.Default, null, args, CultureInfo.CurrentCulture, new object[0]);
+			}
+			// Catch errors
+			catch(TargetInvocationException e)
+			{
+				// Throw the actual exception
+				Debug.WriteLine(DateTime.Now.ToShortDateString() + " " + DateTime.Now.ToShortTimeString());
+				Debug.WriteLine(e.InnerException.Source + " throws " + e.InnerException.GetType().Name + ":");
+				Debug.WriteLine(e.InnerException.Message);
+				Debug.WriteLine(e.InnerException.StackTrace);
+				throw e.InnerException;
+			}
+		}
+		
 		#endregion
 
 		#region ================== Methods
