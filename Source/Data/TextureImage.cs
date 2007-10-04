@@ -34,6 +34,8 @@ namespace CodeImp.DoomBuilder.Data
 
 		#region ================== Variables
 
+		private List<TexturePatch> patches;
+
 		#endregion
 
 		#region ================== Properties
@@ -43,10 +45,12 @@ namespace CodeImp.DoomBuilder.Data
 		#region ================== Constructor / Disposer
 
 		// Constructor
-		public TextureImage()
+		public TextureImage(string name)
 		{
 			// Initialize
-
+			this.patches = new List<TexturePatch>();
+			SetName(name);
+			
 			// We have no destructor
 			GC.SuppressFinalize(this);
 		}
@@ -68,6 +72,13 @@ namespace CodeImp.DoomBuilder.Data
 
 		#region ================== Methods
 
+		// This adds a patch to the texture
+		public void AddPatch(TexturePatch patch)
+		{
+			// Add it
+			patches.Add(patch);
+		}
+		
 		// This loads the image
 		public override void LoadImage()
 		{
