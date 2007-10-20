@@ -66,6 +66,12 @@ namespace CodeImp.DoomBuilder.Rendering
 
 		#region ================== Methods
 
+		// This returns a PixelColor with adjusted alpha
+		public PixelColor WithAlpha(byte a)
+		{
+			return new PixelColor(color, a);
+		}
+		
 		// Equal?
 		public bool Equals(ColorSetting other)
 		{
