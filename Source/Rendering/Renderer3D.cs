@@ -49,7 +49,7 @@ namespace CodeImp.DoomBuilder.Rendering
 		#region ================== Constructor / Disposer
 
 		// Constructor
-		public Renderer3D(D3DGraphics graphics) : base(graphics)
+		public Renderer3D(D3DDevice graphics) : base(graphics)
 		{
 			// Initialize
 
