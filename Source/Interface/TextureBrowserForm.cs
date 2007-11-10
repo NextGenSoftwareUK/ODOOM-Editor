@@ -79,12 +79,10 @@ namespace CodeImp.DoomBuilder.Interface
 				foreach(Sector s in General.Map.Map.Sectors)
 				{
 					// Add floor flat
-					if(s.FloorTexture.Length > 0)
-						if(!useditems.ContainsKey(s.LongFloorTexture)) useditems.Add(s.LongFloorTexture, 0);
+					if(!useditems.ContainsKey(s.LongFloorTexture)) useditems.Add(s.LongFloorTexture, 0);
 
 					// Add ceil flat
-					if(s.CeilTexture.Length > 0)
-						if(!useditems.ContainsKey(s.LongCeilTexture)) useditems.Add(s.LongCeilTexture, 0);
+					if(!useditems.ContainsKey(s.LongCeilTexture)) useditems.Add(s.LongCeilTexture, 0);
 				}
 			}
 			
@@ -119,6 +117,7 @@ namespace CodeImp.DoomBuilder.Interface
 		{
 			// Set selected name and close
 			selectedname = browser.SelectedItem.Text;
+			DialogResult = DialogResult.OK;
 			this.Close();
 		}
 
@@ -127,6 +126,7 @@ namespace CodeImp.DoomBuilder.Interface
 		{
 			// No selection, close
 			selectedname = "";
+			DialogResult = DialogResult.Cancel;
 			this.Close();
 		}
 
@@ -199,6 +199,23 @@ namespace CodeImp.DoomBuilder.Interface
 			General.Settings.WriteSetting("browserwindow.sizewidth", lastsize.Width);
 			General.Settings.WriteSetting("browserwindow.sizeheight", lastsize.Height);
 			General.Settings.WriteSetting("browserwindow.windowstate", windowstate);
+		}
+
+		// Static method to browse for texture
+		// Returns null when cancelled.
+		public static string Browse(IWin32Window parent, string select)
+		{
+			TextureBrowserForm browser = new TextureBrowserForm();
+			if(browser.ShowDialog(parent) == DialogResult.OK)
+			{
+				// Return result
+				return browser.SelectedName;
+			}
+			else
+			{
+				// Cancelled
+				return null;
+			}
 		}
 	}
 }
