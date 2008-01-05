@@ -87,7 +87,7 @@ namespace CodeImp.DoomBuilder.Rendering
 			if(!isdisposed)
 			{
 				// Clean up
-				texture1.Dispose();
+				if(texture1 != null) texture1.Dispose();
 
 				// Done
 				base.Dispose();

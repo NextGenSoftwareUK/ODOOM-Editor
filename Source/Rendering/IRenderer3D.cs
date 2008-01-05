@@ -41,7 +41,11 @@ namespace CodeImp.DoomBuilder.Rendering
 {
 	public interface IRenderer3D
 	{
-		//void Finish();
-		//bool Start();
+		void Finish();
+		bool Start();
+		void StartGeometry();
+		void FinishGeometry();
+		void RenderGeometry(VisualSector s);
+		void PositionAndLookAt(Vector3D pos, Vector3D lookat);
 	}
 }

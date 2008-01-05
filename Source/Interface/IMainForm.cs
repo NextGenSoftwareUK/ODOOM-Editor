@@ -59,6 +59,10 @@ namespace CodeImp.DoomBuilder.Interface
 		void ShowThingInfo(Thing t);
 		void ShowVertexInfo(Vertex v);
 		void HideInfo();
+		void UpdateCoordinates(Vector2D coords);
 		bool Focus();
+		void SetProcessorState(bool on);
+		void StartExclusiveMouseInput();
+		void StopExclusiveMouseInput();
 	}
 }
