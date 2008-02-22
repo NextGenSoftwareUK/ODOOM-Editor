@@ -459,7 +459,7 @@ namespace CodeImp.DoomBuilder.Interface
 			this.Opacity = 0;
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-			this.Text = "ActionBrowserForm";
+			this.Text = "Edit Action";
 			groupBox1.ResumeLayout(false);
 			groupBox1.PerformLayout();
 			groupBox2.ResumeLayout(false);
