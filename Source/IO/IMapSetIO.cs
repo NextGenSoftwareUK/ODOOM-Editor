@@ -34,5 +34,6 @@ namespace CodeImp.DoomBuilder.IO
 	{
 		int MaxSidedefs { get; }
 		int VertexDecimals { get; }
+		string DecimalsFormat { get; }
 	}
 }
