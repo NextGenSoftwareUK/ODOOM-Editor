@@ -58,7 +58,7 @@ namespace CodeImp.DoomBuilder.Types
 			// Already an int or float?
 			if((value is int) || (value is float))
 			{
-				// Return the same
+				// Set directly
 				this.value = (int)value;
 			}
 			else
@@ -75,6 +75,11 @@ namespace CodeImp.DoomBuilder.Types
 			}
 		}
 
+		public override object GetValue()
+		{
+			return this.value;
+		}
+		
 		public override int GetIntValue()
 		{
 			return this.value;

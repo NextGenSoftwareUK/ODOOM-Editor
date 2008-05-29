@@ -53,6 +53,18 @@ namespace CodeImp.DoomBuilder.Types
 			this.value = value;
 		}
 
+		public override object GetValue()
+		{
+			return this.value.ToString();
+		}
+
+		public override int GetIntValue()
+		{
+			int result;
+			if(int.TryParse(this.value.ToString(), out result)) return result;
+				else return 0;
+		}
+		
 		public override string GetStringValue()
 		{
 			return this.value.ToString();
