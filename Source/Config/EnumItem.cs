@@ -31,7 +31,7 @@ using System.Windows.Forms;
 
 namespace CodeImp.DoomBuilder.Config
 {
-	public class EnumItem : INumberedTitle
+	public class EnumItem
 	{
 		#region ================== Constants
 
@@ -39,14 +39,14 @@ namespace CodeImp.DoomBuilder.Config
 
 		#region ================== Variables
 
-		private int index;
+		private string value;
 		private string title;
 
 		#endregion
 
 		#region ================== Properties
 
-		public int Index { get { return index; } }
+		public string Value { get { return value; } }
 		public string Title { get { return title; } }
 
 		#endregion
@@ -54,10 +54,10 @@ namespace CodeImp.DoomBuilder.Config
 		#region ================== Constructor
 
 		// Constructor
-		public EnumItem(int index, string title)
+		public EnumItem(string value, string title)
 		{
 			// Initialize
-			this.index = index;
+			this.value = value;
 			this.title = title;
 		}
 		
@@ -71,6 +71,16 @@ namespace CodeImp.DoomBuilder.Config
 			return title;
 		}
 
+		// This returns the value as int
+		public int GetIntValue()
+		{
+			int result;
+			if(int.TryParse(value, NumberStyles.Integer, CultureInfo.InvariantCulture, out result))
+				return result;
+			else
+				return 0;
+		}
+		
 		#endregion
 	}
 }
