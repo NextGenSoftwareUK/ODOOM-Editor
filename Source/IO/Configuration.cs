@@ -904,7 +904,7 @@ namespace CodeImp.DoomBuilder.IO
 						if(ValidateKeyword(val.Trim(), line))
 						{
 							// Add to the struct depending on the keyword
-							switch(val.Trim().ToLower())
+							switch(val.Trim().ToLowerInvariant())
 							{
 								case "true":
 									
