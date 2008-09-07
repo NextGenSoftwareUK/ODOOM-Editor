@@ -31,66 +31,43 @@ using CodeImp.DoomBuilder.Map;
 
 namespace CodeImp.DoomBuilder.Geometry
 {
-	public class Polygon : LinkedList<EarClipVertex>
+	public class Polygon : List<Vector2D>
 	{
 		#region ================== Variables
-
-		// Tree variables
-		private List<Polygon> children;
-		private bool inner;
 
 		#endregion
 
 		#region ================== Properties
-
-		public List<Polygon> Children { get { return children; } }
-		public bool Inner { get { return inner; } set { inner = value; } }
 
 		#endregion
 
 		#region ================== Constructors
 
 		// Constructor
-		internal Polygon()
+		public Polygon()
 		{
 			// Initialize
-			children = new List<Polygon>();
-		}
-
-		// Constructor
-		internal Polygon(Polygon p, EarClipVertex add) : base(p)
-		{
-			// Initialize
-			base.AddLast(add);
-			children = new List<Polygon>();
 		}
 
 		#endregion
-		
+
 		#region ================== Methods
 
-		// This merges a polygon into this one
-		public void Add(Polygon p)
-		{
-			// Initialize
-			foreach(EarClipVertex v in p) base.AddLast(v);
-		}
-		
 		// Point inside the polygon?
 		// See: http://local.wasp.uwa.edu.au/~pbourke/geometry/insidepoly/
 		public bool Intersect(Vector2D p)
 		{
 			float miny, maxy, maxx, xint;
-			Vector2D v1 = base.Last.Value.Position;
+			Vector2D v1 = base[base.Count - 1];
 			Vector2D v2;
-			LinkedListNode<EarClipVertex> n = base.First;
+			int index = 0;
 			uint c = 0;
-			
+
 			// Go for all vertices
-			while(n != null)
+			while(index < base.Count)
 			{
 				// Get next vertex
-				v2 = n.Value.Position;
+				v2 = base[index];
 
 				// Determine min/max values
 				miny = Math.Min(v1.y, v2.y);
@@ -109,57 +86,16 @@ namespace CodeImp.DoomBuilder.Geometry
 						}
 					}
 				}
-				
+
 				// Move to next
 				v1 = v2;
-				n = n.Next;
+				index++;
 			}
-
-			// Inside this polygon?
-			if((c & 0x00000001UL) != 0)
-			{
-				// Check if not inside the children
-				foreach(Polygon child in children)
-				{
-					// Inside this child? Then it is not inside this polygon.
-					if(child.Intersect(p)) return false;
-				}
-
-				// Inside polygon!
-				return true;
-			}
-			else
-			{
-				// Not inside the polygon
-				return false;
-			}
-		}
-		
-		// This inserts a polygon if it is a child of this one
-		public bool InsertChild(Polygon p)
-		{
-			// Polygon must have at least 1 vertex
-			if(p.Count == 0) return false;
 			
-			// Check if it can be inserted at a lower level
-			foreach(Polygon child in children)
-			{
-				if(child.InsertChild(p)) return true;
-			}
-
-			// Check if it can be inserted here
-			if(this.Intersect(p.First.Value.Position))
-			{
-				// Make the polygon the inverse of this one
-				p.Inner = !inner;
-				children.Add(p);
-				return true;
-			}
-
-			// Can't insert it as a child
-			return false;
+			// Inside this polygon?
+			return (c & 0x00000001UL) != 0;
 		}
-		
+
 		#endregion
 	}
 }
