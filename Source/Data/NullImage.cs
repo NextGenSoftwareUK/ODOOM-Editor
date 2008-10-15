@@ -52,7 +52,7 @@ namespace CodeImp.DoomBuilder.Data
 		#region ================== Methods
 		
 		// Dont do anything
-		public override void LoadImage() { bitmap = CodeImp.DoomBuilder.Properties.Resources.UnknownImage; }
+		protected override void LocalLoadImage() { bitmap = CodeImp.DoomBuilder.Properties.Resources.UnknownImage; }
 		internal override void CreateTexture() { }
 
 		#endregion
