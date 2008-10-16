@@ -40,15 +40,19 @@ namespace CodeImp.DoomBuilder.Map
 
 		// Univeral fields
 		private UniFields fields;
-
+		
+		// Marking
+		protected bool marked;
+		
 		// Disposing
 		protected bool isdisposed = false;
 		
 		#endregion
-
+		
 		#region ================== Properties
-
+		
 		public UniFields Fields { get { return fields; } }
+		public bool Marked { get { return marked; } set { marked = value; } }
 		public bool IsDisposed { get { return isdisposed; } }
 		
 		#endregion
@@ -77,10 +81,10 @@ namespace CodeImp.DoomBuilder.Map
 
 		#endregion
 
-		#region ================== Fields
-		
-		// This copies fields to any other element
-		protected void CopyFieldsTo(MapElement element)
+		#region ================== Methods
+
+		// This copies properties to any other element
+		public void CopyPropertiesTo(MapElement element)
 		{
 			element.fields = new UniFields(this.fields);
 		}
