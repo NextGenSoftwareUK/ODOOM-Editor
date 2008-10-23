@@ -76,19 +76,17 @@ namespace CodeImp.DoomBuilder.BuilderModes
 		// This submits a result to show in the results list
 		protected void SubmitResult(ErrorResult result)
 		{
-			
+			BuilderPlug.Me.ErrorCheckForm.SubmitResult(result);
 		}
 		
 		// This reports a change in progress
-		protected void ShowProgress(int percent)
+		protected void AddProgress(int amount)
 		{
-			// Any change?
-			if(percent > lastprogress)
-			{
-				if(percent < 0) percent = 0;
-				if(percent > totalprogress) percent = totalprogress;
-				lastprogress = percent;
-			}
+			// Make changes
+			if(amount < 0) amount = 0;
+			if((lastprogress + amount) > totalprogress) throw new InvalidOperationException("Cannot exceed total progress amount!");
+			lastprogress += amount;
+			BuilderPlug.Me.ErrorCheckForm.AddProgressValue(amount);
 		}
 		
 		// This sets the total progress
