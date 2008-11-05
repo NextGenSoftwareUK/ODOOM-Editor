@@ -36,7 +36,6 @@ namespace CodeImp.DoomBuilder.Windows
 		public ScriptEditTestForm()
 		{
 			InitializeComponent();
-			script.SetupStyles(General.ScriptConfigs["zdoom_acs.cfg"]);
 		}
 	}
 }
