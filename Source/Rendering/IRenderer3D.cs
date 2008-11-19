@@ -33,6 +33,7 @@ using CodeImp.DoomBuilder.Geometry;
 using System.Drawing.Imaging;
 using CodeImp.DoomBuilder.Data;
 using CodeImp.DoomBuilder.Editing;
+using CodeImp.DoomBuilder.VisualModes;
 
 #endregion
 
