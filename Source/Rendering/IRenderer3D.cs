@@ -41,11 +41,19 @@ namespace CodeImp.DoomBuilder.Rendering
 {
 	public interface IRenderer3D
 	{
+		// Properties
+		ProjectedFrustum2D Frustum2D { get; }
+
+		// General methods
+		void PositionAndLookAt(Vector3D pos, Vector3D lookat);
+		
+		// Presenting methods
 		void Finish();
 		bool Start();
 		void StartGeometry();
 		void FinishGeometry();
-		void RenderGeometry(VisualSector s);
-		void PositionAndLookAt(Vector3D pos, Vector3D lookat);
+
+		// Rendering methods
+		void RenderGeometry(VisualGeometry g);
 	}
 }
