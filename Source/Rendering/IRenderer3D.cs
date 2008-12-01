@@ -54,6 +54,6 @@ namespace CodeImp.DoomBuilder.Rendering
 		void FinishGeometry();
 
 		// Rendering methods
-		void RenderGeometry(VisualGeometry g);
+		void AddGeometry(VisualGeometry g);
 	}
 }
