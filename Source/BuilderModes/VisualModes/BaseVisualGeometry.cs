@@ -36,7 +36,7 @@ using CodeImp.DoomBuilder.VisualModes;
 
 namespace CodeImp.DoomBuilder.BuilderModes
 {
-	internal class BaseVisualGeometry : VisualGeometry
+	internal abstract class BaseVisualGeometry : VisualGeometry
 	{
 		#region ================== Constants
 
@@ -50,22 +50,25 @@ namespace CodeImp.DoomBuilder.BuilderModes
 
 		#endregion
 
-		#region ================== Constructor / Destructor
+		#region ================== Constructor / Setup
 
 		// Constructor
-		public BaseVisualGeometry() : base()
+		public BaseVisualGeometry(VisualSector vs) : base(vs)
 		{
 		}
-
+		
 		// Constructor for sidedefs
-		public BaseVisualGeometry(Sidedef sd) : base(sd)
+		public BaseVisualGeometry(VisualSector vs, Sidedef sd) : base(vs, sd)
 		{
 		}
+		
+		// This is for setting up new geometry
+		public abstract bool Setup();
 
 		#endregion
 
 		#region ================== Methods
-
+		
 		#endregion
 
 		#region ================== Events
