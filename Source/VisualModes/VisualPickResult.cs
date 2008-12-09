@@ -41,7 +41,7 @@ namespace CodeImp.DoomBuilder.VisualModes
 	public struct VisualPickResult
 	{
 		// Members
-		public VisualGeometry geometry;
+		public IVisualPickable picked;
 		public float u_ray;
 		public Vector3D hitpos;
 	}
