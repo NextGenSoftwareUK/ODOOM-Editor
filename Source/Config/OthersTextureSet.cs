@@ -37,7 +37,7 @@ namespace CodeImp.DoomBuilder.Config
 	{
 		#region ================== Constants
 		
-		public const string NAME = "Other";
+		public const string NAME = "Others";
 		
 		#endregion
 
