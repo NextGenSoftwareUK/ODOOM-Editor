@@ -45,6 +45,7 @@ namespace CodeImp.DoomBuilder.Types
 		SectorTag = 13,
 		ThingTag = 14,
 		LinedefTag = 15,
-		EnumStrings = 16
+		EnumStrings = 16,
+		AngleDegreesFloat = 17
 	}
 }
