@@ -81,6 +81,10 @@ namespace CodeImp.DoomBuilder.BuilderModes
 		{
 			renderer.PlotLinedef(line1, General.Colors.Selection);
 			renderer.PlotLinedef(line2, General.Colors.Selection);
+			renderer.PlotVertex(line1.Start, ColorCollection.VERTICES);
+			renderer.PlotVertex(line1.End, ColorCollection.VERTICES);
+			renderer.PlotVertex(line2.Start, ColorCollection.VERTICES);
+			renderer.PlotVertex(line2.End, ColorCollection.VERTICES);
 		}
 		
 		#endregion
