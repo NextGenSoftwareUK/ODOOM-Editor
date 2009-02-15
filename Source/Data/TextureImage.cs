@@ -74,7 +74,6 @@ namespace CodeImp.DoomBuilder.Data
 		// This loads the image
 		protected override void LocalLoadImage()
 		{
-			uint datalength = (uint)(width * height * sizeof(PixelColor));
 			IImageReader reader;
 			BitmapData bitmapdata = null;
 			MemoryStream mem;
