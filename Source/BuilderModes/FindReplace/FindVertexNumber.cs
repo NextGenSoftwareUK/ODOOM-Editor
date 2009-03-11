@@ -36,7 +36,7 @@ using CodeImp.DoomBuilder.Editing;
 
 namespace CodeImp.DoomBuilder.BuilderModes
 {
-	[FindReplace("Vertex by Number", BrowseButton = false, Replacable = false)]
+	[FindReplace("Vertex Index", BrowseButton = false, Replacable = false)]
 	internal class FindVertexNumber : FindReplaceType
 	{
 		#region ================== Constants
