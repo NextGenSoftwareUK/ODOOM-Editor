@@ -118,7 +118,7 @@ namespace CodeImp.DoomBuilder.BuilderModes
 					if(replacewith != null) sd.SetTextureMid(replacewith);
 					objs.Add(new FindReplaceObject(sd, "Sidedef " + sd.GetIndex() + " (" + side + ", middle)"));
 				}
-
+				
 				if(sd.LongLowTexture == longfind)
 				{
 					// Replace and add to list

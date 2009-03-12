@@ -121,7 +121,7 @@ namespace CodeImp.DoomBuilder.BuilderModes
 					if(t.Action == findaction)
 					{
 						// Replace
-						if(replacewith != null) t.Action = findaction;
+						if(replacewith != null) t.Action = replaceaction;
 
 						// Add to list
 						ThingTypeInfo ti = General.Map.Data.GetThingInfo(t.Type);
