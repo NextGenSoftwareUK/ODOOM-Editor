@@ -50,7 +50,7 @@ namespace CodeImp.DoomBuilder.BuilderModes
 			this.viewobjects.Add(s);
 			
 			string objname = ceiling ? "ceiling" : "floor";
-			this.description = "This sector " + objname + " uses an unknown flat. This could be the result of missing resources, or a mistyped flat name. Click the Add Default Flat button to use a known flat instead.";
+			this.description = "This sector's " + objname + " uses an unknown flat. This could be the result of missing resources, or a mistyped flat name. Click the 'Add Default Flat' button to use a known flat instead.";
 		}
 		
 		#endregion
