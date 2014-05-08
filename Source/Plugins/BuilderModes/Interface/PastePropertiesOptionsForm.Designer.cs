@@ -49,8 +49,7 @@
 			// 
 			// tabControl
 			// 
-			this.tabControl.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-						| System.Windows.Forms.AnchorStyles.Left)
+			this.tabControl.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
 						| System.Windows.Forms.AnchorStyles.Right)));
 			this.tabControl.Controls.Add(this.sectors);
 			this.tabControl.Controls.Add(this.linedefs);
@@ -91,7 +90,7 @@
 			this.linedefs.Location = new System.Drawing.Point(4, 23);
 			this.linedefs.Name = "linedefs";
 			this.linedefs.Padding = new System.Windows.Forms.Padding(3);
-			this.linedefs.Size = new System.Drawing.Size(258, 182);
+			this.linedefs.Size = new System.Drawing.Size(258, 100);
 			this.linedefs.TabIndex = 1;
 			this.linedefs.Text = "Linedefs";
 			this.linedefs.UseVisualStyleBackColor = true;
@@ -103,7 +102,7 @@
 			this.lineflags.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.lineflags.Location = new System.Drawing.Point(3, 3);
 			this.lineflags.Name = "lineflags";
-			this.lineflags.Size = new System.Drawing.Size(252, 176);
+			this.lineflags.Size = new System.Drawing.Size(252, 94);
 			this.lineflags.TabIndex = 3;
 			this.lineflags.VerticalSpacing = 1;
 			// 
@@ -113,7 +112,7 @@
 			this.sidedefs.Location = new System.Drawing.Point(4, 23);
 			this.sidedefs.Name = "sidedefs";
 			this.sidedefs.Padding = new System.Windows.Forms.Padding(3);
-			this.sidedefs.Size = new System.Drawing.Size(258, 182);
+			this.sidedefs.Size = new System.Drawing.Size(258, 100);
 			this.sidedefs.TabIndex = 2;
 			this.sidedefs.Text = "Sidedefs";
 			this.sidedefs.UseVisualStyleBackColor = true;
@@ -125,7 +124,7 @@
 			this.sideflags.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.sideflags.Location = new System.Drawing.Point(3, 3);
 			this.sideflags.Name = "sideflags";
-			this.sideflags.Size = new System.Drawing.Size(252, 176);
+			this.sideflags.Size = new System.Drawing.Size(252, 94);
 			this.sideflags.TabIndex = 2;
 			this.sideflags.VerticalSpacing = 1;
 			// 
@@ -135,7 +134,7 @@
 			this.things.Location = new System.Drawing.Point(4, 23);
 			this.things.Name = "things";
 			this.things.Padding = new System.Windows.Forms.Padding(3);
-			this.things.Size = new System.Drawing.Size(258, 182);
+			this.things.Size = new System.Drawing.Size(258, 100);
 			this.things.TabIndex = 3;
 			this.things.Text = "Things";
 			this.things.UseVisualStyleBackColor = true;
@@ -147,7 +146,7 @@
 			this.thingflags.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.thingflags.Location = new System.Drawing.Point(3, 3);
 			this.thingflags.Name = "thingflags";
-			this.thingflags.Size = new System.Drawing.Size(252, 176);
+			this.thingflags.Size = new System.Drawing.Size(252, 94);
 			this.thingflags.TabIndex = 2;
 			this.thingflags.VerticalSpacing = 1;
 			// 
@@ -157,7 +156,7 @@
 			this.vertices.Location = new System.Drawing.Point(4, 23);
 			this.vertices.Name = "vertices";
 			this.vertices.Padding = new System.Windows.Forms.Padding(3);
-			this.vertices.Size = new System.Drawing.Size(258, 182);
+			this.vertices.Size = new System.Drawing.Size(258, 100);
 			this.vertices.TabIndex = 4;
 			this.vertices.Text = "Vertices";
 			this.vertices.UseVisualStyleBackColor = true;
@@ -169,7 +168,7 @@
 			this.vertexflags.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.vertexflags.Location = new System.Drawing.Point(3, 3);
 			this.vertexflags.Name = "vertexflags";
-			this.vertexflags.Size = new System.Drawing.Size(252, 176);
+			this.vertexflags.Size = new System.Drawing.Size(252, 94);
 			this.vertexflags.TabIndex = 1;
 			this.vertexflags.VerticalSpacing = 1;
 			// 
@@ -177,7 +176,7 @@
 			// 
 			this.cancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.cancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.cancel.Location = new System.Drawing.Point(202, 146);
+			this.cancel.Location = new System.Drawing.Point(122, 144);
 			this.cancel.Name = "cancel";
 			this.cancel.Size = new System.Drawing.Size(75, 23);
 			this.cancel.TabIndex = 0;
@@ -188,7 +187,7 @@
 			// apply
 			// 
 			this.apply.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.apply.Location = new System.Drawing.Point(121, 146);
+			this.apply.Location = new System.Drawing.Point(203, 144);
 			this.apply.Name = "apply";
 			this.apply.Size = new System.Drawing.Size(75, 23);
 			this.apply.TabIndex = 1;
@@ -199,11 +198,11 @@
 			// enableall
 			// 
 			this.enableall.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.enableall.Location = new System.Drawing.Point(10, 146);
+			this.enableall.Location = new System.Drawing.Point(11, 144);
 			this.enableall.Name = "enableall";
 			this.enableall.Size = new System.Drawing.Size(70, 23);
 			this.enableall.TabIndex = 2;
-			this.enableall.Text = "Enable All";
+			this.enableall.Text = "Toggle All";
 			this.enableall.UseVisualStyleBackColor = true;
 			this.enableall.Click += new System.EventHandler(this.enableall_Click);
 			// 
@@ -213,7 +212,7 @@
 			this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
 			this.CancelButton = this.cancel;
-			this.ClientSize = new System.Drawing.Size(290, 176);
+			this.ClientSize = new System.Drawing.Size(290, 171);
 			this.Controls.Add(this.enableall);
 			this.Controls.Add(this.apply);
 			this.Controls.Add(this.cancel);
@@ -222,8 +221,8 @@
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
 			this.Name = "PastePropertiesOptionsForm";
 			this.ShowInTaskbar = false;
-			this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
 			this.Text = "Paste Properties Options";
+			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.PastePropertiesOptionsForm_FormClosing);
 			this.tabControl.ResumeLayout(false);
 			this.sectors.ResumeLayout(false);
 			this.linedefs.ResumeLayout(false);
