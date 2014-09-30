@@ -6,7 +6,8 @@ using CodeImp.DoomBuilder.Rendering;
 
 #endregion
 
-namespace CodeImp.DoomBuilder.BuilderModes.ErrorChecks {
+namespace CodeImp.DoomBuilder.BuilderModes
+{
 	public class ResultUnknownThing : ErrorResult
 	{
 
