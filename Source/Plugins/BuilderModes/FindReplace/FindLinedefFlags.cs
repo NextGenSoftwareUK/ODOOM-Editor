@@ -16,18 +16,19 @@
 
 #region ================== Namespaces
 
+using System;
 using System.Collections.Generic;
-using System.Windows.Forms;
-using CodeImp.DoomBuilder.Windows;
-using CodeImp.DoomBuilder.Map;
 using System.Drawing;
+using System.Windows.Forms;
 using CodeImp.DoomBuilder.Config;
+using CodeImp.DoomBuilder.Map;
+using CodeImp.DoomBuilder.Windows;
 
 #endregion
 
 namespace CodeImp.DoomBuilder.BuilderModes
 {
-	[FindReplace("Linedef Flags", BrowseButton = true, Replacable = false)]
+	[FindReplace("Linedef Flags", BrowseButton = true)]
 	internal class FindLinedefFlags : BaseFindLinedef
 	{
 		#region ================== Constants
@@ -56,16 +57,45 @@ namespace CodeImp.DoomBuilder.BuilderModes
 			return FlagsForm.ShowDialog(Form.ActiveForm, initialvalue, General.Map.Config.LinedefFlags);
 		}
 
-
 		// This is called to perform a search (and replace)
 		// Returns a list of items to show in the results list
 		// replacewith is null when not replacing
-		public override FindReplaceObject[] Find(string value, bool withinselection, string replacewith, bool keepselection)
+		public override FindReplaceObject[] Find(string value, bool withinselection, bool replace, string replacewith, bool keepselection)
 		{
 			List<FindReplaceObject> objs = new List<FindReplaceObject>();
 
 			// Where to search?
 			ICollection<Linedef> list = withinselection ? General.Map.Map.GetSelectedLinedefs(true) : General.Map.Map.Linedefs;
+
+			// Find what? (mxd)
+			List<string> findflagslist = new List<string>();
+			foreach(string flag in value.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries)) 
+			{
+				string f = flag.Trim();
+				if(General.Map.Config.LinedefFlags.ContainsKey(f)) findflagslist.Add(f);
+			}
+			if(findflagslist.Count == 0) 
+			{
+				MessageBox.Show("Invalid value for this search type!", "Find and Replace", MessageBoxButtons.OK, MessageBoxIcon.Error);
+				return objs.ToArray();
+			}
+
+			// Replace with what? (mxd)
+			List<string> replaceflagslist = new List<string>();
+			if(replace) 
+			{
+				string[] replaceflags = replacewith.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+				foreach(string flag in replaceflags) 
+				{
+					string f = flag.Trim();
+					if (!General.Map.Config.LinedefFlags.ContainsKey(f))
+					{
+						MessageBox.Show("Invalid replace value '" + f + "' for this search type!", "Find and Replace", MessageBoxButtons.OK, MessageBoxIcon.Error);
+						return objs.ToArray();
+					}
+					replaceflagslist.Add(f);
+				}
+			}
 
 			// Go for all linedefs
 			foreach (Linedef l in list)
@@ -73,12 +103,10 @@ namespace CodeImp.DoomBuilder.BuilderModes
 				bool match = true;
 
 				// Parse the value string...
-				foreach (string s in value.Split(','))
+				foreach(string flag in findflagslist)
 				{
-					string str = s.Trim();
-
 					// ... and check if the flags don't match
-					if (General.Map.Config.LinedefFlags.ContainsKey(str) && !l.IsFlagSet(str))
+					if(!l.IsFlagSet(flag))
 					{
 						match = false;
 						break;
@@ -88,6 +116,16 @@ namespace CodeImp.DoomBuilder.BuilderModes
 				// Flags matches?
 				if (match)
 				{
+					// Replace flags (mxd)
+					if(replace) 
+					{
+						// Clear all flags
+						l.ClearFlags();
+
+						// Set new flags
+						foreach(string flag in replaceflagslist) l.SetFlag(flag, true);
+					}
+					
 					// Add to list
 					LinedefActionInfo info = General.Map.Config.GetLinedefActionInfo(l.Action);
 					if (!info.IsNull)
