@@ -21,7 +21,7 @@ namespace CodeImp.DoomBuilder.BuilderModes
 			int progress = 0;
 			int stepprogress = 0;
 
-			// Go for all things
+			// Go for all vertices
 			foreach(Vertex v in General.Map.Map.Vertices) 
 			{
 				if(v.Linedefs == null || v.Linedefs.Count == 0) SubmitResult(new ResultStrayVertex(v));
