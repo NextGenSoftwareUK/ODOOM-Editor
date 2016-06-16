@@ -6,7 +6,7 @@ using System.Resources;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("GZDoom Builder")]
-[assembly: AssemblyDescription("ZDoom, GZDoom and Zandronum map editor")]
+[assembly: AssemblyDescription("ZDoom, GZDoom and Zandronum map editor (can be used for Vanilla/Boom mapping too!)")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("CodeImp, MaxED")]
 [assembly: AssemblyProduct("GZDoom Builder")]
@@ -29,5 +29,5 @@ using System.Resources;
 //      Build Number
 //      Revision
 //
-[assembly: AssemblyVersion("2.3.0.2411")]
+[assembly: AssemblyVersion("2.3.0.2651")]
 [assembly: NeutralResourcesLanguageAttribute("en")]
