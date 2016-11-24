@@ -138,4 +138,7 @@ Drag items to change order (lower items override higher items).
 Use the context menu to cut, copy, paste or remove items.
 Grayed items are loaded according to the game configuration.</value>
   </data>
+  <metadata name="tooltip.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>17, 17</value>
+  </metadata>
 </root>
