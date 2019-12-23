@@ -34,7 +34,7 @@
 #undef max
 #endif
 
-#include "gl_load/gl_system.h"
+#include "OpenGL/gl_load/gl_system.h"
 
 #define APART(x) (static_cast<uint32_t>(x) >> 24)
 #define RPART(x) ((static_cast<uint32_t>(x) >> 16)  & 0xff)
