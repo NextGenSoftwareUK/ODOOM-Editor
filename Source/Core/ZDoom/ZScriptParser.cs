@@ -1155,6 +1155,10 @@ namespace CodeImp.DoomBuilder.ZDoom
 
 							if (!actor.flags.ContainsKey("solid") && mixincls.Actor.flags.ContainsKey("solid"))
 								actor.flags["solid"] = true;
+
+							// user_ variables
+							foreach (string uservarname in mixincls.Actor.uservars.Keys)
+								actor.uservars[uservarname] = mixincls.Actor.uservars[uservarname];
 						}
 					}
 
