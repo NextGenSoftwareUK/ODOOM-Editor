@@ -80,6 +80,7 @@ namespace CodeImp.DoomBuilder.Data
 
         // GDI bitmap
         private Bitmap loadedbitmap;
+        private Bitmap uncorrectedbitmap;
         private Bitmap previewbitmap;
         private Bitmap spritepreviewbitmap;
 
@@ -178,11 +179,13 @@ namespace CodeImp.DoomBuilder.Data
                 // Clean up
                 loadedbitmap?.Dispose();
                 previewbitmap?.Dispose();
+                uncorrectedbitmap?.Dispose();
                 spritepreviewbitmap?.Dispose();
                 texture?.Dispose();
                 indexedTexture?.Dispose();
                 loadedbitmap = null;
                 previewbitmap = null;
+                uncorrectedbitmap = null;
                 spritepreviewbitmap = null;
 				texture = null;
 					
@@ -305,6 +308,7 @@ namespace CodeImp.DoomBuilder.Data
             // Do the loading
             LocalLoadResult loadResult = LocalLoadImage();
 
+            MakeUncorrectedImage(loadResult, usecolorcorrection);
             ConvertImageFormat(loadResult, usecolorcorrection);
             MakeImagePreview(loadResult);
             MakeAlphaTestImage(loadResult);
@@ -315,6 +319,8 @@ namespace CodeImp.DoomBuilder.Data
             {
                 loadResult.bitmap?.Dispose();
                 loadResult.bitmap = null;
+                loadResult.uncorrected?.Dispose();
+                loadResult.uncorrected = null;
                 onlyPreview = true;
             }
 
@@ -334,10 +340,12 @@ namespace CodeImp.DoomBuilder.Data
                     }
 
                     loadedbitmap?.Dispose();
+                    uncorrectedbitmap?.Dispose();
                     texture?.Dispose();
                     indexedTexture?.Dispose();
                     imagestate = ImageLoadState.Ready;
                     loadedbitmap = loadResult.bitmap;
+                    uncorrectedbitmap = loadResult.uncorrected;
                     alphatest = loadResult.alphatest;
                     alphatestWidth = loadResult.alphatestWidth;
                     alphatestHeight = loadResult.alphatestHeight;
@@ -390,6 +398,7 @@ namespace CodeImp.DoomBuilder.Data
 
             public Bitmap bitmap;
             public Bitmap preview;
+            public Bitmap uncorrected;
             public BitArray alphatest;
             public int alphatestWidth;
             public int alphatestHeight;
@@ -594,6 +603,22 @@ namespace CodeImp.DoomBuilder.Data
         // Dimensions of a single preview image
         const int MAX_PREVIEW_SIZE = 256; //mxd
 
+        // This makes a copy of the image before color correction or, if color correction is disabled for this image,
+        // just references the original bitmap.
+        private void MakeUncorrectedImage(LocalLoadResult loadResult, bool usecolorcorrection)
+        {
+	        if (loadResult.bitmap == null)
+		        return;
+	        if (usecolorcorrection)
+	        {
+		        loadResult.uncorrected = new Bitmap(loadResult.bitmap);
+	        }
+	        else
+	        {
+		        loadResult.uncorrected = loadResult.bitmap;
+	        }
+        }
+
         // This makes a preview for the given image and updates the image settings
         private void MakeImagePreview(LocalLoadResult loadResult)
         {
@@ -701,28 +726,31 @@ namespace CodeImp.DoomBuilder.Data
           return General.Map.Data.LoadingTexture;
       if (loadfailed)
           return General.Map.Data.FailedTexture;
-
+      
       if (imagestate == ImageLoadState.None)
       {
-          General.Map.Data.QueueLoadImage(this);
-          return General.Map.Data.LoadingTexture;
+	      General.Map.Data.QueueLoadImage(this);
+        return General.Map.Data.LoadingTexture;
       }
       
       if (loadedbitmap == null)
       {
 	      return General.Map.Data.LoadingTexture;
       }
-
-      texture = new Texture(General.Map.Graphics, loadedbitmap);
+      
       if (wantIndexed)
       {
-	      Bitmap indexedBitmap = CreateIndexedBitmap(loadedbitmap, General.Map.Data.Palette);
+	      Bitmap indexedBitmap = CreateIndexedBitmap(uncorrectedbitmap, General.Map.Data.Palette);
 	      indexedTexture = new Texture(General.Map.Graphics, indexedBitmap);
 	      indexedTexture.UserData = TEXTURE_INDEXED;
       }
+      
+      texture = new Texture(General.Map.Graphics, loadedbitmap);
 
       loadedbitmap.Dispose();
       loadedbitmap = null;
+      uncorrectedbitmap.Dispose();
+      uncorrectedbitmap = null;
 
 #if DEBUG
 			texture.Tag = name; //mxd. Helps with tracking undisposed resources...
