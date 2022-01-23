@@ -43,6 +43,7 @@ namespace CodeImp.DoomBuilder.UDBScript.Wrapper
 		private MapSet map;
 		private VisualCameraWrapper visualcamera;
 		private Vector2D mousemappos;
+		private object highlightedobject;
 
 		#endregion
 
@@ -111,6 +112,9 @@ namespace CodeImp.DoomBuilder.UDBScript.Wrapper
 		{
 			map = General.Map.Map;
 			visualcamera = new VisualCameraWrapper();
+
+			// If the main window loses focus before the script is running General.Editing.Mode.HighlightedObject will always be null, so cache it here
+			highlightedobject = General.Editing.Mode.HighlightedObject;
 
 			if (General.Editing.Mode is ClassicMode)
 				mousemappos = ((ClassicMode)General.Editing.Mode).MouseMapPos;
@@ -688,7 +692,7 @@ namespace CodeImp.DoomBuilder.UDBScript.Wrapper
 		/// <returns>The currently highlighted `Vertex` or `null` if no `Vertex` is highlighted</returns>
 		public VertexWrapper getHighlightedVertex()
 		{
-			Vertex v = General.Editing.Mode.HighlightedObject as Vertex;
+			Vertex v = highlightedobject as Vertex;
 
 			if (v != null)
 				return new VertexWrapper(v);
@@ -704,13 +708,13 @@ namespace CodeImp.DoomBuilder.UDBScript.Wrapper
 		{
 			if (General.Map.Map.SelectedVerticessCount > 0)
 			{
-				List<VertexWrapper> linedefs = new List<VertexWrapper>();
+				List<VertexWrapper> vertices = new List<VertexWrapper>();
 
 				foreach (Vertex v in General.Map.Map.Vertices)
 					if (v.Selected)
-						linedefs.Add(new VertexWrapper(v));
+						vertices.Add(new VertexWrapper(v));
 
-				return linedefs.ToArray();
+				return vertices.ToArray();
 			}
 			else
 			{
@@ -757,10 +761,20 @@ namespace CodeImp.DoomBuilder.UDBScript.Wrapper
 		/// <returns>The currently highlighted `Thing` or `null` if no `Thing` is highlighted</returns>
 		public ThingWrapper getHighlightedThing()
 		{
-			Thing t = General.Editing.Mode.HighlightedObject as Thing;
+			if (General.Editing.Mode is BaseVisualMode)
+			{
+				VisualThing t = highlightedobject as VisualThing;
 
-			if (t != null)
-				return new ThingWrapper(t);
+				if (t != null)
+					return new ThingWrapper(t.Thing);
+			}
+			else
+			{
+				Thing t = highlightedobject as Thing;
+
+				if (t != null)
+					return new ThingWrapper(t);
+			}
 
 			return null;
 		}
@@ -817,14 +831,14 @@ namespace CodeImp.DoomBuilder.UDBScript.Wrapper
 		{
 			if (General.Editing.Mode is BaseVisualMode)
 			{
-				VisualSector s = General.Editing.Mode.HighlightedObject as VisualSector;
+				VisualSector s = highlightedobject as VisualSector;
 
 				if (s != null)
 					return new SectorWrapper(s.Sector);
 			}
 			else
 			{
-				Sector s = General.Editing.Mode.HighlightedObject as Sector;
+				Sector s = highlightedobject as Sector;
 
 				if (s != null)
 					return new SectorWrapper(s);
@@ -839,9 +853,9 @@ namespace CodeImp.DoomBuilder.UDBScript.Wrapper
 		/// <returns>`Array` of `Sector`s</returns>
 		public SectorWrapper[] getSelectedOrHighlightedSectors()
 		{
-			SectorWrapper[] things = getSelectedSectors(true);
-			if (things.Length > 0)
-				return things;
+			SectorWrapper[] sectors = getSelectedSectors(true);
+			if (sectors.Length > 0)
+				return sectors;
 
 			SectorWrapper highlight = getHighlightedSector();
 			if (highlight != null)
@@ -885,14 +899,14 @@ namespace CodeImp.DoomBuilder.UDBScript.Wrapper
 		{
 			if (General.Editing.Mode is BaseVisualMode)
 			{
-				Sidedef sd = General.Editing.Mode.HighlightedObject as Sidedef;
+				Sidedef sd = highlightedobject as Sidedef;
 
 				if (sd != null)
 					return new LinedefWrapper(sd.Line);
 			}
 			else
 			{
-				Linedef ld = General.Editing.Mode.HighlightedObject as Linedef;
+				Linedef ld = highlightedobject as Linedef;
 
 				if (ld != null)
 					return new LinedefWrapper(ld);
