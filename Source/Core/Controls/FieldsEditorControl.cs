@@ -981,6 +981,27 @@ namespace CodeImp.DoomBuilder.Controls
 				if(frow != null && frow.RowType == FieldsEditorRowType.FIXED) frow.Visible = showfixedfields;
 			}
 		}
+
+		/// <summary>
+		/// Removes an field by its name.
+		/// </summary>
+		/// <param name="name">Name of the field to remove</param>
+		public void RemoveField(string name)
+		{
+			int index = -1;
+
+			foreach(DataGridViewRow dgvr in fieldslist.Rows)
+			{
+				if(dgvr.Cells[0].Value.ToString().ToLowerInvariant() == name.ToLowerInvariant())
+				{
+					index = dgvr.Index;
+					break;
+				}
+			}
+
+			if (index >= 0)
+				fieldslist.Rows.RemoveAt(index);
+		}
 		
 		#endregion
 	}

@@ -19,6 +19,7 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using System.Windows.Forms;
 using CodeImp.DoomBuilder.Config;
 using CodeImp.DoomBuilder.Controls;
@@ -327,6 +328,18 @@ namespace CodeImp.DoomBuilder.Windows
 
 				//mxd. Store initial properties
 				thingprops.Add(new ThingProperties(t));
+			}
+
+			// Remove unused thing type specific fields
+			foreach(UniversalFieldInfo ufi in  General.Map.Config.ThingFields)
+			{
+				if (!ufi.ThingTypeSpecific)
+					continue;
+
+				if(!things.Any(t => { ThingTypeInfo tti = General.Map.Data.GetThingInfoEx(t.Type); return (tti != null && tti.HasAddUniversalField(ufi.Name)); }))
+				{
+					fieldslist.RemoveField(ufi.Name);
+				}
 			}
 
 			preventchanges = false;

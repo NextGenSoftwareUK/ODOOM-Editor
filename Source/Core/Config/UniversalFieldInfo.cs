@@ -60,6 +60,7 @@ namespace CodeImp.DoomBuilder.Config
 		private string name;
 		private int type;
 		private object defaultvalue;
+		private bool thingtypespecific;
 		private EnumList enumlist;
 		private Dictionary<string, UDMFFieldAssociation> associations;
 
@@ -70,6 +71,7 @@ namespace CodeImp.DoomBuilder.Config
 		public string Name { get { return name; } }
 		public int Type { get { return type; } }
 		public object Default { get { return defaultvalue; } }
+		public bool ThingTypeSpecific { get { return thingtypespecific; } }
 		public EnumList Enum { get { return enumlist; } }
 		public Dictionary<string, UDMFFieldAssociation> Associations { get { return associations; } }
 
@@ -87,8 +89,9 @@ namespace CodeImp.DoomBuilder.Config
 			associations = new Dictionary<string, UDMFFieldAssociation>();
 
 			// Read type
-			this.type = cfg.ReadSetting(setting + ".type", int.MinValue);
-			this.defaultvalue = cfg.ReadSettingObject(setting + ".default", null);
+			type = cfg.ReadSetting(setting + ".type", int.MinValue);
+			defaultvalue = cfg.ReadSettingObject(setting + ".default", null);
+			thingtypespecific = cfg.ReadSetting(setting + ".thingtypespecific", false);
 
 			// Read enum
 			object enumsetting = cfg.ReadSettingObject(setting + ".enum", null);
