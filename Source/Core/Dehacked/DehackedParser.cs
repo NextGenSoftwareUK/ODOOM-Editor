@@ -389,7 +389,7 @@ namespace CodeImp.DoomBuilder.Dehacked
 		{
 			// Thing headers have the format "Thing <thingnumber> (<thingname>)". Note that "thingnumber" is not the
 			// DoomEdNum, but the Dehacked thing number
-			Regex re = new Regex(@"thing\s+(\d+)\s+\((.+)\)", RegexOptions.IgnoreCase);
+			Regex re = new Regex(@"thing\s+(\d+)(\s+\((.+)\))?", RegexOptions.IgnoreCase);
 			Match m = re.Match(line);
 
 			if (!m.Success)
@@ -399,7 +399,7 @@ namespace CodeImp.DoomBuilder.Dehacked
 			}
 
 			int dehthingnumber = int.Parse(m.Groups[1].Value);
-			string dehthingname = m.Groups[2].Value;
+			string dehthingname = string.IsNullOrWhiteSpace(m.Groups[3].Value) ? "<DeHackEd thing " + dehthingnumber + ">" : m.Groups[3].Value;
 			string fieldkey = string.Empty;
 			string fieldvalue = string.Empty;
 
