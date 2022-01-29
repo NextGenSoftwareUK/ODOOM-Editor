@@ -188,6 +188,12 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Controls\Scripting\TextEditorControl.cs" />
+    <Compile Include="Controls\SidedefPartLightControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\SidedefPartLightControl.Designer.cs">
+      <DependentUpon>SidedefPartLightControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Controls\TransparentTrackBar.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -660,6 +666,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\PairedFloatControl.resx">
       <DependentUpon>PairedFloatControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\SidedefPartLightControl.resx">
+      <DependentUpon>SidedefPartLightControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Windows\PreAndPostCommandsForm.resx">
       <DependentUpon>PreAndPostCommandsForm.cs</DependentUpon>

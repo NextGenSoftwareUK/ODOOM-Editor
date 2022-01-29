@@ -112,6 +112,7 @@ namespace CodeImp.DoomBuilder.Config
 		private readonly bool planeequationsupport;
 		private readonly bool distinctfloorandceilingbrightness;
 		private readonly bool distinctwallbrightness;
+		private readonly bool distinectsidedefpartbrightness;
 
 		// Skills
 		private readonly List<SkillInfo> skills;
@@ -286,6 +287,7 @@ namespace CodeImp.DoomBuilder.Config
 		public bool PlaneEquationSupport { get { return planeequationsupport; } }
 		public bool DistinctFloorAndCeilingBrightness { get { return distinctfloorandceilingbrightness; } }
 		public bool DistinctWallBrightness { get { return distinctwallbrightness; } }
+		public bool DistinectSidedefPartBrightness { get { return distinectsidedefpartbrightness; } }
 
 		// Texture/flat/voxel sources
 		public IDictionary TextureRanges { get { return textureranges; } }
@@ -462,6 +464,7 @@ namespace CodeImp.DoomBuilder.Config
 			planeequationsupport = cfg.ReadSetting("planeequationsupport", false);
 			distinctfloorandceilingbrightness = cfg.ReadSetting("distinctfloorandceilingbrightness", false);
 			distinctwallbrightness = cfg.ReadSetting("distinctwallbrightness", false);
+			distinectsidedefpartbrightness = cfg.ReadSetting("distinectsidedefpartbrightness", false);
 			for (int i = 0; i < Linedef.NUM_ARGS; i++) makedoorargs[i] = cfg.ReadSetting("makedoorarg" + i.ToString(CultureInfo.InvariantCulture), 0);
 
 			//mxd. Update map format flags
