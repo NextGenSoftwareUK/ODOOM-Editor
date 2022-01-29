@@ -138,7 +138,7 @@ namespace CodeImp.DoomBuilder.Controls
 		{
 			reset.Visible = (cbAbsolute.CheckState != CheckState.Unchecked || light.GetResult(0) != 0);
 
-			if (!General.Map.Config.DistinectSidedefPartBrightness)
+			if (!General.Map.Config.DistinctSidedefPartBrightness)
 			{
 				lbLight.Enabled = false;
 				light.Enabled = false;

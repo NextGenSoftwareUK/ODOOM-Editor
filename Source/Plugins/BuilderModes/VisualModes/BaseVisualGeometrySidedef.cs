@@ -524,7 +524,7 @@ namespace CodeImp.DoomBuilder.BuilderModes
 		{
 			string partstr = string.Empty, partstrabs = string.Empty;
 
-			if (General.Map.Config.DistinectSidedefPartBrightness)
+			if (General.Map.Config.DistinctSidedefPartBrightness)
 			{
 				switch (geometrytype)
 				{
@@ -545,7 +545,7 @@ namespace CodeImp.DoomBuilder.BuilderModes
 			}
 
 			bool lightglobalabsolute = Sidedef.Fields.GetValue("lightabsolute", false);
-			bool lightpartabsolute = General.Map.Config.DistinectSidedefPartBrightness ? Sidedef.Fields.GetValue(partstrabs, false) : false;
+			bool lightpartabsolute = General.Map.Config.DistinctSidedefPartBrightness ? Sidedef.Fields.GetValue(partstrabs, false) : false;
 			lightabsolute = lightglobalabsolute || lightpartabsolute;
 			bool affectedbyfog = General.Map.Data.MapInfo.HasFadeColor || (Sector.Sector.HasSkyCeiling && General.Map.Data.MapInfo.HasOutsideFogColor) || Sector.Sector.Fields.ContainsKey("fadecolor");
 			bool ignorelight = affectedbyfog && !Sidedef.IsFlagSet("lightfog") && !lightabsolute;
@@ -561,7 +561,7 @@ namespace CodeImp.DoomBuilder.BuilderModes
 				if(lightpartabsolute)
 					lightvalue = Sidedef.Fields.GetValue(partstr, 0);
 				else
-					lightvalue = Sidedef.Fields.GetValue("light", 0) + (General.Map.Config.DistinectSidedefPartBrightness ? Sidedef.Fields.GetValue(partstr, 0) : 0);
+					lightvalue = Sidedef.Fields.GetValue("light", 0) + (General.Map.Config.DistinctSidedefPartBrightness ? Sidedef.Fields.GetValue(partstr, 0) : 0);
 			}
 
 			if(ignorelight) lightabsolute = false;
@@ -1588,12 +1588,12 @@ namespace CodeImp.DoomBuilder.BuilderModes
 		public virtual void OnChangeTargetBrightness(bool up)
 		{
 			//mxd. Change UDMF wall light?
-			if(General.Map.UDMF && (General.Map.Config.DistinctWallBrightness || General.Map.Config.DistinectSidedefPartBrightness))
+			if(General.Map.UDMF && (General.Map.Config.DistinctWallBrightness || General.Map.Config.DistinctSidedefPartBrightness))
 			{
 				string fieldname = "light";
 				string fieldabsolutename = "lightabsolute";
 
-				if(General.Map.Config.DistinectSidedefPartBrightness)
+				if(General.Map.Config.DistinctSidedefPartBrightness)
 				{
 					fieldname += "_" + partname;
 					fieldabsolutename += "_" + partname;
