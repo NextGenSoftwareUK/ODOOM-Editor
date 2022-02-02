@@ -570,17 +570,17 @@ namespace CodeImp.DoomBuilder.BuilderModes
 		// biwa
 		protected static double GetNewTexutreOffset(double oldValue, double offset, double textureSize)
 		{
-			return GetRoundedTextureOffset(oldValue, offset, 1.0f, textureSize);
+			return GetRoundedTextureOffset(oldValue, offset, 1.0, textureSize);
 		}
 
 		//mxd
 		protected static double GetRoundedTextureOffset(double oldValue, double offset, double scale, double textureSize) 
 		{
-			if(offset == 0f) return oldValue;
+			if(offset == 0 || offset % textureSize == 0) return oldValue;
 			double scaledOffset = offset * Math.Abs(scale);
 			double result = Math.Round(oldValue + scaledOffset);
 			if(textureSize > 0) result %= textureSize;
-			if(result == oldValue) result += (scaledOffset < 0 ? -1 : 1);
+			if(result == oldValue) result += (scaledOffset < 0 ? -1 : 1); // biwa. Why?
 			return result;
 		}
 
