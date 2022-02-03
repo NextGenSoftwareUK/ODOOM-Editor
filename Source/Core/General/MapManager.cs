@@ -2643,6 +2643,9 @@ namespace CodeImp.DoomBuilder
 				undoredo.WithdrawUndo();
 			}
 
+			// Let the current editing mode know that we changed something
+			General.Editing.Mode.OnMapElementsChanged();
+
 			// Done
 			General.Interface.RedrawDisplay();
 			Cursor.Current = Cursors.Default;

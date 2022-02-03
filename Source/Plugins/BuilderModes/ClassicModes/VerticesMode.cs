@@ -759,7 +759,17 @@ namespace CodeImp.DoomBuilder.BuilderModes
 			
 			return base.OnCopyBegin();
 		}
-		
+
+		/// <summary>
+		/// If map elements have changed the blockmap needs to be recreated.
+		/// </summary>
+		public override void OnMapElementsChanged()
+		{
+			base.OnMapElementsChanged();
+
+			CreateBlockmap();
+		}
+
 		#endregion
 
 		#region ================== Actions

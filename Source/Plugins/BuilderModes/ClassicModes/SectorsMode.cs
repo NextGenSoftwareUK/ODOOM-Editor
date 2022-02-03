@@ -1596,6 +1596,16 @@ namespace CodeImp.DoomBuilder.BuilderModes
 			General.Interface.RedrawDisplay();
 		}
 
+		/// <summary>
+		/// If map elements have changed the blockmap needs to be recreated.
+		/// </summary>
+		public override void OnMapElementsChanged()
+		{
+			base.OnMapElementsChanged();
+
+			CreateBlockmap();
+		}
+
 		//mxd
 		public override void OnViewSelectionNumbersChanged(bool enabled)
 		{
