@@ -23,13 +23,11 @@ using System.Linq;
 using System.Windows.Forms;
 using CodeImp.DoomBuilder.Actions;
 using CodeImp.DoomBuilder.BuilderModes.Interface;
-using CodeImp.DoomBuilder.Config;
 using CodeImp.DoomBuilder.Data;
 using CodeImp.DoomBuilder.Editing;
 using CodeImp.DoomBuilder.Geometry;
 using CodeImp.DoomBuilder.Map;
 using CodeImp.DoomBuilder.Rendering;
-using CodeImp.DoomBuilder.Types;
 using CodeImp.DoomBuilder.Windows;
 
 #endregion
@@ -921,6 +919,7 @@ namespace CodeImp.DoomBuilder.BuilderModes
 		public override void OnMouseMove(MouseEventArgs e)
 		{
 			base.OnMouseMove(e);
+
 			if(panning) return; //mxd. Skip all this jazz while panning
 
 			//mxd
@@ -978,18 +977,39 @@ namespace CodeImp.DoomBuilder.BuilderModes
 				{
 					bool snaptogrid = General.Interface.ShiftState ^ General.Interface.SnapToGrid;
 					bool snaptonearest = General.Interface.CtrlState ^ General.Interface.AutoMerge;
-					Vector2D v = DrawGeometryMode.GetCurrentPosition(mousemappos, snaptonearest, snaptogrid, false, false, renderer, new List<DrawnVertex>()).pos;
 
-					if(v != insertpreview)
+					Vector2D v = DrawGeometryMode.GetCurrentPosition(mousemappos, snaptonearest, snaptogrid, false, false, renderer, new List<DrawnVertex>(), blockmap).pos;
+
+					if (v != insertpreview)
 					{
 						insertpreview = v;
-						General.Interface.RedrawDisplay();
+
+						// Render preview. Do not redraw the whole display for performance reasons
+						if(renderer.StartOverlay(true))
+						{
+							double dist = Math.Min(Vector2D.Distance(mousemappos, insertpreview), BuilderPlug.Me.HighlightRange);
+							byte alpha = (byte)(255 - (dist / BuilderPlug.Me.HighlightRange) * 128);
+							float vsize = (renderer.VertexSize + 1.0f) / renderer.Scale;
+							renderer.RenderRectangleFilled(new RectangleF((float)(insertpreview.x - vsize), (float)(insertpreview.y - vsize), vsize * 2.0f, vsize * 2.0f), General.Colors.InfoLine.WithAlpha(alpha), true);
+							renderer.Finish();
+							renderer.Present();
+						}
 					}
 				} 
 				else if(insertpreview.IsFinite()) 
 				{
 					insertpreview.x = float.NaN;
-					General.Interface.RedrawDisplay();
+
+					// Render preview. Do not redraw the whole display for performance reasons
+					if (renderer.StartOverlay(true))
+					{
+						double dist = Math.Min(Vector2D.Distance(mousemappos, insertpreview), BuilderPlug.Me.HighlightRange);
+						byte alpha = (byte)(255 - (dist / BuilderPlug.Me.HighlightRange) * 128);
+						float vsize = (renderer.VertexSize + 1.0f) / renderer.Scale;
+						renderer.RenderRectangleFilled(new RectangleF((float)(insertpreview.x - vsize), (float)(insertpreview.y - vsize), vsize * 2.0f, vsize * 2.0f), General.Colors.InfoLine.WithAlpha(alpha), true);
+						renderer.Finish();
+						renderer.Present();
+					}
 				}
 
 				// Highlight if not the same
@@ -1023,7 +1043,7 @@ namespace CodeImp.DoomBuilder.BuilderModes
 		protected override void BeginViewPan() 
 		{
 			// We don't want vertex preview while panning
-			insertpreview.x = float.NaN;
+			insertpreview.x = double.NaN;
 			base.BeginViewPan();
 		}
 
