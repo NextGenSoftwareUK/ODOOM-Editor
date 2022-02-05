@@ -2720,9 +2720,33 @@ namespace CodeImp.DoomBuilder.BuilderModes
 			PostAction();
 	    }
 
+		[BeginAction("raisemapelementbygridsize")]
+		public void RaiseMapElementByGridSize()
+		{
+			PreAction(UndoGroup.SectorHeightChange);
+			List<IVisualEventReceiver> objs = GetSelectedObjects(true, true, true, true, true);
+			bool hasvisualslopehandles = objs.Any(o => o is VisualSlope);
+			foreach (IVisualEventReceiver i in objs) // If slope handles are selected only apply the action to them
+				if (!hasvisualslopehandles || (hasvisualslopehandles && i is VisualSlope))
+					i.OnChangeTargetHeight(General.Map.Grid.GridSize);
+			PostAction();
+		}
 
-        //mxd
-        [BeginAction("raisesectortonearest")]
+		[BeginAction("lowermapelementbygridsize")]
+		public void LowerMapElementByGridSize()
+		{
+			PreAction(UndoGroup.SectorHeightChange);
+			List<IVisualEventReceiver> objs = GetSelectedObjects(true, true, true, true, true);
+			bool hasvisualslopehandles = objs.Any(o => o is VisualSlope);
+			foreach (IVisualEventReceiver i in objs) // If slope handles are selected only apply the action to them
+				if (!hasvisualslopehandles || (hasvisualslopehandles && i is VisualSlope))
+					i.OnChangeTargetHeight(-General.Map.Grid.GridSize);
+			PostAction();
+		}
+
+
+		//mxd
+		[BeginAction("raisesectortonearest")]
 		public void RaiseSectorToNearest() 
 		{
 			List<VisualSidedefSlope> selectedhandles = GetSelectedSlopeHandles();
