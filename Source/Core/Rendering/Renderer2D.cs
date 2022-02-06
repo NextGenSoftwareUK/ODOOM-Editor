@@ -125,10 +125,22 @@ namespace CodeImp.DoomBuilder.Rendering
 		public SurfaceManager Surfaces { get { return surfaces; } }
 		public RectangleF Viewport { get { return viewport; } } //mxd
 
+		private bool ShouldRenderVertices
+		{
+			get
+			{
+				if (!(General.Editing.Mode is ClassicMode mode))
+				{
+					return true;
+				}
+				return mode.AlwaysShowVertices || General.Settings.AlwaysShowVertices;
+			}
+		}
+
 		#endregion
 
 		#region ================== Constructor / Disposer
-		
+
 		// Constructor
 		internal Renderer2D(RenderDevice graphics) : base(graphics)
 		{
@@ -2116,8 +2128,12 @@ namespace CodeImp.DoomBuilder.Rendering
 		}
 
 		// This renders a single vertex
-		public void PlotVertex(Vertex v, int colorindex)
+		public void PlotVertex(Vertex v, int colorindex, bool checkMode = true)
 		{
+			if (checkMode && !ShouldRenderVertices)
+			{
+				return;
+			}
 			// Transform vertex coordinates
 			Vector2D nv = v.Position.GetTransformed(translatex, translatey, scale, -scale);
 
@@ -2126,8 +2142,13 @@ namespace CodeImp.DoomBuilder.Rendering
 		}
 
 		// This renders a single vertex at specified coordinates
-		public void PlotVertexAt(Vector2D v, int colorindex)
+		public void PlotVertexAt(Vector2D v, int colorindex, bool checkMode = true)
 		{
+			if (checkMode && !ShouldRenderVertices)
+			{
+				return;
+			}
+			
 			// Transform vertex coordinates
 			Vector2D nv = v.GetTransformed(translatex, translatey, scale, -scale);
 
@@ -2136,8 +2157,13 @@ namespace CodeImp.DoomBuilder.Rendering
 		}
 		
 		// This renders a set of vertices
-		public void PlotVerticesSet(ICollection<Vertex> vertices)
+		public void PlotVerticesSet(ICollection<Vertex> vertices, bool checkMode = true)
 		{
+			if (checkMode && !ShouldRenderVertices)
+			{
+				return;
+			}
+			
 			// Go for all vertices
 			foreach(Vertex v in vertices) PlotVertex(v, DetermineVertexColor(v));
 		}
