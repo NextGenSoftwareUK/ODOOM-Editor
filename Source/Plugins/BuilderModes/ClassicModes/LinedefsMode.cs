@@ -466,6 +466,105 @@ namespace CodeImp.DoomBuilder.BuilderModes
 			blockmap.AddLinedefsSet(General.Map.Map.Linedefs);
 		}
 
+		/// <summary>
+		/// Renders the overlay with the (selection) labels and insert vertex preview.
+		/// </summary>
+		private void RenderOverlay()
+		{
+			if (renderer.StartOverlay(true))
+			{
+				if (!selecting) //mxd
+				{
+					if ((highlighted != null) && !highlighted.IsDisposed) highlightasso.Render(); //mxd
+				}
+				else
+				{
+					RenderMultiSelection();
+				}
+
+				//mxd. Render vertex insert preview
+				if (insertpreview.IsFinite())
+				{
+					double dist = Math.Min(Vector2D.Distance(mousemappos, insertpreview), BuilderPlug.Me.HighlightRange);
+					byte alpha = (byte)(255 - (dist / BuilderPlug.Me.HighlightRange) * 128);
+					float vsize = (renderer.VertexSize + 1.0f) / renderer.Scale;
+					renderer.RenderRectangleFilled(new RectangleF((float)(insertpreview.x - vsize), (float)(insertpreview.y - vsize), vsize * 2.0f, vsize * 2.0f), General.Colors.InfoLine.WithAlpha(alpha), true);
+				}
+
+				//mxd. Render sector tag labels
+				if (BuilderPlug.Me.ViewSelectionEffects)
+				{
+					List<ITextLabel> torender = new List<ITextLabel>(sectorlabels.Count);
+					foreach (KeyValuePair<Sector, string[]> group in sectortexts)
+					{
+						// Pick which text variant to use
+						TextLabel[] labelarray = sectorlabels[group.Key];
+						for (int i = 0; i < group.Key.Labels.Count; i++)
+						{
+							TextLabel l = labelarray[i];
+
+							// Render only when enough space for the label to see
+							if (!textlabelsizecache.ContainsKey(group.Value[0]))
+								textlabelsizecache[group.Value[0]] = General.Interface.MeasureString(group.Value[0], l.Font).Width;
+
+							float requiredsize = textlabelsizecache[group.Value[0]] / 2 / renderer.Scale;
+
+							if (requiredsize > group.Key.Labels[i].radius)
+							{
+								if (!textlabelsizecache.ContainsKey(group.Value[1]))
+									textlabelsizecache[group.Value[1]] = General.Interface.MeasureString(group.Value[1], l.Font).Width;
+
+								requiredsize = textlabelsizecache[group.Value[1]] / 2 / renderer.Scale;
+
+								string newtext;
+
+								if (requiredsize > group.Key.Labels[i].radius)
+									newtext = (requiredsize > group.Key.Labels[i].radius * 4 ? string.Empty : "+");
+								else
+									newtext = group.Value[1];
+
+								if (l.Text != newtext)
+									l.Text = newtext;
+							}
+							else
+							{
+								if (group.Value[0] != l.Text)
+									l.Text = group.Value[0];
+							}
+
+							if (!string.IsNullOrEmpty(l.Text)) torender.Add(l);
+						}
+					}
+
+					// Render labels
+					renderer.RenderText(torender);
+				}
+
+				//mxd. Render selection labels
+				if (BuilderPlug.Me.ViewSelectionNumbers)
+				{
+					List<ITextLabel> torender = new List<ITextLabel>(labels.Count);
+					foreach (KeyValuePair<Linedef, SelectionLabel> group in labels)
+					{
+						// Render only when enough space for the label to see
+						group.Value.Move(group.Key.Start.Position, group.Key.End.Position);
+						float requiredsize = (group.Value.TextSize.Width) / renderer.Scale;
+						if (group.Key.Length > requiredsize)
+						{
+							torender.Add(group.Value.TextLabel);
+						}
+					}
+
+					renderer.RenderText(torender);
+				}
+
+				//mxd. Render comments
+				if (General.Map.UDMF && General.Settings.RenderComments) foreach (Linedef l in General.Map.Map.Linedefs) RenderComment(l);
+
+				renderer.Finish();
+			}
+		}
+
 		#endregion
 
 		#region ================== Events
@@ -600,99 +699,8 @@ namespace CodeImp.DoomBuilder.BuilderModes
 				renderer.Finish();
 			}
 
-			// Render selection
-			if(renderer.StartOverlay(true))
-			{
-				if(!selecting) //mxd
-				{ 
-					if ((highlighted != null) && !highlighted.IsDisposed) highlightasso.Render(); //mxd
-				}
-				else
-				{
-					RenderMultiSelection();
-				}
-
-				//mxd. Render vertex insert preview
-				if(insertpreview.IsFinite())
-				{
-					double dist = Math.Min(Vector2D.Distance(mousemappos, insertpreview), BuilderPlug.Me.HighlightRange);
-					byte alpha = (byte)(255 - (dist / BuilderPlug.Me.HighlightRange) * 128);
-					float vsize = (renderer.VertexSize + 1.0f) / renderer.Scale;
-					renderer.RenderRectangleFilled(new RectangleF((float)(insertpreview.x - vsize), (float)(insertpreview.y - vsize), vsize * 2.0f, vsize * 2.0f), General.Colors.InfoLine.WithAlpha(alpha), true);
-				}
-
-				//mxd. Render sector tag labels
-				if(BuilderPlug.Me.ViewSelectionEffects)
-				{
-					List<ITextLabel> torender = new List<ITextLabel>(sectorlabels.Count);
-					foreach(KeyValuePair<Sector, string[]> group in sectortexts)
-					{
-						// Pick which text variant to use
-						TextLabel[] labelarray = sectorlabels[group.Key];
-						for(int i = 0; i < group.Key.Labels.Count; i++)
-						{
-							TextLabel l = labelarray[i];
-
-							// Render only when enough space for the label to see
-							if (!textlabelsizecache.ContainsKey(group.Value[0]))
-								textlabelsizecache[group.Value[0]] = General.Interface.MeasureString(group.Value[0], l.Font).Width;
-
-							float requiredsize = textlabelsizecache[group.Value[0]] / 2 / renderer.Scale;
-
-							if (requiredsize > group.Key.Labels[i].radius)
-							{
-								if (!textlabelsizecache.ContainsKey(group.Value[1]))
-									textlabelsizecache[group.Value[1]] = General.Interface.MeasureString(group.Value[1], l.Font).Width;
-
-								requiredsize = textlabelsizecache[group.Value[1]] / 2 / renderer.Scale;
-
-								string newtext;
-
-								if (requiredsize > group.Key.Labels[i].radius)
-									newtext = (requiredsize > group.Key.Labels[i].radius * 4 ? string.Empty : "+");
-								else
-									newtext = group.Value[1];
-
-								if (l.Text != newtext)
-									l.Text = newtext;
-							}
-							else
-							{
-								if (group.Value[0] != l.Text)
-									l.Text = group.Value[0];
-							}
-
-							if(!string.IsNullOrEmpty(l.Text)) torender.Add(l);
-						}
-					}
-
-					// Render labels
-					renderer.RenderText(torender);
-				}
-
-				//mxd. Render selection labels
-				if(BuilderPlug.Me.ViewSelectionNumbers)
-				{
-					List<ITextLabel> torender = new List<ITextLabel>(labels.Count);
-					foreach(KeyValuePair<Linedef, SelectionLabel> group in labels)
-					{
-						// Render only when enough space for the label to see
-						group.Value.Move(group.Key.Start.Position, group.Key.End.Position);
-						float requiredsize = (group.Value.TextSize.Width) / renderer.Scale;
-						if(group.Key.Length > requiredsize)
-						{
-							torender.Add(group.Value.TextLabel);
-						}
-					}
-
-					renderer.RenderText(torender);
-				}
-
-				//mxd. Render comments
-				if(General.Map.UDMF && General.Settings.RenderComments) foreach(Linedef l in General.Map.Map.Linedefs) RenderComment(l);
-
-				renderer.Finish();
-			}
+			// Render the overlay with the text labels and ve
+			RenderOverlay();
 
 			renderer.Present();
 		}
@@ -986,36 +994,24 @@ namespace CodeImp.DoomBuilder.BuilderModes
 					{
 						insertpreview = v;
 
-						// Render preview. Do not redraw the whole display for performance reasons
-						if(renderer.StartOverlay(true))
-						{
-							double dist = Math.Min(Vector2D.Distance(mousemappos, insertpreview), BuilderPlug.Me.HighlightRange);
-							byte alpha = (byte)(255 - (dist / BuilderPlug.Me.HighlightRange) * 128);
-							float vsize = (renderer.VertexSize + 1.0f) / renderer.Scale;
-							renderer.RenderRectangleFilled(new RectangleF((float)(insertpreview.x - vsize), (float)(insertpreview.y - vsize), vsize * 2.0f, vsize * 2.0f), General.Colors.InfoLine.WithAlpha(alpha), true);
-							renderer.Finish();
-							renderer.Present();
-						}
+						// Render overlay to show the new insert preview. Do not redraw the whole display for performance reasons.
+						// We need to present ourselves because RenderOverlay does not do it
+						RenderOverlay();
+						renderer.Present();
 					}
 				} 
 				else if(insertpreview.IsFinite()) 
 				{
 					insertpreview.x = float.NaN;
 
-					// Render preview. Do not redraw the whole display for performance reasons
-					if (renderer.StartOverlay(true))
-					{
-						double dist = Math.Min(Vector2D.Distance(mousemappos, insertpreview), BuilderPlug.Me.HighlightRange);
-						byte alpha = (byte)(255 - (dist / BuilderPlug.Me.HighlightRange) * 128);
-						float vsize = (renderer.VertexSize + 1.0f) / renderer.Scale;
-						renderer.RenderRectangleFilled(new RectangleF((float)(insertpreview.x - vsize), (float)(insertpreview.y - vsize), vsize * 2.0f, vsize * 2.0f), General.Colors.InfoLine.WithAlpha(alpha), true);
-						renderer.Finish();
-						renderer.Present();
-					}
+					// Render overlay to show the new insert preview. Do not redraw the whole display for performance reasons
+					// We need to present ourselves because RenderOverlay does not do it
+					RenderOverlay();
+					renderer.Present();
 				}
 
 				// Highlight if not the same
-				if(l != highlighted) Highlight(l);
+				if (l != highlighted) Highlight(l);
 
 				//mxd. Show tooltip?
 				if(General.Map.UDMF && General.Settings.RenderComments && mouselastpos != mousepos && highlighted != null && !highlighted.IsDisposed && highlighted.Fields.ContainsKey("comment"))
