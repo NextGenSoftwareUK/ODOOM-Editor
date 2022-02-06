@@ -3,7 +3,7 @@
 ECHO.
 ECHO.     This build script requires the following software to be installed:
 ECHO.       - Git command-line client
-ECHO.       - Microsoft Visual Studio 2008 or newer
+ECHO.       - Microsoft Visual Studio 2019 or newer
 ECHO.       - Microsoft HTML Help compiler
 ECHO.       - 7zip
 ECHO.
@@ -13,7 +13,7 @@ ECHO.     Files in the 'GIT_Build' directory may be overwritten.
 ECHO.
 ECHO.
 
-SET STUDIODIR=c:\Program Files (x86)\Microsoft Visual Studio 14.0
+SET STUDIODIR=c:\Program Files (x86)\Microsoft Visual Studio\2019\Community
 SET HHWDIR=c:\Program Files (x86)\HTML Help Workshop
 SET SEVENZIPDIR=c:\Program Files\7-Zip
 SET ISSDIR=c:\Program Files (x86)\Inno Setup 6
