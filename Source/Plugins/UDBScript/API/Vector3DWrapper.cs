@@ -452,7 +452,11 @@ namespace CodeImp.DoomBuilder.UDBScript.Wrapper
 				Vector3D a1 = (Vector3D)BuilderPlug.Me.GetVectorFromObject(a, true);
 				Vector3D b1 = (Vector3D)BuilderPlug.Me.GetVectorFromObject(b, true);
 
-				return new Vector3DWrapper(a1.y * b1.x - a1.z * b1.y, a1.z * b1.x - a1.x * b1.z, a1.x * b1.y - a1.y * b1.x);
+				return new Vector3DWrapper(
+					a1.y * b1.z - a1.z * b1.y,
+					a1.z * b1.x - a1.x * b1.z,
+					a1.x * b1.y - a1.y * b1.x
+				);
 			}
 			catch (CantConvertToVectorException e)
 			{
