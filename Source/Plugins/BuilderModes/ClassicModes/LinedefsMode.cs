@@ -366,8 +366,14 @@ namespace CodeImp.DoomBuilder.BuilderModes
 		//mxd. This sets up new labels
 		private void SetupSectorLabels()
 		{
+			// Dummy label we need for the font
+			TextLabel dummylabel = new TextLabel();
+
+			// The "+" is always shown if the space for the label isn't big enough to show the full text
+			textlabelsizecache["+"] = General.Interface.MeasureString("+", dummylabel.Font).Width;
+
 			// Dispose old labels
-			if(sectorlabels != null)
+			if (sectorlabels != null)
 			{
 				foreach(TextLabel[] larr in sectorlabels.Values)
 					foreach(TextLabel l in larr) l.Dispose();
@@ -395,6 +401,12 @@ namespace CodeImp.DoomBuilder.BuilderModes
 					tagdescarr[0] = "Tag " + s.Tag;
 					tagdescarr[1] = "T" + s.Tag;
 				}
+
+				// Add string lengths to the label size cache
+				if (!textlabelsizecache.ContainsKey(tagdescarr[0]))
+					textlabelsizecache[tagdescarr[0]] = General.Interface.MeasureString(tagdescarr[0], dummylabel.Font).Width;
+				if (!textlabelsizecache.ContainsKey(tagdescarr[1]))
+					textlabelsizecache[tagdescarr[1]] = General.Interface.MeasureString(tagdescarr[1], dummylabel.Font).Width;
 
 				// Add to collection
 				sectortexts.Add(s, tagdescarr);
@@ -501,19 +513,17 @@ namespace CodeImp.DoomBuilder.BuilderModes
 						TextLabel[] labelarray = sectorlabels[group.Key];
 						for (int i = 0; i < group.Key.Labels.Count; i++)
 						{
+							// Only process this label if it's actually in view
+							if (!labelarray[i].IsInViewport())
+								continue;
+
 							TextLabel l = labelarray[i];
 
 							// Render only when enough space for the label to see
-							if (!textlabelsizecache.ContainsKey(group.Value[0]))
-								textlabelsizecache[group.Value[0]] = General.Interface.MeasureString(group.Value[0], l.Font).Width;
-
 							float requiredsize = textlabelsizecache[group.Value[0]] / 2 / renderer.Scale;
 
 							if (requiredsize > group.Key.Labels[i].radius)
 							{
-								if (!textlabelsizecache.ContainsKey(group.Value[1]))
-									textlabelsizecache[group.Value[1]] = General.Interface.MeasureString(group.Value[1], l.Font).Width;
-
 								requiredsize = textlabelsizecache[group.Value[1]] / 2 / renderer.Scale;
 
 								string newtext;
