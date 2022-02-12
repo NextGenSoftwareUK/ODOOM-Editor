@@ -1575,7 +1575,8 @@ namespace CodeImp.DoomBuilder.Rendering
 				graphics.SetAlphaBlendEnable(false);
 				graphics.SetAlphaTestEnable(false);
 				graphics.SetUniform(UniformName.texturefactor, new Color4(1f, 1f, 1f, 1f));
-                SetWorldTransformation(true);
+				graphics.SetUniform(UniformName.desaturation, 0.0f);
+				SetWorldTransformation(true);
 				SetDisplay2DSettings(1f, 1f, 0f, 1f, General.Settings.ClassicBilinear);
 					
 				// Prepare for rendering
