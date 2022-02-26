@@ -49,14 +49,16 @@ namespace CodeImp.DoomBuilder.UDBScript
 {
 	internal class ScriptDirectoryStructure
 	{
+		public string Path;
 		public string Name;
 		public bool Expanded;
 		public string Hash;
 		public List<ScriptDirectoryStructure> Directories;
 		public List<ScriptInfo> Scripts;
 
-		public ScriptDirectoryStructure(string name, bool expanded, string hash)
+		public ScriptDirectoryStructure(string path, string name, bool expanded, string hash)
 		{
+			Path = path;
 			Name = name;
 			Expanded = expanded;
 			Hash = hash;
@@ -386,7 +388,7 @@ namespace CodeImp.DoomBuilder.UDBScript
 			string hash = SHA256Hash.Get(path);
 			bool expanded = General.Settings.ReadPluginSetting("directoryexpand." + hash, true);
 			string name = path.TrimEnd(Path.DirectorySeparatorChar).Split(Path.DirectorySeparatorChar).Last();
-			ScriptDirectoryStructure sds = new ScriptDirectoryStructure(name, expanded, hash);
+			ScriptDirectoryStructure sds = new ScriptDirectoryStructure(path, name, expanded, hash);
 
 			foreach (string directory in Directory.GetDirectories(path))
 				sds.Directories.Add(LoadScriptDirectoryStructure(directory));
