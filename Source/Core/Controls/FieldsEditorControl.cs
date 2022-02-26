@@ -417,7 +417,7 @@ namespace CodeImp.DoomBuilder.Controls
 		}
 
 		//mxd
-		public void ApplyUserVars(Dictionary<string, UniversalType> vars, UniFields tofields)
+		public void ApplyUserVars(Dictionary<string, UniversalType> vars, Dictionary<string, object> vardefaults, UniFields tofields)
 		{
 			// Apply user variables when target map element contains user var definition and the value is not default
 			foreach(DataGridViewRow row in fieldslist.Rows)
@@ -434,8 +434,11 @@ namespace CodeImp.DoomBuilder.Controls
 					// Skip field when mixed values
 					if(newvalue == null) continue;
 
-					// Remove field
-					if(newvalue.Equals(frow.TypeHandler.GetDefaultValue()))
+					object typedefault = frow.TypeHandler.GetDefaultValue();
+					object userdefault = vardefaults.ContainsKey(frow.Name) ? vardefaults[frow.Name] : typedefault;
+
+					// Remove field, but only if the type's default value is the same as the user var's default value
+					if (newvalue.Equals(typedefault) && typedefault.Equals(userdefault))
 					{
 						if(tofields.ContainsKey(frow.Name)) tofields.Remove(frow.Name);
 					}

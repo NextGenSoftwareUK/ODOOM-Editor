@@ -584,9 +584,10 @@ namespace CodeImp.DoomBuilder.Windows
 				if (ti != null && ti.Actor != null)
 				{
 					Dictionary<string, UniversalType> uservars = ti.Actor.GetAllUserVars();
+					Dictionary<string, object> uservardefaults = ti.Actor.GetAllUserVarDefaults();
 
 					if(uservars.Count > 0)
-						fieldslist.ApplyUserVars(uservars, t.Fields);
+						fieldslist.ApplyUserVars(uservars, uservardefaults, t.Fields);
 				}
 
 				color.ApplyTo(t.Fields, t.Fields.GetValue("fillcolor", 0));
