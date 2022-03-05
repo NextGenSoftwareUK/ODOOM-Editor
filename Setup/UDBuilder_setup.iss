@@ -46,11 +46,13 @@ Name: desktopicon; Description: {cm:CreateDesktopIcon}; GroupDescription: {cm:Ad
 [Files]
 Source: Builder.exe; DestDir: {app}; Flags: ignoreversion
 Source: Builder.pdb; DestDir: {app}; Flags: ignoreversion
+Source: Builder.exe.config; DestDir: {app}; Flags: ignoreversion
 Source: UDBuilder.default.cfg; DestDir: {app}; Flags: ignoreversion
 Source: Updater.exe; DestDir: {app}; Flags: ignoreversion
 Source: Updater.ini; DestDir: {app}; Flags: ignoreversion
 Source: Refmanual.chm; DestDir: {app}; Flags: ignoreversion
 Source: BuilderNative.dll; DestDir: {app}; Flags: ignoreversion
+Source: BuilderNative.pdb; DestDir: {app}; Flags: ignoreversion
 Source: SharpCompress.dll; DestDir: {app}; Flags: ignoreversion
 Source: ScintillaNET.dll; DestDir: {app}; Flags: ignoreversion
 Source: TabControlEX.dll; DestDir: {app}; Flags: ignoreversion
