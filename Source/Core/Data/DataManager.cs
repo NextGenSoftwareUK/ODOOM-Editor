@@ -80,6 +80,8 @@ namespace CodeImp.DoomBuilder.Data
 		private List<MatchingTextureSet> texturesets;
 		private List<ResourceTextureSet> resourcetextures;
 		private AllTextureSet alltextures;
+		private AllTextureSet walltextureset;
+		private AllTextureSet flattextureset;
 
 		//mxd 
 		private Dictionary<int, ModelData> modeldefentries; //Thing.Type, Model entry
@@ -192,6 +194,8 @@ namespace CodeImp.DoomBuilder.Data
 		internal ICollection<MatchingTextureSet> TextureSets { get { return texturesets; } }
 		internal ICollection<ResourceTextureSet> ResourceTextureSets { get { return resourcetextures; } }
 		internal AllTextureSet AllTextureSet { get { return alltextures; } }
+		internal AllTextureSet WallTextureSet { get { return walltextureset; } }
+		internal AllTextureSet FlatTextureSet { get { return flattextureset; } }
 		
 		public bool IsLoading
 		{
@@ -364,6 +368,8 @@ namespace CodeImp.DoomBuilder.Data
 			
 			// Special textures sets
 			alltextures = new AllTextureSet();
+			walltextureset = new AllTextureSet();
+			flattextureset = new AllTextureSet();
 			resourcetextures = new List<ResourceTextureSet>();
 			
 			// Go for all locations
@@ -511,7 +517,7 @@ namespace CodeImp.DoomBuilder.Data
 						if(t.Value.HasLongName) flatnames.Add(t.Value.ShortName);
 						flatnames.Add(t.Value.Name);
 					}
-					else if(t.Value is TEXTURESImage || t.Value is SimpleTextureImage) //mxd. Textures defined in TEXTURES or placed between TX_START and TX_END markers override "regular" flats in ZDoom
+					else if(t.Value.TextureNamespace == TextureNamespace.TEXTURE)
 					{
 						//TODO: check this!
 						flats[t.Key] = t.Value;
@@ -533,8 +539,8 @@ namespace CodeImp.DoomBuilder.Data
 						textures.Add(f.Key, f.Value);
 
 						//mxd. Add both short and long names?
-						if(f.Value.HasLongName) texturenames.Add(f.Value.ShortName);
-						texturenames.Add(f.Value.Name);
+						if(f.Value.HasLongName && !texturenames.Contains(f.Value.ShortName)) texturenames.Add(f.Value.ShortName);
+						if(!texturenames.Contains(f.Value.Name)) texturenames.Add(f.Value.Name);
 					}
 				}
 
@@ -582,6 +588,7 @@ namespace CodeImp.DoomBuilder.Data
 
 				// Add to all
 				alltextures.AddTexture(img.Value);
+				walltextureset.AddTexture(img.Value);
 			}
 			
 			// Add flat names to texture sets
@@ -593,6 +600,7 @@ namespace CodeImp.DoomBuilder.Data
 				
 				// Add to all
 				alltextures.AddFlat(img.Value);
+				flattextureset.AddFlat(img.Value);
 			}
 
 			//mxd. Create skybox texture(s)
@@ -1011,11 +1019,10 @@ namespace CodeImp.DoomBuilder.Data
 		public ImageData GetTextureImage(long longname)
 		{
 			// Does this texture exist?
-			if(textures.ContainsKey(longname) 
-				&& (textures[longname] is TEXTURESImage || textures[longname] is HiResImage))
-				return textures[longname]; //TEXTURES and HiRes textures should still override regular ones...
-			if(texturenamesshorttofull.ContainsKey(longname)) return textures[texturenamesshorttofull[longname]]; //mxd
-			if(textures.ContainsKey(longname)) return textures[longname];
+			if (textures.ContainsKey(longname))
+				return textures[longname];
+			if (texturenamesshorttofull.ContainsKey(longname)) return textures[texturenamesshorttofull[longname]]; //mxd
+			if (textures.ContainsKey(longname)) return textures[longname];
 
 			// Return null image
 			return unknownimage; //mxd
@@ -1214,13 +1221,13 @@ namespace CodeImp.DoomBuilder.Data
 		public ImageData GetFlatImage(long longname)
 		{
 			// Does this flat exist?
-			if(flats.ContainsKey(longname) && (flats[longname] is TEXTURESImage || flats[longname] is HiResImage))
+			if (flats.ContainsKey(longname) && (flats[longname] is TEXTURESImage || flats[longname] is HiResImage))
 				return flats[longname]; //TEXTURES and HiRes flats should still override regular ones...
-			if(flatnamesshorttofull.ContainsKey(longname))
-                return flats[flatnamesshorttofull[longname]]; //mxd
-            if (flats.ContainsKey(longname))
-                return flats[longname];
-			
+			if (flatnamesshorttofull.ContainsKey(longname))
+				return flats[flatnamesshorttofull[longname]]; //mxd
+			if (flats.ContainsKey(longname))
+				return flats[longname];
+
 			// Return null image
 			return unknownimage; //mxd
 		}

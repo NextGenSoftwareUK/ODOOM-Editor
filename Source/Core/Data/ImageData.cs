@@ -55,7 +55,6 @@ namespace CodeImp.DoomBuilder.Data
 		protected string shortname; //mxd. Name in uppercase and clamped to DataManager.CLASIC_IMAGE_NAME_LENGTH
 		protected string virtualname; //mxd. Path of this name is used in TextureBrowserForm
 		protected string displayname; //mxd. Name to display in TextureBrowserForm
-		protected bool isFlat; //mxd. If false, it's a texture
 		protected bool istranslucent; //mxd. If true, has pixels with alpha > 0 && < 255 
 		protected bool ismasked; //mxd. If true, has pixels with zero alpha
 		protected bool hasLongName; //mxd. Texture name is longer than DataManager.CLASIC_IMAGE_NAME_LENGTH
@@ -63,6 +62,7 @@ namespace CodeImp.DoomBuilder.Data
 		protected int namewidth; // biwa
 		protected int shortnamewidth; // biwa
 		protected bool wantIndexed; // volte
+		protected TextureNamespace texturenamespace;
 
 		//mxd. Hashing
 		private static int hashcounter;
@@ -103,7 +103,7 @@ namespace CodeImp.DoomBuilder.Data
 		public string FilePathName { get { return filepathname; } } //mxd
 		public string VirtualName { get { return virtualname; } } //mxd
 		public string DisplayName { get { return displayname; } } //mxd
-		public bool IsFlat { get { return isFlat; } } //mxd
+		public TextureNamespace TextureNamespace { get { return texturenamespace; } }
 		public bool IsTranslucent { get { return istranslucent; } } //mxd
 		public bool IsMasked { get { return ismasked; } } //mxd
 		public bool HasPatchWithSameName { get { return hasPatchWithSameName; } } //mxd

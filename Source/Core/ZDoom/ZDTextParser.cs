@@ -208,8 +208,8 @@ namespace CodeImp.DoomBuilder.ZDoom
 		}
 
 		//mxd
-		internal bool ReadTextureName(out string name) { return ReadTextureName(out name, "texture"); }
-		internal bool ReadTextureName(out string name, string elementname)
+		internal bool ReadTextureName(out string name) { return ReadTextureName(out name, TextureNamespace.WALLTEXTURE); }
+		internal bool ReadTextureName(out string name, TextureNamespace texturenamespace)
 		{
 			string token = ReadToken(false);
 			name = StripQuotes(token);
@@ -218,7 +218,7 @@ namespace CodeImp.DoomBuilder.ZDoom
 				&& name.Length > DataManager.CLASIC_IMAGE_NAME_LENGTH
 				&& name.Length == token.Length)
 			{
-				ReportError("Long " + elementname + " names must be quoted. See \"" + token + "\"");
+				ReportError("Long " + texturenamespace.ToString() + " names must be quoted. See \"" + token + "\"");
 				return false;
 			}
 

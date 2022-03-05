@@ -245,6 +245,9 @@ namespace CodeImp.DoomBuilder.Data
 					// Make the textures
 					foreach(TextureStructure t in cachedparsers[fullpath].Textures)
 						imgset.Add(t.MakeImage());
+
+					foreach (TextureStructure t in cachedparsers[fullpath].WallTextures)
+						imgset.Add(t.MakeImage());
 				}
 				else
 				{
