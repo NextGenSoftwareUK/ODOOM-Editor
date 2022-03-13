@@ -4,12 +4,16 @@
 #define public Dependency_NoExampleSetup
 #include "CodeDependencies.iss"
 
-#define UDB_arch "x64"
+;#define UDB_arch "x64"
+#define UDB_GetVersionString() \
+  Local[0] = GetVersionNumbersString("..\Build\Builder.exe"), \
+  Delete(Local[0], 0, RPos(".", Local[0])+1), \
+  "R" + Local[0]
 
 [Setup]
 AppName=Ultimate Doom Builder
-AppVersion={code:GetBuildNumberString|..\Build\Builder.exe}
-AppVerName=Ultimate Doom Builder {#SetupSetting("AppVersion")} ({#UDB_arch})
+AppVersion={#UDB_GetVersionString} ({#UDB_arch})
+;AppVerName=Ultimate Doom Builder {#UDB_GetVersionString} ({#UDB_arch})
 AppPublisher=ZZYZX
 AppPublisherURL=https://forum.zdoom.org/memberlist.php?mode=viewprofile&u=7527
 AppSupportURL=https://forum.zdoom.org/viewtopic.php?f=232&t=66745
@@ -122,7 +126,7 @@ procedure InitializeWizard();
 begin
   // .Net and VC Redistributables. Those come from CodeDependencies.iss
   Dependency_AddDotNet47;
-  Dependency_AddVC2015To2022;
+  //Dependency_AddVC2015To2022;
 end;
 
 //Remove configs?
@@ -138,23 +142,4 @@ begin
 		DeleteFile(ExpandConstant('{localappdata}\Doom Builder\UDBuilder.log'));
 		DeleteFile(ExpandConstant('{localappdata}\Doom Builder\UDBCrash.txt'));
 	end;
-end;
-
-function GetBuildNumberString(const Filename: String): String;
-var
-  MS, LS: Cardinal;
-  Build: Cardinal;
-  Success: Boolean;
-  ASD: String;
-begin
-  GetVersionNumbersString(Filename, ASD);
-  Success := GetVersionNumbers(Filename, MS, LS);
-
-  if Success then
-  begin
-    Build := ls and $FFFF;
-    Result := Format('R%d', [Build]);
-  end
-  else
-    Result := 'Unknown version';
 end;
