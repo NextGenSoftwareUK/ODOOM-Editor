@@ -67,28 +67,19 @@ namespace CodeImp.DoomBuilder.BuilderModes
 			this.label13 = new System.Windows.Forms.Label();
 			this.label11 = new System.Windows.Forms.Label();
 			this.absrot = new CodeImp.DoomBuilder.Controls.ButtonsNumericTextbox();
-			this.ceiltexgroup = new System.Windows.Forms.GroupBox();
-			this.ceiltexoffset = new System.Windows.Forms.CheckBox();
-			this.ceiltexrotation = new System.Windows.Forms.CheckBox();
-			this.ceiltexscale = new System.Windows.Forms.CheckBox();
-			this.ceiltexall = new System.Windows.Forms.CheckBox();
-			this.floortexrotation = new System.Windows.Forms.CheckBox();
-			this.floortexoffset = new System.Windows.Forms.CheckBox();
-			this.floortexscale = new System.Windows.Forms.CheckBox();
-			this.floortexall = new System.Windows.Forms.CheckBox();
-			this.floortexgroup = new System.Windows.Forms.GroupBox();
 			this.tooltip = new System.Windows.Forms.ToolTip(this.components);
+			this.pintextures = new System.Windows.Forms.CheckBox();
+			this.gbTextures = new System.Windows.Forms.GroupBox();
 			this.groupBox1.SuspendLayout();
 			this.groupBox2.SuspendLayout();
 			this.groupBox3.SuspendLayout();
-			this.ceiltexgroup.SuspendLayout();
-			this.floortexgroup.SuspendLayout();
+			this.gbTextures.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// groupBox1
 			// 
-			this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-						| System.Windows.Forms.AnchorStyles.Right)));
+			this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.groupBox1.Controls.Add(this.preciseposition);
 			this.groupBox1.Controls.Add(this.orgposy);
 			this.groupBox1.Controls.Add(this.orgposx);
@@ -118,7 +109,7 @@ namespace CodeImp.DoomBuilder.BuilderModes
 			this.preciseposition.TabIndex = 6;
 			this.preciseposition.Text = "High precision positioning";
 			this.tooltip.SetToolTip(this.preciseposition, "When checked, thing and vertex positions will be set using floating point precisi" +
-					"on.\r\nOtherwise, they will be rounded to the nearest integer.");
+        "on.\r\nOtherwise, they will be rounded to the nearest integer.");
 			this.preciseposition.UseVisualStyleBackColor = true;
 			this.preciseposition.CheckedChanged += new System.EventHandler(this.preciseposition_CheckedChanged);
 			// 
@@ -183,6 +174,7 @@ namespace CodeImp.DoomBuilder.BuilderModes
 			// relposy
 			// 
 			this.relposy.AllowDecimal = true;
+			this.relposy.AllowExpressions = false;
 			this.relposy.AllowNegative = true;
 			this.relposy.AllowRelative = true;
 			this.relposy.ButtonStep = 1;
@@ -196,14 +188,15 @@ namespace CodeImp.DoomBuilder.BuilderModes
 			this.relposy.Size = new System.Drawing.Size(72, 24);
 			this.relposy.StepValues = null;
 			this.relposy.TabIndex = 5;
+			this.relposy.WhenTextChanged += new System.EventHandler(this.WhenTextChanged);
+			this.relposy.WhenButtonsClicked += new System.EventHandler(this.relposy_Validated);
 			this.relposy.WhenEnterPressed += new System.EventHandler(this.relposy_Validated);
 			this.relposy.Validated += new System.EventHandler(this.relposy_Validated);
-			this.relposy.WhenButtonsClicked += new System.EventHandler(this.relposy_Validated);
-			this.relposy.WhenTextChanged += new System.EventHandler(this.WhenTextChanged);
 			// 
 			// relposx
 			// 
 			this.relposx.AllowDecimal = true;
+			this.relposx.AllowExpressions = false;
 			this.relposx.AllowNegative = true;
 			this.relposx.AllowRelative = true;
 			this.relposx.ButtonStep = 1;
@@ -217,14 +210,15 @@ namespace CodeImp.DoomBuilder.BuilderModes
 			this.relposx.Size = new System.Drawing.Size(72, 24);
 			this.relposx.StepValues = null;
 			this.relposx.TabIndex = 4;
+			this.relposx.WhenTextChanged += new System.EventHandler(this.WhenTextChanged);
+			this.relposx.WhenButtonsClicked += new System.EventHandler(this.relposx_Validated);
 			this.relposx.WhenEnterPressed += new System.EventHandler(this.relposx_Validated);
 			this.relposx.Validated += new System.EventHandler(this.relposx_Validated);
-			this.relposx.WhenButtonsClicked += new System.EventHandler(this.relposx_Validated);
-			this.relposx.WhenTextChanged += new System.EventHandler(this.WhenTextChanged);
 			// 
 			// absposy
 			// 
 			this.absposy.AllowDecimal = true;
+			this.absposy.AllowExpressions = false;
 			this.absposy.AllowNegative = true;
 			this.absposy.AllowRelative = true;
 			this.absposy.ButtonStep = 1;
@@ -238,14 +232,15 @@ namespace CodeImp.DoomBuilder.BuilderModes
 			this.absposy.Size = new System.Drawing.Size(72, 24);
 			this.absposy.StepValues = null;
 			this.absposy.TabIndex = 3;
+			this.absposy.WhenTextChanged += new System.EventHandler(this.WhenTextChanged);
+			this.absposy.WhenButtonsClicked += new System.EventHandler(this.absposy_Validated);
 			this.absposy.WhenEnterPressed += new System.EventHandler(this.absposy_Validated);
 			this.absposy.Validated += new System.EventHandler(this.absposy_Validated);
-			this.absposy.WhenButtonsClicked += new System.EventHandler(this.absposy_Validated);
-			this.absposy.WhenTextChanged += new System.EventHandler(this.WhenTextChanged);
 			// 
 			// absposx
 			// 
 			this.absposx.AllowDecimal = true;
+			this.absposx.AllowExpressions = false;
 			this.absposx.AllowNegative = true;
 			this.absposx.AllowRelative = true;
 			this.absposx.ButtonStep = 1;
@@ -259,10 +254,10 @@ namespace CodeImp.DoomBuilder.BuilderModes
 			this.absposx.Size = new System.Drawing.Size(72, 24);
 			this.absposx.StepValues = null;
 			this.absposx.TabIndex = 2;
+			this.absposx.WhenTextChanged += new System.EventHandler(this.WhenTextChanged);
+			this.absposx.WhenButtonsClicked += new System.EventHandler(this.absposx_Validated);
 			this.absposx.WhenEnterPressed += new System.EventHandler(this.absposx_Validated);
 			this.absposx.Validated += new System.EventHandler(this.absposx_Validated);
-			this.absposx.WhenButtonsClicked += new System.EventHandler(this.absposx_Validated);
-			this.absposx.WhenTextChanged += new System.EventHandler(this.WhenTextChanged);
 			// 
 			// label2
 			// 
@@ -284,8 +279,8 @@ namespace CodeImp.DoomBuilder.BuilderModes
 			// 
 			// groupBox2
 			// 
-			this.groupBox2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-						| System.Windows.Forms.AnchorStyles.Right)));
+			this.groupBox2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.groupBox2.Controls.Add(this.orgsizey);
 			this.groupBox2.Controls.Add(this.orgsizex);
 			this.groupBox2.Controls.Add(this.label12);
@@ -366,6 +361,7 @@ namespace CodeImp.DoomBuilder.BuilderModes
 			// relsizey
 			// 
 			this.relsizey.AllowDecimal = true;
+			this.relsizey.AllowExpressions = false;
 			this.relsizey.AllowNegative = true;
 			this.relsizey.AllowRelative = true;
 			this.relsizey.ButtonStep = 1;
@@ -379,14 +375,15 @@ namespace CodeImp.DoomBuilder.BuilderModes
 			this.relsizey.Size = new System.Drawing.Size(72, 24);
 			this.relsizey.StepValues = null;
 			this.relsizey.TabIndex = 5;
+			this.relsizey.WhenTextChanged += new System.EventHandler(this.WhenTextChanged);
+			this.relsizey.WhenButtonsClicked += new System.EventHandler(this.relsizey_Validated);
 			this.relsizey.WhenEnterPressed += new System.EventHandler(this.relsizey_Validated);
 			this.relsizey.Validated += new System.EventHandler(this.relsizey_Validated);
-			this.relsizey.WhenButtonsClicked += new System.EventHandler(this.relsizey_Validated);
-			this.relsizey.WhenTextChanged += new System.EventHandler(this.WhenTextChanged);
 			// 
 			// relsizex
 			// 
 			this.relsizex.AllowDecimal = true;
+			this.relsizex.AllowExpressions = false;
 			this.relsizex.AllowNegative = true;
 			this.relsizex.AllowRelative = true;
 			this.relsizex.ButtonStep = 1;
@@ -400,10 +397,10 @@ namespace CodeImp.DoomBuilder.BuilderModes
 			this.relsizex.Size = new System.Drawing.Size(72, 24);
 			this.relsizex.StepValues = null;
 			this.relsizex.TabIndex = 4;
+			this.relsizex.WhenTextChanged += new System.EventHandler(this.WhenTextChanged);
+			this.relsizex.WhenButtonsClicked += new System.EventHandler(this.relsizex_Validated);
 			this.relsizex.WhenEnterPressed += new System.EventHandler(this.relsizex_Validated);
 			this.relsizex.Validated += new System.EventHandler(this.relsizex_Validated);
-			this.relsizex.WhenButtonsClicked += new System.EventHandler(this.relsizex_Validated);
-			this.relsizex.WhenTextChanged += new System.EventHandler(this.WhenTextChanged);
 			// 
 			// label4
 			// 
@@ -417,6 +414,7 @@ namespace CodeImp.DoomBuilder.BuilderModes
 			// abssizey
 			// 
 			this.abssizey.AllowDecimal = true;
+			this.abssizey.AllowExpressions = false;
 			this.abssizey.AllowNegative = true;
 			this.abssizey.AllowRelative = true;
 			this.abssizey.ButtonStep = 1;
@@ -430,14 +428,15 @@ namespace CodeImp.DoomBuilder.BuilderModes
 			this.abssizey.Size = new System.Drawing.Size(72, 24);
 			this.abssizey.StepValues = null;
 			this.abssizey.TabIndex = 3;
+			this.abssizey.WhenTextChanged += new System.EventHandler(this.WhenTextChanged);
+			this.abssizey.WhenButtonsClicked += new System.EventHandler(this.abssizey_Validated);
 			this.abssizey.WhenEnterPressed += new System.EventHandler(this.abssizey_Validated);
 			this.abssizey.Validated += new System.EventHandler(this.abssizey_Validated);
-			this.abssizey.WhenButtonsClicked += new System.EventHandler(this.abssizey_Validated);
-			this.abssizey.WhenTextChanged += new System.EventHandler(this.WhenTextChanged);
 			// 
 			// abssizex
 			// 
 			this.abssizex.AllowDecimal = true;
+			this.abssizex.AllowExpressions = false;
 			this.abssizex.AllowNegative = true;
 			this.abssizex.AllowRelative = true;
 			this.abssizex.ButtonStep = 1;
@@ -451,10 +450,10 @@ namespace CodeImp.DoomBuilder.BuilderModes
 			this.abssizex.Size = new System.Drawing.Size(72, 24);
 			this.abssizex.StepValues = null;
 			this.abssizex.TabIndex = 2;
+			this.abssizex.WhenTextChanged += new System.EventHandler(this.WhenTextChanged);
+			this.abssizex.WhenButtonsClicked += new System.EventHandler(this.abssizex_Validated);
 			this.abssizex.WhenEnterPressed += new System.EventHandler(this.abssizex_Validated);
 			this.abssizex.Validated += new System.EventHandler(this.abssizex_Validated);
-			this.abssizex.WhenButtonsClicked += new System.EventHandler(this.abssizex_Validated);
-			this.abssizex.WhenTextChanged += new System.EventHandler(this.WhenTextChanged);
 			// 
 			// label3
 			// 
@@ -467,8 +466,8 @@ namespace CodeImp.DoomBuilder.BuilderModes
 			// 
 			// groupBox3
 			// 
-			this.groupBox3.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-						| System.Windows.Forms.AnchorStyles.Right)));
+			this.groupBox3.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.groupBox3.Controls.Add(this.heightmode);
 			this.groupBox3.Controls.Add(this.label10);
 			this.groupBox3.Controls.Add(this.label14);
@@ -565,6 +564,7 @@ namespace CodeImp.DoomBuilder.BuilderModes
 			// absrot
 			// 
 			this.absrot.AllowDecimal = true;
+			this.absrot.AllowExpressions = false;
 			this.absrot.AllowNegative = true;
 			this.absrot.AllowRelative = true;
 			this.absrot.ButtonStep = 1;
@@ -578,135 +578,39 @@ namespace CodeImp.DoomBuilder.BuilderModes
 			this.absrot.Size = new System.Drawing.Size(82, 24);
 			this.absrot.StepValues = null;
 			this.absrot.TabIndex = 0;
+			this.absrot.WhenTextChanged += new System.EventHandler(this.WhenTextChanged);
+			this.absrot.WhenButtonsClicked += new System.EventHandler(this.absrot_Validated);
 			this.absrot.WhenEnterPressed += new System.EventHandler(this.absrot_Validated);
 			this.absrot.Validated += new System.EventHandler(this.absrot_Validated);
-			this.absrot.WhenButtonsClicked += new System.EventHandler(this.absrot_Validated);
-			this.absrot.WhenTextChanged += new System.EventHandler(this.WhenTextChanged);
 			// 
-			// ceiltexgroup
+			// pintextures
 			// 
-			this.ceiltexgroup.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-						| System.Windows.Forms.AnchorStyles.Right)));
-			this.ceiltexgroup.Controls.Add(this.ceiltexoffset);
-			this.ceiltexgroup.Controls.Add(this.ceiltexrotation);
-			this.ceiltexgroup.Controls.Add(this.ceiltexscale);
-			this.ceiltexgroup.Location = new System.Drawing.Point(3, 401);
-			this.ceiltexgroup.Name = "ceiltexgroup";
-			this.ceiltexgroup.Size = new System.Drawing.Size(243, 58);
-			this.ceiltexgroup.TabIndex = 3;
-			this.ceiltexgroup.TabStop = false;
-			this.ceiltexgroup.Text = "  ";
+			this.pintextures.AutoSize = true;
+			this.pintextures.Location = new System.Drawing.Point(9, 19);
+			this.pintextures.Name = "pintextures";
+			this.pintextures.Size = new System.Drawing.Size(81, 17);
+			this.pintextures.TabIndex = 39;
+			this.pintextures.Text = "Pin textures";
+			this.pintextures.UseVisualStyleBackColor = true;
+			this.pintextures.CheckedChanged += new System.EventHandler(this.cbPinTextures_CheckedChanged);
 			// 
-			// ceiltexoffset
+			// gbTextures
 			// 
-			this.ceiltexoffset.AutoSize = true;
-			this.ceiltexoffset.Location = new System.Drawing.Point(27, 28);
-			this.ceiltexoffset.Name = "ceiltexoffset";
-			this.ceiltexoffset.Size = new System.Drawing.Size(54, 17);
-			this.ceiltexoffset.TabIndex = 0;
-			this.ceiltexoffset.Text = "Offset";
-			this.ceiltexoffset.UseVisualStyleBackColor = true;
-			this.ceiltexoffset.CheckedChanged += new System.EventHandler(this.ceiltexoffset_CheckedChanged);
-			// 
-			// ceiltexrotation
-			// 
-			this.ceiltexrotation.AutoSize = true;
-			this.ceiltexrotation.Location = new System.Drawing.Point(89, 28);
-			this.ceiltexrotation.Name = "ceiltexrotation";
-			this.ceiltexrotation.Size = new System.Drawing.Size(66, 17);
-			this.ceiltexrotation.TabIndex = 1;
-			this.ceiltexrotation.Text = "Rotation";
-			this.ceiltexrotation.UseVisualStyleBackColor = true;
-			this.ceiltexrotation.CheckedChanged += new System.EventHandler(this.ceiltexrotation_CheckedChanged);
-			// 
-			// ceiltexscale
-			// 
-			this.ceiltexscale.AutoSize = true;
-			this.ceiltexscale.Location = new System.Drawing.Point(163, 28);
-			this.ceiltexscale.Name = "ceiltexscale";
-			this.ceiltexscale.Size = new System.Drawing.Size(53, 17);
-			this.ceiltexscale.TabIndex = 2;
-			this.ceiltexscale.Text = "Scale";
-			this.ceiltexscale.UseVisualStyleBackColor = true;
-			this.ceiltexscale.CheckedChanged += new System.EventHandler(this.ceiltexscale_CheckedChanged);
-			// 
-			// ceiltexall
-			// 
-			this.ceiltexall.AutoSize = true;
-			this.ceiltexall.Location = new System.Drawing.Point(14, 400);
-			this.ceiltexall.Name = "ceiltexall";
-			this.ceiltexall.Size = new System.Drawing.Size(154, 17);
-			this.ceiltexall.TabIndex = 0;
-			this.ceiltexall.Text = "Ceiling Textures Transform:";
-			this.ceiltexall.UseVisualStyleBackColor = true;
-			this.ceiltexall.CheckedChanged += new System.EventHandler(this.ceiltexall_CheckedChanged);
-			// 
-			// floortexrotation
-			// 
-			this.floortexrotation.AutoSize = true;
-			this.floortexrotation.Location = new System.Drawing.Point(89, 28);
-			this.floortexrotation.Name = "floortexrotation";
-			this.floortexrotation.Size = new System.Drawing.Size(66, 17);
-			this.floortexrotation.TabIndex = 1;
-			this.floortexrotation.Text = "Rotation";
-			this.floortexrotation.UseVisualStyleBackColor = true;
-			this.floortexrotation.CheckedChanged += new System.EventHandler(this.floortexrotation_CheckedChanged);
-			// 
-			// floortexoffset
-			// 
-			this.floortexoffset.AutoSize = true;
-			this.floortexoffset.Location = new System.Drawing.Point(27, 28);
-			this.floortexoffset.Name = "floortexoffset";
-			this.floortexoffset.Size = new System.Drawing.Size(54, 17);
-			this.floortexoffset.TabIndex = 0;
-			this.floortexoffset.Text = "Offset";
-			this.floortexoffset.UseVisualStyleBackColor = true;
-			this.floortexoffset.CheckedChanged += new System.EventHandler(this.floortexoffset_CheckedChanged);
-			// 
-			// floortexscale
-			// 
-			this.floortexscale.AutoSize = true;
-			this.floortexscale.Location = new System.Drawing.Point(163, 28);
-			this.floortexscale.Name = "floortexscale";
-			this.floortexscale.Size = new System.Drawing.Size(53, 17);
-			this.floortexscale.TabIndex = 2;
-			this.floortexscale.Text = "Scale";
-			this.floortexscale.UseVisualStyleBackColor = true;
-			this.floortexscale.CheckedChanged += new System.EventHandler(this.floortexscale_CheckedChanged);
-			// 
-			// floortexall
-			// 
-			this.floortexall.AutoSize = true;
-			this.floortexall.Location = new System.Drawing.Point(14, 464);
-			this.floortexall.Name = "floortexall";
-			this.floortexall.Size = new System.Drawing.Size(146, 17);
-			this.floortexall.TabIndex = 1;
-			this.floortexall.Text = "Floor Textures Transform:";
-			this.floortexall.UseVisualStyleBackColor = true;
-			this.floortexall.CheckedChanged += new System.EventHandler(this.floortexall_CheckedChanged);
-			// 
-			// floortexgroup
-			// 
-			this.floortexgroup.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-						| System.Windows.Forms.AnchorStyles.Right)));
-			this.floortexgroup.Controls.Add(this.floortexoffset);
-			this.floortexgroup.Controls.Add(this.floortexrotation);
-			this.floortexgroup.Controls.Add(this.floortexscale);
-			this.floortexgroup.Location = new System.Drawing.Point(3, 465);
-			this.floortexgroup.Name = "floortexgroup";
-			this.floortexgroup.Size = new System.Drawing.Size(243, 58);
-			this.floortexgroup.TabIndex = 38;
-			this.floortexgroup.TabStop = false;
-			this.floortexgroup.Text = "  ";
+			this.gbTextures.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.gbTextures.Controls.Add(this.pintextures);
+			this.gbTextures.Location = new System.Drawing.Point(3, 400);
+			this.gbTextures.Name = "gbTextures";
+			this.gbTextures.Size = new System.Drawing.Size(243, 47);
+			this.gbTextures.TabIndex = 40;
+			this.gbTextures.TabStop = false;
+			this.gbTextures.Text = "Textures";
 			// 
 			// EditSelectionPanel
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
-			this.Controls.Add(this.ceiltexall);
-			this.Controls.Add(this.floortexall);
-			this.Controls.Add(this.floortexgroup);
-			this.Controls.Add(this.ceiltexgroup);
+			this.Controls.Add(this.gbTextures);
 			this.Controls.Add(this.groupBox3);
 			this.Controls.Add(this.groupBox2);
 			this.Controls.Add(this.groupBox1);
@@ -718,12 +622,9 @@ namespace CodeImp.DoomBuilder.BuilderModes
 			this.groupBox2.PerformLayout();
 			this.groupBox3.ResumeLayout(false);
 			this.groupBox3.PerformLayout();
-			this.ceiltexgroup.ResumeLayout(false);
-			this.ceiltexgroup.PerformLayout();
-			this.floortexgroup.ResumeLayout(false);
-			this.floortexgroup.PerformLayout();
+			this.gbTextures.ResumeLayout(false);
+			this.gbTextures.PerformLayout();
 			this.ResumeLayout(false);
-			this.PerformLayout();
 
 		}
 
@@ -762,19 +663,11 @@ namespace CodeImp.DoomBuilder.BuilderModes
 		private System.Windows.Forms.Button orgposy;
 		private System.Windows.Forms.Button orgsizey;
 		private System.Windows.Forms.Button orgsizex;
-		private System.Windows.Forms.GroupBox ceiltexgroup;
-		private System.Windows.Forms.CheckBox ceiltexrotation;
-		private System.Windows.Forms.CheckBox floortexrotation;
-		private System.Windows.Forms.CheckBox ceiltexoffset;
-		private System.Windows.Forms.CheckBox floortexoffset;
-		private System.Windows.Forms.CheckBox ceiltexscale;
-		private System.Windows.Forms.CheckBox floortexscale;
-		private System.Windows.Forms.CheckBox ceiltexall;
-		private System.Windows.Forms.CheckBox floortexall;
-		private System.Windows.Forms.GroupBox floortexgroup;
 		private System.Windows.Forms.CheckBox preciseposition;
 		private System.Windows.Forms.ToolTip tooltip;
 		private System.Windows.Forms.ComboBox heightmode;
 		private System.Windows.Forms.Label label10;
+		private System.Windows.Forms.CheckBox pintextures;
+		private System.Windows.Forms.GroupBox gbTextures;
 	}
 }
