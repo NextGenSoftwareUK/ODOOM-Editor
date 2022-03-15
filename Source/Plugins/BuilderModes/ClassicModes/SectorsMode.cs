@@ -185,7 +185,7 @@ namespace CodeImp.DoomBuilder.BuilderModes
 		// This updates the overlay
 		private void UpdateOverlay()
 		{
-			if(renderer.StartOverlay(true))
+			if(General.Map.Map.IsSafeToAccess && renderer.StartOverlay(true))
 			{
 				// Go for all selected sectors
 				ICollection<Sector> orderedselection = General.Map.Map.GetSelectedSectors(true);
