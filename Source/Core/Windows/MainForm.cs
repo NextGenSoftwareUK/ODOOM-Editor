@@ -215,6 +215,10 @@ namespace CodeImp.DoomBuilder.Windows
 				xposlabel.Width = (int)Math.Round(xposlabel.Width * DPIScaler.Width);
 				yposlabel.Width = (int)Math.Round(yposlabel.Width * DPIScaler.Width);
 				warnsLabel.Width = (int)Math.Round(warnsLabel.Width * DPIScaler.Width);
+
+				thingfilters.Size = new Size((int)(120 * DPIScaler.Width), (int)(22 * DPIScaler.Height));
+				linedefcolorpresets.Size = new Size((int)(120 * DPIScaler.Width), (int)(22 * DPIScaler.Height));
+				configlabel.Size = new Size((int)(280 * DPIScaler.Width), (int)(18 * DPIScaler.Height));
 			}
 
 			pluginbuttons = new List<PluginToolbarButton>();

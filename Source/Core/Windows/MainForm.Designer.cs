@@ -1642,7 +1642,7 @@ namespace CodeImp.DoomBuilder.Windows
 			this.thingfilters.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.thingfilters.Margin = new System.Windows.Forms.Padding(1, 1, 0, 2);
 			this.thingfilters.Name = "thingfilters";
-			this.thingfilters.Size = new System.Drawing.Size((int)(120 * MainForm.DPIScaler.Width), (int)(22 * MainForm.DPIScaler.Height));
+			this.thingfilters.Size = new System.Drawing.Size(120, 22);
 			this.thingfilters.Text = "(show all)";
 			this.thingfilters.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.thingfilters.DropDownClosed += new System.EventHandler(this.LoseFocus);
@@ -1672,7 +1672,7 @@ namespace CodeImp.DoomBuilder.Windows
 			this.linedefcolorpresets.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.linedefcolorpresets.Margin = new System.Windows.Forms.Padding(1, 1, 0, 2);
 			this.linedefcolorpresets.Name = "linedefcolorpresets";
-			this.linedefcolorpresets.Size = new System.Drawing.Size((int)(120 * MainForm.DPIScaler.Width), (int)(22 * MainForm.DPIScaler.Height));
+			this.linedefcolorpresets.Size = new System.Drawing.Size(120, 22);
 			this.linedefcolorpresets.Text = "No presets";
 			this.linedefcolorpresets.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.linedefcolorpresets.DropDownItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.linedefcolorpresets_DropDownItemClicked);
@@ -2284,7 +2284,7 @@ namespace CodeImp.DoomBuilder.Windows
 			this.configlabel.AutoSize = false;
 			this.configlabel.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.configlabel.Name = "configlabel";
-			this.configlabel.Size = new System.Drawing.Size((int)(280 * MainForm.DPIScaler.Width), (int)(18 * MainForm.DPIScaler.Height));
+			this.configlabel.Size = new System.Drawing.Size(280, 18);
 			this.configlabel.Text = "ZDoom (Doom in Hexen Format)";
 			this.configlabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.configlabel.ToolTipText = "Current Game Configuration";
