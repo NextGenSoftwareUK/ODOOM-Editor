@@ -483,7 +483,7 @@ namespace CodeImp.DoomBuilder.BuilderModes
 		/// </summary>
 		private void RenderOverlay()
 		{
-			if (renderer.StartOverlay(true))
+			if (General.Map.Map.IsSafeToAccess && renderer.StartOverlay(true))
 			{
 				if (!selecting) //mxd
 				{
