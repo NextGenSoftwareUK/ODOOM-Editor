@@ -846,22 +846,17 @@ namespace CodeImp.DoomBuilder.ZDoom
                                                            ZScriptTokenType.Preprocessor);
 
 				if (token == null) // EOF reached
-				{
-					// Now parse all included files
-					foreach(string include in includes)
-					{
-						if (!ParseInclude(include))
-							return false;
-					}
-
 					break;
-				}
 
                 if (!token.IsValid)
                 {
                     ReportError("Expected preprocessor statement, const, enum or class declaraction, got " + token);
                     return false;
                 }
+
+                // If $GZDB_SKIP is encountered we stop parsing. Not that we can't "return" here yet, because the includes still have to be parsed
+                if (token.Type == ZScriptTokenType.LineComment && token.Value.Trim().ToLowerInvariant() == "$gzdb_skip")
+                    break;
 
                 // toplevel tokens allowed are only Preprocessor and Identifier.
                 switch (token.Type)
@@ -876,9 +871,6 @@ namespace CodeImp.DoomBuilder.ZDoom
                             string cmtval = token.Value.TrimStart();
                             if (cmtval.Length <= 0 || cmtval[0] != '$')
                                 break;
-                            // check for $GZDB_SKIP
-                            if (cmtval.Trim().ToLowerInvariant() == "$gzdb_skip")
-                                return true;
                             // if we are in a region, read property using function from ZScriptActorStructure
                             if (regions.Count > 0)
                                 ZScriptActorStructure.ParseGZDBComment(regions.Last().Properties, cmtval);
@@ -1012,6 +1004,13 @@ namespace CodeImp.DoomBuilder.ZDoom
                             break;
                         }
                 }
+            }
+
+            // Now parse all included files
+            foreach (string include in includes)
+            {
+                if (!ParseInclude(include))
+                    return false;
             }
 
             return true;
