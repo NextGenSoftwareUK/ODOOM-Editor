@@ -159,6 +159,8 @@ namespace CodeImp.DoomBuilder.Windows
 
 		//mxd. Misc drawing
 		private Graphics graphics;
+
+		private CommandPaletteControl commandpalette;
 		
 		#endregion
 
@@ -465,11 +467,28 @@ namespace CodeImp.DoomBuilder.Windows
 			
 			this.Update();
 		}
-		
+
+		// We're doing it in EndAction because it'll otherwise screw with the stored keys
+		[EndAction("opencommandpalette")]
+		public void OpenCommandPalette()
+		{
+			if (commandpalette == null)
+			{
+				// We have to add the command palette control manually because trying to use the designer will make the form explode
+				commandpalette = new CommandPaletteControl();
+				Controls.Add(commandpalette);
+
+				// Send it somewhere to the background
+				Controls.SetChildIndex(commandpalette, 0xffff);
+			}
+
+			commandpalette.MakeVisible();
+		}
+
 		#endregion
-		
+
 		#region ================== Window
-		
+
 		// This locks the window for updating
 		internal void LockUpdate()
 		{
@@ -1162,7 +1181,7 @@ namespace CodeImp.DoomBuilder.Windows
 			{
 				General.Plugins.OnEditMouseEnter(e);
 				General.Editing.Mode.OnMouseEnter(e);
-				if(Application.OpenForms.Count == 1 || editformopen) display.Focus(); //mxd
+				if((Application.OpenForms.Count == 1 || editformopen) && (commandpalette == null ? true : !commandpalette.Visible)) display.Focus(); //mxd
 			}
 		}
 
@@ -1424,7 +1443,7 @@ namespace CodeImp.DoomBuilder.Windows
 			if(alt) mod |= (int)Keys.Alt;
 			if(shift) mod |= (int)Keys.Shift;
 			if(ctrl) mod |= (int)Keys.Control;
-			
+
 			// Don't process any keys when they are meant for other input controls
 			if((e.KeyData != Keys.None) && ((ActiveControl == null) || (ActiveControl == display)))
 			{
@@ -1480,7 +1499,7 @@ namespace CodeImp.DoomBuilder.Windows
 		private void MainForm_KeyUp(object sender, KeyEventArgs e)
 		{
 			int mod = 0;
-			
+
 			// Keep key modifiers
 			alt = e.Alt;
 			shift = e.Shift;
