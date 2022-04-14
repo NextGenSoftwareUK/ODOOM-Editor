@@ -528,12 +528,13 @@ namespace CodeImp.DoomBuilder.Data
 			parser.Parse(data, false);
 			if(parser.HasError) parser.LogError(); //mxd
 
-			// Make the textures
-			foreach(TextureStructure t in parser.Textures)
-			{
-				// Add the texture
+			// Make and add the textures
+			foreach (TextureStructure t in parser.Textures)
 				images.Add(t.MakeImage());
-			}
+
+			// Make and add the wall textures
+			foreach (TextureStructure t in parser.WallTextures)
+				images.Add(t.MakeImage());
 
 			//mxd. Add to text resources collection
 			if(!General.Map.Data.ScriptResources.ContainsKey(parser.ScriptType))
