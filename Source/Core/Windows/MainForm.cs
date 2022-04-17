@@ -546,10 +546,11 @@ namespace CodeImp.DoomBuilder.Windows
 				if(General.AutoLoadMap != null)
 				{
 					Configuration mapsettings;
-					
+
 					// Try to find existing options in the settings file
-					string dbsfile = General.AutoLoadFile.Substring(0, General.AutoLoadFile.Length - 4) + ".dbs";
-					if(File.Exists(dbsfile))
+					//string dbsfile = General.AutoLoadFile.Substring(0, General.AutoLoadFile.Length - 4) + ".dbs";
+					string dbsfile = Path.ChangeExtension(General.AutoLoadFile, "dbs");
+					if (File.Exists(dbsfile))
 						try { mapsettings = new Configuration(dbsfile, true); }
 						catch(Exception) { mapsettings = new Configuration(true); }
 					else
@@ -557,8 +558,13 @@ namespace CodeImp.DoomBuilder.Windows
 
 					//mxd. Get proper configuration file
 					bool longtexturenamessupported = false;
-					string configfile = General.AutoLoadConfig;
-					if(string.IsNullOrEmpty(configfile)) configfile = mapsettings.ReadSetting("gameconfig", "");
+					string configfile = null;
+
+					// Make sure the config file exists
+					if(General.GetConfigurationInfo(General.AutoLoadConfig) != null)
+						configfile = General.AutoLoadConfig;
+
+					if (string.IsNullOrEmpty(configfile)) configfile = mapsettings.ReadSetting("gameconfig", "");
 					if(configfile.Trim().Length == 0)
 					{
 						showdialog = true;

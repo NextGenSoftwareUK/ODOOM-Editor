@@ -831,7 +831,7 @@ namespace CodeImp.DoomBuilder
 				else if(string.Compare(curarg, "-MAP", true) == 0)
 				{
 					// Store next arg as map name information
-					autoloadmap = argslist.Dequeue();
+					autoloadmap = argslist.Dequeue()?.ToUpperInvariant();
 				}
 				// Config name info?
 				else if((string.Compare(curarg, "-CFG", true) == 0) ||
