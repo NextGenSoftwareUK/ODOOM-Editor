@@ -102,7 +102,7 @@ Source: Textures\*; DestDir: {app}\Textures; Flags: ignoreversion
 [Icons]
 Name: {group}\Ultimate Doom Builder; Filename: {app}\Builder.exe
 Name: {group}\{cm:UninstallProgram,Ultimate Doom Builder}; Filename: {uninstallexe}
-Name: {commondesktop}\Ultimate Doom Builder; Filename: {app}\Builder.exe; Tasks: desktopicon
+Name: {autodesktop}\Ultimate Doom Builder; Filename: {app}\Builder.exe; Tasks: desktopicon
 
 [Run]
 Filename: {app}\Builder.exe; Description: Run {#SetupSetting("AppName")}; Flags: postinstall skipifsilent
