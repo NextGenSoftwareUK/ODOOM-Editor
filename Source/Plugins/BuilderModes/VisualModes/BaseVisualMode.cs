@@ -3850,8 +3850,11 @@ namespace CodeImp.DoomBuilder.BuilderModes
 			List<IVisualEventReceiver> objs = GetSelectedObjects(true, true, true, true, false);
             foreach (IVisualEventReceiver i in objs)
             {
-                if (i is BaseVisualThing)
-                    visiblethings.Remove((BaseVisualThing)i); // [ZZ] if any
+				if (i is BaseVisualThing)
+				{
+					visiblethings.Remove((BaseVisualThing)i); // [ZZ] if any
+					allthings.Remove(((BaseVisualThing)i).Thing);
+				}
                 i.OnDelete();
             }
             PostAction();
