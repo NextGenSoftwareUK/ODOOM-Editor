@@ -125,14 +125,16 @@ namespace CodeImp.DoomBuilder.BuilderModes
 			// Disable groups?
 			if(!enable)
 			{
-				pintextures.Enabled = false;
+				pinfloortextures.Enabled = false;
+				pinceilingtextures.Enabled = false;
 				return;
 			}
 
 			// Update checkboxes
 			preventchanges = true;
 
-			pintextures.Checked = mode.PinTextures;
+			pinfloortextures.Checked = mode.PinFloorTextures;
+			pinceilingtextures.Checked = mode.PinCeilingTextures;
 
 			preventchanges = false;
 		}
@@ -266,12 +268,22 @@ namespace CodeImp.DoomBuilder.BuilderModes
 
 		#endregion
 
-		private void cbPinTextures_CheckedChanged(object sender, EventArgs e)
+		private void cbPinFloorTextures_CheckedChanged(object sender, EventArgs e)
 		{
 			if (preventchanges) return;
 			preventchanges = true;
 
-			mode.PinTextures = pintextures.Checked;
+			mode.PinFloorTextures = pinfloortextures.Checked;
+
+			preventchanges = false;
+		}
+
+		private void pinceilingtextures_CheckedChanged(object sender, EventArgs e)
+		{
+			if (preventchanges) return;
+			preventchanges = true;
+
+			mode.PinCeilingTextures = pinceilingtextures.Checked;
 
 			preventchanges = false;
 		}

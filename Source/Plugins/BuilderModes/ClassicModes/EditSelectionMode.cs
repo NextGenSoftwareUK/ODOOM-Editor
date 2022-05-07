@@ -183,7 +183,8 @@ namespace CodeImp.DoomBuilder.BuilderModes
 		private bool usepreciseposition; //mxd
 
 		//mxd. Texture modification
-		private static bool pintextures;
+		private static bool pinfloortextures;
+		private static bool pinceilingtextures;
 		private Vector2D selectioncenter;
 		private Vector2D selectionbasecenter;
 		private Vector2D referencepoint;
@@ -228,7 +229,8 @@ namespace CodeImp.DoomBuilder.BuilderModes
 		internal bool UsePrecisePosition { get { return usepreciseposition; } set { usepreciseposition = value; } }
 
 		// Texture offset properties
-		internal bool PinTextures { get { return pintextures; } set { pintextures = value; UpdateAllChanges(); } }
+		internal bool PinFloorTextures { get { return pinfloortextures; } set { pinfloortextures = value; UpdateAllChanges(); } }
+		internal bool PinCeilingTextures { get { return pinceilingtextures; } set { pinceilingtextures = value; UpdateAllChanges(); } }
 
 		//mxd. Height offset mode
 		internal HeightAdjustMode SectorHeightAdjustMode { get { return heightadjustmode; } set { heightadjustmode = value; } }
@@ -895,7 +897,7 @@ namespace CodeImp.DoomBuilder.BuilderModes
 		//mxd. This updates texture transforms in given UniFields
 		private void UpdateTextureTransform(UniFields fields, SurfaceTextureInfo si /*, bool transformoffsets, bool rotateoffsets, bool scaleoffsets */)
 		{
-			if (pintextures)
+			if ((si.Part == "floor" && pinfloortextures) || (si.Part == "ceiling" && pinceilingtextures))
 			{
 				double texrotation = Angle2D.PI2 - rotation;
 

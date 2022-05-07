@@ -39,10 +39,6 @@ namespace CodeImp.DoomBuilder.BuilderModes
 			this.label19 = new System.Windows.Forms.Label();
 			this.label6 = new System.Windows.Forms.Label();
 			this.label5 = new System.Windows.Forms.Label();
-			this.relposy = new CodeImp.DoomBuilder.Controls.ButtonsNumericTextbox();
-			this.relposx = new CodeImp.DoomBuilder.Controls.ButtonsNumericTextbox();
-			this.absposy = new CodeImp.DoomBuilder.Controls.ButtonsNumericTextbox();
-			this.absposx = new CodeImp.DoomBuilder.Controls.ButtonsNumericTextbox();
 			this.label2 = new System.Windows.Forms.Label();
 			this.label1 = new System.Windows.Forms.Label();
 			this.groupBox2 = new System.Windows.Forms.GroupBox();
@@ -52,11 +48,7 @@ namespace CodeImp.DoomBuilder.BuilderModes
 			this.label9 = new System.Windows.Forms.Label();
 			this.label8 = new System.Windows.Forms.Label();
 			this.label7 = new System.Windows.Forms.Label();
-			this.relsizey = new CodeImp.DoomBuilder.Controls.ButtonsNumericTextbox();
-			this.relsizex = new CodeImp.DoomBuilder.Controls.ButtonsNumericTextbox();
 			this.label4 = new System.Windows.Forms.Label();
-			this.abssizey = new CodeImp.DoomBuilder.Controls.ButtonsNumericTextbox();
-			this.abssizex = new CodeImp.DoomBuilder.Controls.ButtonsNumericTextbox();
 			this.label3 = new System.Windows.Forms.Label();
 			this.groupBox3 = new System.Windows.Forms.GroupBox();
 			this.heightmode = new System.Windows.Forms.ComboBox();
@@ -66,10 +58,19 @@ namespace CodeImp.DoomBuilder.BuilderModes
 			this.fliph = new System.Windows.Forms.Button();
 			this.label13 = new System.Windows.Forms.Label();
 			this.label11 = new System.Windows.Forms.Label();
-			this.absrot = new CodeImp.DoomBuilder.Controls.ButtonsNumericTextbox();
 			this.tooltip = new System.Windows.Forms.ToolTip(this.components);
-			this.pintextures = new System.Windows.Forms.CheckBox();
+			this.pinfloortextures = new System.Windows.Forms.CheckBox();
 			this.gbTextures = new System.Windows.Forms.GroupBox();
+			this.pinceilingtextures = new System.Windows.Forms.CheckBox();
+			this.absrot = new CodeImp.DoomBuilder.Controls.ButtonsNumericTextbox();
+			this.relsizey = new CodeImp.DoomBuilder.Controls.ButtonsNumericTextbox();
+			this.relsizex = new CodeImp.DoomBuilder.Controls.ButtonsNumericTextbox();
+			this.abssizey = new CodeImp.DoomBuilder.Controls.ButtonsNumericTextbox();
+			this.abssizex = new CodeImp.DoomBuilder.Controls.ButtonsNumericTextbox();
+			this.relposy = new CodeImp.DoomBuilder.Controls.ButtonsNumericTextbox();
+			this.relposx = new CodeImp.DoomBuilder.Controls.ButtonsNumericTextbox();
+			this.absposy = new CodeImp.DoomBuilder.Controls.ButtonsNumericTextbox();
+			this.absposx = new CodeImp.DoomBuilder.Controls.ButtonsNumericTextbox();
 			this.groupBox1.SuspendLayout();
 			this.groupBox2.SuspendLayout();
 			this.groupBox3.SuspendLayout();
@@ -171,94 +172,6 @@ namespace CodeImp.DoomBuilder.BuilderModes
 			this.label5.TabIndex = 12;
 			this.label5.Text = "mp";
 			// 
-			// relposy
-			// 
-			this.relposy.AllowDecimal = true;
-			this.relposy.AllowExpressions = false;
-			this.relposy.AllowNegative = true;
-			this.relposy.AllowRelative = true;
-			this.relposy.ButtonStep = 1;
-			this.relposy.ButtonStepBig = 10F;
-			this.relposy.ButtonStepFloat = 1F;
-			this.relposy.ButtonStepSmall = 0.1F;
-			this.relposy.ButtonStepsUseModifierKeys = false;
-			this.relposy.ButtonStepsWrapAround = false;
-			this.relposy.Location = new System.Drawing.Point(136, 83);
-			this.relposy.Name = "relposy";
-			this.relposy.Size = new System.Drawing.Size(72, 24);
-			this.relposy.StepValues = null;
-			this.relposy.TabIndex = 5;
-			this.relposy.WhenTextChanged += new System.EventHandler(this.WhenTextChanged);
-			this.relposy.WhenButtonsClicked += new System.EventHandler(this.relposy_Validated);
-			this.relposy.WhenEnterPressed += new System.EventHandler(this.relposy_Validated);
-			this.relposy.Validated += new System.EventHandler(this.relposy_Validated);
-			// 
-			// relposx
-			// 
-			this.relposx.AllowDecimal = true;
-			this.relposx.AllowExpressions = false;
-			this.relposx.AllowNegative = true;
-			this.relposx.AllowRelative = true;
-			this.relposx.ButtonStep = 1;
-			this.relposx.ButtonStepBig = 10F;
-			this.relposx.ButtonStepFloat = 1F;
-			this.relposx.ButtonStepSmall = 0.1F;
-			this.relposx.ButtonStepsUseModifierKeys = false;
-			this.relposx.ButtonStepsWrapAround = false;
-			this.relposx.Location = new System.Drawing.Point(58, 83);
-			this.relposx.Name = "relposx";
-			this.relposx.Size = new System.Drawing.Size(72, 24);
-			this.relposx.StepValues = null;
-			this.relposx.TabIndex = 4;
-			this.relposx.WhenTextChanged += new System.EventHandler(this.WhenTextChanged);
-			this.relposx.WhenButtonsClicked += new System.EventHandler(this.relposx_Validated);
-			this.relposx.WhenEnterPressed += new System.EventHandler(this.relposx_Validated);
-			this.relposx.Validated += new System.EventHandler(this.relposx_Validated);
-			// 
-			// absposy
-			// 
-			this.absposy.AllowDecimal = true;
-			this.absposy.AllowExpressions = false;
-			this.absposy.AllowNegative = true;
-			this.absposy.AllowRelative = true;
-			this.absposy.ButtonStep = 1;
-			this.absposy.ButtonStepBig = 10F;
-			this.absposy.ButtonStepFloat = 1F;
-			this.absposy.ButtonStepSmall = 0.1F;
-			this.absposy.ButtonStepsUseModifierKeys = false;
-			this.absposy.ButtonStepsWrapAround = false;
-			this.absposy.Location = new System.Drawing.Point(136, 53);
-			this.absposy.Name = "absposy";
-			this.absposy.Size = new System.Drawing.Size(72, 24);
-			this.absposy.StepValues = null;
-			this.absposy.TabIndex = 3;
-			this.absposy.WhenTextChanged += new System.EventHandler(this.WhenTextChanged);
-			this.absposy.WhenButtonsClicked += new System.EventHandler(this.absposy_Validated);
-			this.absposy.WhenEnterPressed += new System.EventHandler(this.absposy_Validated);
-			this.absposy.Validated += new System.EventHandler(this.absposy_Validated);
-			// 
-			// absposx
-			// 
-			this.absposx.AllowDecimal = true;
-			this.absposx.AllowExpressions = false;
-			this.absposx.AllowNegative = true;
-			this.absposx.AllowRelative = true;
-			this.absposx.ButtonStep = 1;
-			this.absposx.ButtonStepBig = 10F;
-			this.absposx.ButtonStepFloat = 1F;
-			this.absposx.ButtonStepSmall = 0.1F;
-			this.absposx.ButtonStepsUseModifierKeys = false;
-			this.absposx.ButtonStepsWrapAround = false;
-			this.absposx.Location = new System.Drawing.Point(58, 53);
-			this.absposx.Name = "absposx";
-			this.absposx.Size = new System.Drawing.Size(72, 24);
-			this.absposx.StepValues = null;
-			this.absposx.TabIndex = 2;
-			this.absposx.WhenTextChanged += new System.EventHandler(this.WhenTextChanged);
-			this.absposx.WhenButtonsClicked += new System.EventHandler(this.absposx_Validated);
-			this.absposx.WhenEnterPressed += new System.EventHandler(this.absposx_Validated);
-			this.absposx.Validated += new System.EventHandler(this.absposx_Validated);
-			// 
 			// label2
 			// 
 			this.label2.AutoSize = true;
@@ -358,50 +271,6 @@ namespace CodeImp.DoomBuilder.BuilderModes
 			this.label7.TabIndex = 16;
 			this.label7.Text = "mp";
 			// 
-			// relsizey
-			// 
-			this.relsizey.AllowDecimal = true;
-			this.relsizey.AllowExpressions = false;
-			this.relsizey.AllowNegative = true;
-			this.relsizey.AllowRelative = true;
-			this.relsizey.ButtonStep = 1;
-			this.relsizey.ButtonStepBig = 10F;
-			this.relsizey.ButtonStepFloat = 1F;
-			this.relsizey.ButtonStepSmall = 0.1F;
-			this.relsizey.ButtonStepsUseModifierKeys = false;
-			this.relsizey.ButtonStepsWrapAround = false;
-			this.relsizey.Location = new System.Drawing.Point(136, 83);
-			this.relsizey.Name = "relsizey";
-			this.relsizey.Size = new System.Drawing.Size(72, 24);
-			this.relsizey.StepValues = null;
-			this.relsizey.TabIndex = 5;
-			this.relsizey.WhenTextChanged += new System.EventHandler(this.WhenTextChanged);
-			this.relsizey.WhenButtonsClicked += new System.EventHandler(this.relsizey_Validated);
-			this.relsizey.WhenEnterPressed += new System.EventHandler(this.relsizey_Validated);
-			this.relsizey.Validated += new System.EventHandler(this.relsizey_Validated);
-			// 
-			// relsizex
-			// 
-			this.relsizex.AllowDecimal = true;
-			this.relsizex.AllowExpressions = false;
-			this.relsizex.AllowNegative = true;
-			this.relsizex.AllowRelative = true;
-			this.relsizex.ButtonStep = 1;
-			this.relsizex.ButtonStepBig = 10F;
-			this.relsizex.ButtonStepFloat = 1F;
-			this.relsizex.ButtonStepSmall = 0.1F;
-			this.relsizex.ButtonStepsUseModifierKeys = false;
-			this.relsizex.ButtonStepsWrapAround = false;
-			this.relsizex.Location = new System.Drawing.Point(58, 83);
-			this.relsizex.Name = "relsizex";
-			this.relsizex.Size = new System.Drawing.Size(72, 24);
-			this.relsizex.StepValues = null;
-			this.relsizex.TabIndex = 4;
-			this.relsizex.WhenTextChanged += new System.EventHandler(this.WhenTextChanged);
-			this.relsizex.WhenButtonsClicked += new System.EventHandler(this.relsizex_Validated);
-			this.relsizex.WhenEnterPressed += new System.EventHandler(this.relsizex_Validated);
-			this.relsizex.Validated += new System.EventHandler(this.relsizex_Validated);
-			// 
 			// label4
 			// 
 			this.label4.AutoSize = true;
@@ -410,50 +279,6 @@ namespace CodeImp.DoomBuilder.BuilderModes
 			this.label4.Size = new System.Drawing.Size(37, 13);
 			this.label4.TabIndex = 13;
 			this.label4.Text = "Scale:";
-			// 
-			// abssizey
-			// 
-			this.abssizey.AllowDecimal = true;
-			this.abssizey.AllowExpressions = false;
-			this.abssizey.AllowNegative = true;
-			this.abssizey.AllowRelative = true;
-			this.abssizey.ButtonStep = 1;
-			this.abssizey.ButtonStepBig = 10F;
-			this.abssizey.ButtonStepFloat = 1F;
-			this.abssizey.ButtonStepSmall = 0.1F;
-			this.abssizey.ButtonStepsUseModifierKeys = false;
-			this.abssizey.ButtonStepsWrapAround = false;
-			this.abssizey.Location = new System.Drawing.Point(136, 53);
-			this.abssizey.Name = "abssizey";
-			this.abssizey.Size = new System.Drawing.Size(72, 24);
-			this.abssizey.StepValues = null;
-			this.abssizey.TabIndex = 3;
-			this.abssizey.WhenTextChanged += new System.EventHandler(this.WhenTextChanged);
-			this.abssizey.WhenButtonsClicked += new System.EventHandler(this.abssizey_Validated);
-			this.abssizey.WhenEnterPressed += new System.EventHandler(this.abssizey_Validated);
-			this.abssizey.Validated += new System.EventHandler(this.abssizey_Validated);
-			// 
-			// abssizex
-			// 
-			this.abssizex.AllowDecimal = true;
-			this.abssizex.AllowExpressions = false;
-			this.abssizex.AllowNegative = true;
-			this.abssizex.AllowRelative = true;
-			this.abssizex.ButtonStep = 1;
-			this.abssizex.ButtonStepBig = 10F;
-			this.abssizex.ButtonStepFloat = 1F;
-			this.abssizex.ButtonStepSmall = 0.1F;
-			this.abssizex.ButtonStepsUseModifierKeys = false;
-			this.abssizex.ButtonStepsWrapAround = false;
-			this.abssizex.Location = new System.Drawing.Point(58, 53);
-			this.abssizex.Name = "abssizex";
-			this.abssizex.Size = new System.Drawing.Size(72, 24);
-			this.abssizex.StepValues = null;
-			this.abssizex.TabIndex = 2;
-			this.abssizex.WhenTextChanged += new System.EventHandler(this.WhenTextChanged);
-			this.abssizex.WhenButtonsClicked += new System.EventHandler(this.abssizex_Validated);
-			this.abssizex.WhenEnterPressed += new System.EventHandler(this.abssizex_Validated);
-			this.abssizex.Validated += new System.EventHandler(this.abssizex_Validated);
 			// 
 			// label3
 			// 
@@ -561,6 +386,41 @@ namespace CodeImp.DoomBuilder.BuilderModes
 			this.label11.TabIndex = 22;
 			this.label11.Text = "deg.";
 			// 
+			// pinfloortextures
+			// 
+			this.pinfloortextures.AutoSize = true;
+			this.pinfloortextures.Location = new System.Drawing.Point(9, 42);
+			this.pinfloortextures.Name = "pinfloortextures";
+			this.pinfloortextures.Size = new System.Drawing.Size(104, 17);
+			this.pinfloortextures.TabIndex = 39;
+			this.pinfloortextures.Text = "Pin floor textures";
+			this.pinfloortextures.UseVisualStyleBackColor = true;
+			this.pinfloortextures.CheckedChanged += new System.EventHandler(this.cbPinFloorTextures_CheckedChanged);
+			// 
+			// gbTextures
+			// 
+			this.gbTextures.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.gbTextures.Controls.Add(this.pinceilingtextures);
+			this.gbTextures.Controls.Add(this.pinfloortextures);
+			this.gbTextures.Location = new System.Drawing.Point(3, 400);
+			this.gbTextures.Name = "gbTextures";
+			this.gbTextures.Size = new System.Drawing.Size(243, 68);
+			this.gbTextures.TabIndex = 40;
+			this.gbTextures.TabStop = false;
+			this.gbTextures.Text = "Textures";
+			// 
+			// pinceilingtextures
+			// 
+			this.pinceilingtextures.AutoSize = true;
+			this.pinceilingtextures.Location = new System.Drawing.Point(9, 19);
+			this.pinceilingtextures.Name = "pinceilingtextures";
+			this.pinceilingtextures.Size = new System.Drawing.Size(114, 17);
+			this.pinceilingtextures.TabIndex = 40;
+			this.pinceilingtextures.Text = "Pin ceiling textures";
+			this.pinceilingtextures.UseVisualStyleBackColor = true;
+			this.pinceilingtextures.CheckedChanged += new System.EventHandler(this.pinceilingtextures_CheckedChanged);
+			// 
 			// absrot
 			// 
 			this.absrot.AllowDecimal = true;
@@ -583,28 +443,181 @@ namespace CodeImp.DoomBuilder.BuilderModes
 			this.absrot.WhenEnterPressed += new System.EventHandler(this.absrot_Validated);
 			this.absrot.Validated += new System.EventHandler(this.absrot_Validated);
 			// 
-			// pintextures
+			// relsizey
 			// 
-			this.pintextures.AutoSize = true;
-			this.pintextures.Location = new System.Drawing.Point(9, 19);
-			this.pintextures.Name = "pintextures";
-			this.pintextures.Size = new System.Drawing.Size(81, 17);
-			this.pintextures.TabIndex = 39;
-			this.pintextures.Text = "Pin textures";
-			this.pintextures.UseVisualStyleBackColor = true;
-			this.pintextures.CheckedChanged += new System.EventHandler(this.cbPinTextures_CheckedChanged);
+			this.relsizey.AllowDecimal = true;
+			this.relsizey.AllowExpressions = false;
+			this.relsizey.AllowNegative = true;
+			this.relsizey.AllowRelative = true;
+			this.relsizey.ButtonStep = 1;
+			this.relsizey.ButtonStepBig = 10F;
+			this.relsizey.ButtonStepFloat = 1F;
+			this.relsizey.ButtonStepSmall = 0.1F;
+			this.relsizey.ButtonStepsUseModifierKeys = false;
+			this.relsizey.ButtonStepsWrapAround = false;
+			this.relsizey.Location = new System.Drawing.Point(136, 83);
+			this.relsizey.Name = "relsizey";
+			this.relsizey.Size = new System.Drawing.Size(72, 24);
+			this.relsizey.StepValues = null;
+			this.relsizey.TabIndex = 5;
+			this.relsizey.WhenTextChanged += new System.EventHandler(this.WhenTextChanged);
+			this.relsizey.WhenButtonsClicked += new System.EventHandler(this.relsizey_Validated);
+			this.relsizey.WhenEnterPressed += new System.EventHandler(this.relsizey_Validated);
+			this.relsizey.Validated += new System.EventHandler(this.relsizey_Validated);
 			// 
-			// gbTextures
+			// relsizex
 			// 
-			this.gbTextures.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this.gbTextures.Controls.Add(this.pintextures);
-			this.gbTextures.Location = new System.Drawing.Point(3, 400);
-			this.gbTextures.Name = "gbTextures";
-			this.gbTextures.Size = new System.Drawing.Size(243, 47);
-			this.gbTextures.TabIndex = 40;
-			this.gbTextures.TabStop = false;
-			this.gbTextures.Text = "Textures";
+			this.relsizex.AllowDecimal = true;
+			this.relsizex.AllowExpressions = false;
+			this.relsizex.AllowNegative = true;
+			this.relsizex.AllowRelative = true;
+			this.relsizex.ButtonStep = 1;
+			this.relsizex.ButtonStepBig = 10F;
+			this.relsizex.ButtonStepFloat = 1F;
+			this.relsizex.ButtonStepSmall = 0.1F;
+			this.relsizex.ButtonStepsUseModifierKeys = false;
+			this.relsizex.ButtonStepsWrapAround = false;
+			this.relsizex.Location = new System.Drawing.Point(58, 83);
+			this.relsizex.Name = "relsizex";
+			this.relsizex.Size = new System.Drawing.Size(72, 24);
+			this.relsizex.StepValues = null;
+			this.relsizex.TabIndex = 4;
+			this.relsizex.WhenTextChanged += new System.EventHandler(this.WhenTextChanged);
+			this.relsizex.WhenButtonsClicked += new System.EventHandler(this.relsizex_Validated);
+			this.relsizex.WhenEnterPressed += new System.EventHandler(this.relsizex_Validated);
+			this.relsizex.Validated += new System.EventHandler(this.relsizex_Validated);
+			// 
+			// abssizey
+			// 
+			this.abssizey.AllowDecimal = true;
+			this.abssizey.AllowExpressions = false;
+			this.abssizey.AllowNegative = true;
+			this.abssizey.AllowRelative = true;
+			this.abssizey.ButtonStep = 1;
+			this.abssizey.ButtonStepBig = 10F;
+			this.abssizey.ButtonStepFloat = 1F;
+			this.abssizey.ButtonStepSmall = 0.1F;
+			this.abssizey.ButtonStepsUseModifierKeys = false;
+			this.abssizey.ButtonStepsWrapAround = false;
+			this.abssizey.Location = new System.Drawing.Point(136, 53);
+			this.abssizey.Name = "abssizey";
+			this.abssizey.Size = new System.Drawing.Size(72, 24);
+			this.abssizey.StepValues = null;
+			this.abssizey.TabIndex = 3;
+			this.abssizey.WhenTextChanged += new System.EventHandler(this.WhenTextChanged);
+			this.abssizey.WhenButtonsClicked += new System.EventHandler(this.abssizey_Validated);
+			this.abssizey.WhenEnterPressed += new System.EventHandler(this.abssizey_Validated);
+			this.abssizey.Validated += new System.EventHandler(this.abssizey_Validated);
+			// 
+			// abssizex
+			// 
+			this.abssizex.AllowDecimal = true;
+			this.abssizex.AllowExpressions = false;
+			this.abssizex.AllowNegative = true;
+			this.abssizex.AllowRelative = true;
+			this.abssizex.ButtonStep = 1;
+			this.abssizex.ButtonStepBig = 10F;
+			this.abssizex.ButtonStepFloat = 1F;
+			this.abssizex.ButtonStepSmall = 0.1F;
+			this.abssizex.ButtonStepsUseModifierKeys = false;
+			this.abssizex.ButtonStepsWrapAround = false;
+			this.abssizex.Location = new System.Drawing.Point(58, 53);
+			this.abssizex.Name = "abssizex";
+			this.abssizex.Size = new System.Drawing.Size(72, 24);
+			this.abssizex.StepValues = null;
+			this.abssizex.TabIndex = 2;
+			this.abssizex.WhenTextChanged += new System.EventHandler(this.WhenTextChanged);
+			this.abssizex.WhenButtonsClicked += new System.EventHandler(this.abssizex_Validated);
+			this.abssizex.WhenEnterPressed += new System.EventHandler(this.abssizex_Validated);
+			this.abssizex.Validated += new System.EventHandler(this.abssizex_Validated);
+			// 
+			// relposy
+			// 
+			this.relposy.AllowDecimal = true;
+			this.relposy.AllowExpressions = false;
+			this.relposy.AllowNegative = true;
+			this.relposy.AllowRelative = true;
+			this.relposy.ButtonStep = 1;
+			this.relposy.ButtonStepBig = 10F;
+			this.relposy.ButtonStepFloat = 1F;
+			this.relposy.ButtonStepSmall = 0.1F;
+			this.relposy.ButtonStepsUseModifierKeys = false;
+			this.relposy.ButtonStepsWrapAround = false;
+			this.relposy.Location = new System.Drawing.Point(136, 83);
+			this.relposy.Name = "relposy";
+			this.relposy.Size = new System.Drawing.Size(72, 24);
+			this.relposy.StepValues = null;
+			this.relposy.TabIndex = 5;
+			this.relposy.WhenTextChanged += new System.EventHandler(this.WhenTextChanged);
+			this.relposy.WhenButtonsClicked += new System.EventHandler(this.relposy_Validated);
+			this.relposy.WhenEnterPressed += new System.EventHandler(this.relposy_Validated);
+			this.relposy.Validated += new System.EventHandler(this.relposy_Validated);
+			// 
+			// relposx
+			// 
+			this.relposx.AllowDecimal = true;
+			this.relposx.AllowExpressions = false;
+			this.relposx.AllowNegative = true;
+			this.relposx.AllowRelative = true;
+			this.relposx.ButtonStep = 1;
+			this.relposx.ButtonStepBig = 10F;
+			this.relposx.ButtonStepFloat = 1F;
+			this.relposx.ButtonStepSmall = 0.1F;
+			this.relposx.ButtonStepsUseModifierKeys = false;
+			this.relposx.ButtonStepsWrapAround = false;
+			this.relposx.Location = new System.Drawing.Point(58, 83);
+			this.relposx.Name = "relposx";
+			this.relposx.Size = new System.Drawing.Size(72, 24);
+			this.relposx.StepValues = null;
+			this.relposx.TabIndex = 4;
+			this.relposx.WhenTextChanged += new System.EventHandler(this.WhenTextChanged);
+			this.relposx.WhenButtonsClicked += new System.EventHandler(this.relposx_Validated);
+			this.relposx.WhenEnterPressed += new System.EventHandler(this.relposx_Validated);
+			this.relposx.Validated += new System.EventHandler(this.relposx_Validated);
+			// 
+			// absposy
+			// 
+			this.absposy.AllowDecimal = true;
+			this.absposy.AllowExpressions = false;
+			this.absposy.AllowNegative = true;
+			this.absposy.AllowRelative = true;
+			this.absposy.ButtonStep = 1;
+			this.absposy.ButtonStepBig = 10F;
+			this.absposy.ButtonStepFloat = 1F;
+			this.absposy.ButtonStepSmall = 0.1F;
+			this.absposy.ButtonStepsUseModifierKeys = false;
+			this.absposy.ButtonStepsWrapAround = false;
+			this.absposy.Location = new System.Drawing.Point(136, 53);
+			this.absposy.Name = "absposy";
+			this.absposy.Size = new System.Drawing.Size(72, 24);
+			this.absposy.StepValues = null;
+			this.absposy.TabIndex = 3;
+			this.absposy.WhenTextChanged += new System.EventHandler(this.WhenTextChanged);
+			this.absposy.WhenButtonsClicked += new System.EventHandler(this.absposy_Validated);
+			this.absposy.WhenEnterPressed += new System.EventHandler(this.absposy_Validated);
+			this.absposy.Validated += new System.EventHandler(this.absposy_Validated);
+			// 
+			// absposx
+			// 
+			this.absposx.AllowDecimal = true;
+			this.absposx.AllowExpressions = false;
+			this.absposx.AllowNegative = true;
+			this.absposx.AllowRelative = true;
+			this.absposx.ButtonStep = 1;
+			this.absposx.ButtonStepBig = 10F;
+			this.absposx.ButtonStepFloat = 1F;
+			this.absposx.ButtonStepSmall = 0.1F;
+			this.absposx.ButtonStepsUseModifierKeys = false;
+			this.absposx.ButtonStepsWrapAround = false;
+			this.absposx.Location = new System.Drawing.Point(58, 53);
+			this.absposx.Name = "absposx";
+			this.absposx.Size = new System.Drawing.Size(72, 24);
+			this.absposx.StepValues = null;
+			this.absposx.TabIndex = 2;
+			this.absposx.WhenTextChanged += new System.EventHandler(this.WhenTextChanged);
+			this.absposx.WhenButtonsClicked += new System.EventHandler(this.absposx_Validated);
+			this.absposx.WhenEnterPressed += new System.EventHandler(this.absposx_Validated);
+			this.absposx.Validated += new System.EventHandler(this.absposx_Validated);
 			// 
 			// EditSelectionPanel
 			// 
@@ -667,7 +680,8 @@ namespace CodeImp.DoomBuilder.BuilderModes
 		private System.Windows.Forms.ToolTip tooltip;
 		private System.Windows.Forms.ComboBox heightmode;
 		private System.Windows.Forms.Label label10;
-		private System.Windows.Forms.CheckBox pintextures;
+		private System.Windows.Forms.CheckBox pinfloortextures;
 		private System.Windows.Forms.GroupBox gbTextures;
+		private System.Windows.Forms.CheckBox pinceilingtextures;
 	}
 }
