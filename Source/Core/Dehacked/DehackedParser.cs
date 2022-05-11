@@ -195,10 +195,11 @@ namespace CodeImp.DoomBuilder.Dehacked
 			linenumber++;
 			string line = datareader.ReadLine();
 
+			// Cut everything from the line after a #, unless it's a editor key (#$)
 			if (line != null)
-				return line.Trim();
-			else
-				return null;
+				return Regex.Replace(line, @"(#[^$].+)", "", RegexOptions.IgnoreCase).Trim();
+
+			return null;
 		}
 
 		/// <summary>
