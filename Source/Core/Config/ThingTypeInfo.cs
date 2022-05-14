@@ -503,6 +503,13 @@ namespace CodeImp.DoomBuilder.Config
 			ModifyByDehackedThing(thing);
 		}
 
+		internal ThingTypeInfo(ThingCategory cat, ActorStructure actor, ThingTypeInfo other) : this(actor.DoomEdNum, other)
+		{
+			category = cat;
+
+			ModifyByDecorateActor(actor);
+		}
+
 		#endregion
 
 		#region ================== Methods

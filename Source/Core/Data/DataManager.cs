@@ -1866,20 +1866,31 @@ namespace CodeImp.DoomBuilder.Data
             Dictionary<string, ActorStructure> mergedAllActorsByClass = decorate.AllActorsByClass.Concat(zscript.AllActorsByClass.Where(x => !decorate.AllActorsByClass.ContainsKey(x.Key))).ToDictionary(k => k.Key, v => v.Value);
             zdoomclasses = mergedAllActorsByClass;
 
+			// Dictionary of replaced actors that have to be recategorized
+			Dictionary<int, ActorStructure> recategorizeactors = new Dictionary<int, ActorStructure>();
+
             // Step 1. Go for all actors in the decorate to make things or update things
             foreach (ActorStructure actor in mergedActors)
             {
+				Console.WriteLine(actor.ClassName);
                 //mxd. Apply "replaces" DECORATE override...
                 if (!string.IsNullOrEmpty(actor.ReplacesClass) && thingtypesbyclass.ContainsKey(actor.ReplacesClass))
                 {
-                    // Update info
-                    thingtypesbyclass[actor.ReplacesClass].ModifyByDecorateActor(actor);
+					// Update info
+					thingtypesbyclass[actor.ReplacesClass].ModifyByDecorateActor(actor);
 
-                    // Count
-                    counter++;
+					// A replaced actor might have to go to another category. Only store the last one in case the same actor is replaced multiple times
+					if (actor.HasPropertyWithValue("$category"))
+						recategorizeactors[thingtypesbyclass[actor.ReplacesClass].Index] = actor;
+					else
+						recategorizeactors.Remove(thingtypesbyclass[actor.ReplacesClass].Index);
+
+					// Count
+					counter++;
                 }
+
                 // Check if we want to add this actor
-                else if (actor.DoomEdNum > 0)
+                if (actor.DoomEdNum > 0)
                 {
                     // Check if we can find this thing in our existing collection
                     if (thingtypes.ContainsKey(actor.DoomEdNum))
@@ -1893,8 +1904,16 @@ namespace CodeImp.DoomBuilder.Data
                         ThingCategory cat = GetThingCategory(null, thingcategories, GetCategoryInfo(actor)); //mxd
 
                         // Add new thing
-                        ThingTypeInfo t = new ThingTypeInfo(cat, actor);
-                        cat.AddThing(t);
+                        ThingTypeInfo t;
+
+						// If the thing inherits from another actor use the base actor's thing type info, otherwise create a new one
+						// This makes sure that inherited actors get all properties like the icon color
+						if (!string.IsNullOrEmpty(actor.InheritsClass))
+							t = new ThingTypeInfo(cat, actor, thingtypesbyclass[actor.InheritsClass]);
+						else
+							t = new ThingTypeInfo(cat, actor);
+
+						cat.AddThing(t);
                         thingtypes.Add(t.Index, t);
                     }
 
@@ -1902,6 +1921,26 @@ namespace CodeImp.DoomBuilder.Data
                     counter++;
                 }
             }
+
+			// Step 1.1. Recategorize actors that replace other actors
+			foreach(KeyValuePair<int, ActorStructure> kvp in recategorizeactors)
+			{
+				int i = kvp.Key;
+				ActorStructure actor = kvp.Value;
+
+				// Remove the thing from its old thing category
+				thingtypes[i].Category.RemoveThing(thingtypes[i]);
+
+				// Get the new thing category
+				ThingCategory tc = GetThingCategory(null, thingcategories, GetCategoryInfo(actor));
+
+				// Remove the existing ThingTypeInfo and create a new one (with the new DoomEdNum)
+				thingtypes.Remove(thingtypesbyclass[actor.ReplacesClass].Index);
+				thingtypes[i] = new ThingTypeInfo(i, thingtypesbyclass[actor.ReplacesClass]);
+
+				// Re-add the ThingTypeInfo to the ThingCategory
+				tc.AddThing(thingtypes[i]);
+			}
 
             //mxd. Step 2. Apply DoomEdNum MAPINFO overrides, remove actors disabled in MAPINFO
             if (doomednumsoverride.Count > 0)
