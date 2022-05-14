@@ -200,7 +200,7 @@ namespace CodeImp.DoomBuilder.Dehacked
 				line = line.Trim();
 
 				// Editor key?
-				if (line.StartsWith("$#"))
+				if (line.StartsWith("#$"))
 					return line;
 
 				// Cut everything from the line after a #, unless it's the "ID #" field, then cut everything after then next #
