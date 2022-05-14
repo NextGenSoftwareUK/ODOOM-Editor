@@ -1872,7 +1872,6 @@ namespace CodeImp.DoomBuilder.Data
             // Step 1. Go for all actors in the decorate to make things or update things
             foreach (ActorStructure actor in mergedActors)
             {
-				Console.WriteLine(actor.ClassName);
                 //mxd. Apply "replaces" DECORATE override...
                 if (!string.IsNullOrEmpty(actor.ReplacesClass) && thingtypesbyclass.ContainsKey(actor.ReplacesClass))
                 {
@@ -1908,7 +1907,7 @@ namespace CodeImp.DoomBuilder.Data
 
 						// If the thing inherits from another actor use the base actor's thing type info, otherwise create a new one
 						// This makes sure that inherited actors get all properties like the icon color
-						if (!string.IsNullOrEmpty(actor.InheritsClass))
+						if (!string.IsNullOrEmpty(actor.InheritsClass) && thingtypesbyclass.ContainsKey(actor.InheritsClass))
 							t = new ThingTypeInfo(cat, actor, thingtypesbyclass[actor.InheritsClass]);
 						else
 							t = new ThingTypeInfo(cat, actor);
