@@ -195,9 +195,19 @@ namespace CodeImp.DoomBuilder.Dehacked
 			linenumber++;
 			string line = datareader.ReadLine();
 
-			// Cut everything from the line after a #, unless it's a editor key (#$)
 			if (line != null)
-				return Regex.Replace(line, @"(#[^$].+)", "", RegexOptions.IgnoreCase).Trim();
+			{
+				line = line.Trim();
+
+				// Editor key?
+				if (line.StartsWith("$#"))
+					return line;
+
+				// Cut everything from the line after a #, unless it's the "ID #" field, then cut everything after then next #
+				// This is technically against the (nowhere officially defined) DeHackEd specs, but of course people manually
+				// added comments at the end of lines anyway and got away with it
+				return Regex.Replace(line, @"\s*(id\s+#)?([^#]*)(#[^$].+)?", "$1$2", RegexOptions.IgnoreCase).Trim();
+			}
 
 			return null;
 		}
