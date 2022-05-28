@@ -2006,6 +2006,8 @@ namespace CodeImp.DoomBuilder.Windows
 			
 			// Bind visible changed event
 			if(!(button is ToolStripSeparator)) button.VisibleChanged += buttonvisiblechangedhandler;
+
+			if (button is ToolStripActionButton) ((ToolStripActionButton)button).UpdateToolTip();
 			
 			// Insert the button in the right section
 			switch(section)
@@ -2204,6 +2206,12 @@ namespace CodeImp.DoomBuilder.Windows
 			buttontogglevisualvertices.Visible = General.Settings.GZToolbarGZDoom && maploaded && General.Map.UDMF;
 			separatorgzmodes.Visible = General.Settings.GZToolbarGZDoom && maploaded;
 
+			foreach (ToolStripItem item in toolbar.Items)
+			{
+				if (item is ToolStripActionButton)
+					((ToolStripActionButton)item).UpdateToolTip();
+			}
+
 			//mxd. Show/hide additional panels
 			modestoolbar.Visible = maploaded;
 			panelinfo.Visible = maploaded;
@@ -2235,6 +2243,10 @@ namespace CodeImp.DoomBuilder.Windows
 					case ToolbarSection.Geometry: p.button.Visible = General.Settings.ToolbarGeometry; break;
 					case ToolbarSection.Testing: p.button.Visible = General.Settings.ToolbarTesting; break;
 				}
+
+				// Update the tooltips of all buttons added by plugins
+				if (p.button is ToolStripActionButton)
+					((ToolStripActionButton)p.button).UpdateToolTip();
 			}
 
 			preventupdateseperators = false;
@@ -2312,11 +2324,12 @@ namespace CodeImp.DoomBuilder.Windows
 			string controlname = modeinfo.ButtonDesc.Replace("&", "&&");
 			
 			// Create a button
-			ToolStripItem item = new ToolStripButton(modeinfo.ButtonDesc, modeinfo.ButtonImage, EditModeButtonHandler);
+			ToolStripItem item = new ToolStripActionButton(modeinfo.ButtonDesc, modeinfo.ButtonImage, EditModeButtonHandler);
 			item.DisplayStyle = ToolStripItemDisplayStyle.Image;
 			item.Padding = new Padding(0, 2, 0, 2);
 			item.Margin = new Padding();
 			item.Tag = modeinfo;
+			((ToolStripActionButton)item).UpdateToolTip();
 			modestoolbar.Items.Add(item); //mxd
 			editmodeitems.Add(item);
 			
