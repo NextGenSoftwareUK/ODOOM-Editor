@@ -3052,6 +3052,9 @@ namespace CodeImp.DoomBuilder.Windows
 		[BeginAction("togglegrid")]
 		protected void ToggleGrid()
 		{
+			if (General.Map == null)
+				return;
+
 			General.Settings.RenderGrid = !General.Settings.RenderGrid;
 			itemtogglegrid.Checked = General.Settings.RenderGrid;
 			buttontogglegrid.Checked = General.Settings.RenderGrid;
@@ -3103,6 +3106,9 @@ namespace CodeImp.DoomBuilder.Windows
 		[BeginAction("resetgrid")]
 		protected void ResetGrid()
 		{
+			if (General.Map == null)
+				return;
+
 			General.Map.Grid.SetGridRotation(0.0f);
 			General.Map.Grid.SetGridOrigin(0, 0);
 			General.Map.CRenderer2D.GridVisibilityChanged();
