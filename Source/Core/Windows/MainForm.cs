@@ -3143,6 +3143,9 @@ namespace CodeImp.DoomBuilder.Windows
 		[BeginAction("viewusedtags")]
 		internal void ViewUsedTags() 
 		{
+			if (General.Map == null)
+				return;
+
 			TagStatisticsForm f = new TagStatisticsForm();
 			f.ShowDialog(this);
 		}
@@ -3151,6 +3154,9 @@ namespace CodeImp.DoomBuilder.Windows
 		[BeginAction("viewthingtypes")]
 		internal void ViewThingTypes()
 		{
+			if (General.Map == null)
+				return;
+
 			ThingStatisticsForm f = new ThingStatisticsForm();
 			f.ShowDialog(this);
 		}
