@@ -5,7 +5,8 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
-using System.Runtime.InteropServices;
+using System.Linq;
+using System.Text;
 using System.Windows.Forms;
 using CodeImp.DoomBuilder.Data;
 using CodeImp.DoomBuilder.Editing;
@@ -250,11 +251,11 @@ namespace CodeImp.DoomBuilder.Plugins.VisplaneExplorer
 
 				using (BinaryReader reader = new BinaryReader(stream))
 				{
-					List<string> formats = new List<string> { "ZNOD", "XNOD" };
+					List<byte[]> formats = new List<byte[]> { Encoding.ASCII.GetBytes("ZNOD"), Encoding.ASCII.GetBytes("XNOD") };
 
-					string nodesformat = new string(reader.ReadChars(4));
+					byte[] format = reader.ReadBytes(4);
 
-					if (formats.Contains(nodesformat))
+					if(formats.Any(f => f.SequenceEqual(format)))
 						throw new Exception("ZDBSP nodes detected. This format is not supporeted by the Visplane Explorer Mode");
 				}
 			}
