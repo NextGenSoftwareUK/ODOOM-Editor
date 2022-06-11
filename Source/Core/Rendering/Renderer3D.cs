@@ -601,6 +601,7 @@ namespace CodeImp.DoomBuilder.Rendering
 					case GZGeneral.LightRenderStyle.VAVOOM: lightOffsets[0]++; break;
 					case GZGeneral.LightRenderStyle.ADDITIVE: lightOffsets[2]++; break;
                     case GZGeneral.LightRenderStyle.SUBTRACTIVE: lightOffsets[3]++; break;
+					case GZGeneral.LightRenderStyle.STATIC: // Static lights look the same as attenuated lights
 					default: lightOffsets[1]++; break; // attenuated
 				}
 			}
@@ -1024,7 +1025,7 @@ namespace CodeImp.DoomBuilder.Rendering
 							world = CreateThingPositionMatrix(t);
 
 							//mxd. If current thing is light - set it's color to light color
-							if(t.LightType != null && t.LightType.LightInternal && !fullbrightness && !General.Settings.ClassicRendering) 
+							if(t.LightType != null && t.LightType.LightInternal && t.LightType.LightType != GZGeneral.LightType.SUN && !fullbrightness && !General.Settings.ClassicRendering) 
 							{
 								wantedshaderpass += 4; // Render using one of passes, which uses World3D.VertexColor
 								vertexcolor = t.LightColor;

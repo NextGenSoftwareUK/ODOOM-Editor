@@ -556,16 +556,46 @@ namespace CodeImp.DoomBuilder.Rendering
 					return new PixelColor(255, (byte)t.Args[1], (byte)t.Args[2], (byte)t.Args[3]);
 				if (t.DynamicLightType.LightType == GZGeneral.LightType.SPOT)
 				{
+					PixelColor color;
+
 					if (t.Fields.ContainsKey("arg0str"))
 					{
-						PixelColor pc;
-						ZDoom.ZDTextParser.GetColorFromString(t.Fields["arg0str"].Value.ToString(), out pc);
-						pc.a = 255;
-						return pc;
+						
+						ZDoom.ZDTextParser.GetColorFromString(t.Fields["arg0str"].Value.ToString(), out color);
+						color.a = 255;
+						
 					}
-					return new PixelColor(255, (byte)((t.Args[0] & 0xFF0000) >> 16), (byte)((t.Args[0] & 0x00FF00) >> 8), (byte)((t.Args[0] & 0x0000FF)));
+					else 
+						color = new PixelColor(255, (byte)((t.Args[0] & 0xFF0000) >> 16), (byte)((t.Args[0] & 0x00FF00) >> 8), (byte)((t.Args[0] & 0x0000FF)));
+
+					// ZDRay static lights have an intensity that's set through the thing's alpha value
+					if (t.DynamicLightType.LightDef == GZGeneral.LightDef.SPOT_STATIC)
+					{
+						double intensity = t.Fields.GetValue("alpha", 1.0);
+						if (intensity != 1.0)
+						{
+							byte r = (byte)General.Clamp(color.r * intensity, 0.0, 255.0);
+							byte g = (byte)General.Clamp(color.g * intensity, 0.0, 255.0);
+							byte b = (byte)General.Clamp(color.b * intensity, 0.0, 255.0);
+							color = new PixelColor(255, r, g, b);
+						}
+					}
+
+					return color;
 				}
-				return new PixelColor(255, (byte)t.Args[0], (byte)t.Args[1], (byte)t.Args[2]);
+
+				// Point light
+				if (t.DynamicLightType.LightDef == GZGeneral.LightDef.POINT_STATIC)
+				{
+					// ZDRay static lights have an intensity that's set through the thing's alpha value
+					double intensity = t.Fields.GetValue("alpha", 1.0);
+					byte r = (byte)General.Clamp(t.Args[0] * intensity, 0.0, 255.0);
+					byte g = (byte)General.Clamp(t.Args[1] * intensity, 0.0, 255.0);
+					byte b = (byte)General.Clamp(t.Args[2] * intensity, 0.0, 255.0);
+					return new PixelColor(255, r, g, b);
+				}
+				else
+					return new PixelColor(255, (byte)t.Args[0], (byte)t.Args[1], (byte)t.Args[2]);
 			}
 
 			return t.Color;
