@@ -815,6 +815,21 @@ namespace CodeImp.DoomBuilder.Windows
 				t.UpdateConfiguration();
 			}
 
+			// Remove user vars (that have their default value) that do not belong to any selected thing
+			fieldslist.RemoveUserVarsWithDefaultValue();
+
+			// Set the user vars for the new thing
+			Thing ft = things.First();
+			ThingTypeInfo fti = General.Map.Data.GetThingInfoEx(ft.Type);
+			if (fti != null && fti.Actor != null)
+			{
+				Dictionary<string, UniversalType> uservars = fti.Actor.GetAllUserVars();
+				Dictionary<string, object> uservardefaults = fti.Actor.GetAllUserVarDefaults();
+
+				if (uservars.Count > 0)
+					fieldslist.SetUserVars(uservars, uservardefaults, ft.Fields, true);
+			}
+
 			UpdateFlagNames(); //mxd
 
 			General.Map.IsChanged = true;

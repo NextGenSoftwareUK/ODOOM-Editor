@@ -1005,6 +1005,29 @@ namespace CodeImp.DoomBuilder.Controls
 			if (index >= 0)
 				fieldslist.Rows.RemoveAt(index);
 		}
+
+		/// <summary>
+		/// Removes all user vars that have their default values.
+		/// </summary>
+		public void RemoveUserVarsWithDefaultValue()
+		{
+			List<int> removeindices = new List<int>();
+
+			// Go through all rows and find the ones to remove. We can't remove them immediately since that would
+			// change the collection while the loop is going through it.
+			foreach (DataGridViewRow dgvr in fieldslist.Rows)
+			{
+				if(dgvr is FieldsEditorRow frow)
+				{
+					if (frow.RowType == FieldsEditorRowType.USERVAR && frow.Info != null && frow.TypeHandler.GetValue().Equals(frow.Info.Default))
+						removeindices.Add(dgvr.Index);
+				}
+			}
+
+			// Remove rows. Do it from behind since otherwise the indices would not match
+			for (int i = removeindices.Count - 1; i >= 0; i--)
+				fieldslist.Rows.RemoveAt(removeindices[i]);
+		}
 		
 		#endregion
 	}

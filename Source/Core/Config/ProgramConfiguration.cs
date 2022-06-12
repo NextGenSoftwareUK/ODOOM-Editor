@@ -749,6 +749,21 @@ namespace CodeImp.DoomBuilder.Config
 				t.Args[2] = (int)tti.Args[2].DefaultValue;
 				t.Args[3] = (int)tti.Args[3].DefaultValue;
 				t.Args[4] = (int)tti.Args[4].DefaultValue;
+
+				// Add user vars
+				if (tti.Actor != null)
+				{
+					Dictionary<string, UniversalType> uservars = tti.Actor.GetAllUserVars();
+					Dictionary<string, object> uservardefaults = tti.Actor.GetAllUserVarDefaults();
+
+					t.BeforeFieldsChange();
+
+					foreach (string fname in uservars.Keys)
+					{
+						if (uservardefaults.ContainsKey(fname))
+							t.Fields[fname] = new UniValue(uservars[fname], uservardefaults[fname]);
+					}
+				}
 			}
 		}
 
@@ -779,6 +794,21 @@ namespace CodeImp.DoomBuilder.Config
 				t.Args[2] = (int)tti.Args[2].DefaultValue;
 				t.Args[3] = (int)tti.Args[3].DefaultValue;
 				t.Args[4] = (int)tti.Args[4].DefaultValue;
+
+				// Add user vars
+				if (tti.Actor != null)
+				{
+					Dictionary<string, UniversalType> uservars = tti.Actor.GetAllUserVars();
+					Dictionary<string, object> uservardefaults = tti.Actor.GetAllUserVarDefaults();
+
+					t.BeforeFieldsChange();
+
+					foreach (string fname in uservars.Keys)
+					{
+						if (uservardefaults.ContainsKey(fname))
+							t.Fields[fname] = new UniValue(uservars[fname], uservardefaults[fname]);
+					}
+				}
 			}
 		}
 

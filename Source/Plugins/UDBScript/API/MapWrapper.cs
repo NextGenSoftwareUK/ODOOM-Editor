@@ -1103,10 +1103,7 @@ namespace CodeImp.DoomBuilder.UDBScript.Wrapper
 				if(t == null)
 					throw BuilderPlug.Me.ScriptRunner.CreateRuntimeException("Failed to create new thing.");
 
-				General.Settings.ApplyCleanThingSettings(t);
-
-				if (type > 0)
-					t.Type = type;
+				General.Settings.ApplyCleanThingSettings(t, type);
 
 				if(v is Vector2D)
 					t.Move((Vector2D)v);

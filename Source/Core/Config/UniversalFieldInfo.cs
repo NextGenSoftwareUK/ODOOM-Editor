@@ -161,6 +161,13 @@ namespace CodeImp.DoomBuilder.Config
 			GC.SuppressFinalize(this);
 		}
 
+		internal UniversalFieldInfo(string name, int type, object defaultvalue)
+		{
+			this.name = name.ToLowerInvariant();
+			this.type = type;
+			this.defaultvalue = defaultvalue;
+		}
+
 		#endregion
 
 		#region ================== Methods
