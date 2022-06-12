@@ -1191,7 +1191,12 @@ namespace CodeImp.DoomBuilder.ZDoom
 
 							// user_ variables
 							foreach (string uservarname in extenseionactor.uservars.Keys)
+							{
 								actor.uservars[uservarname] = extenseionactor.uservars[uservarname];
+
+								if (extenseionactor.uservar_defaults.ContainsKey(uservarname))
+									actor.uservar_defaults[uservarname] = extenseionactor.uservar_defaults[uservarname];
+							}
 						}
 					}
 				}
