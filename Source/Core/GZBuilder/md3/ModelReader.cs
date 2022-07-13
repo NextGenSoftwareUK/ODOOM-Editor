@@ -1425,8 +1425,11 @@ namespace CodeImp.DoomBuilder.GZBuilder.MD3
 								worldvertices.Clear();
 								polyindiceslist.Clear();
 							}
+
+							// Add texture name. It might be in quotes, so remove them.
+							// See https://github.com/jewalky/UltimateDoomBuilder/issues/758
 							if (fields.Length >= 2)
-								result.Skins.Add(fields[1]);
+								result.Skins.Add(fields[1].Replace("\"", ""));
 							
 							surfaceskinid++;
 							break;
