@@ -65,6 +65,8 @@ namespace CodeImp.DoomBuilder.Windows
 			this.testparameters = new System.Windows.Forms.TextBox();
 			this.testapplication = new System.Windows.Forms.TextBox();
 			this.tabtextures = new System.Windows.Forms.TabPage();
+			this.exporttexturesets = new System.Windows.Forms.Button();
+			this.importtexturesets = new System.Windows.Forms.Button();
 			this.listtextures = new System.Windows.Forms.ListView();
 			this.smallimages = new System.Windows.Forms.ImageList(this.components);
 			this.restoretexturesets = new System.Windows.Forms.Button();
@@ -92,6 +94,8 @@ namespace CodeImp.DoomBuilder.Windows
 			this.hintlabel = new System.Windows.Forms.Label();
 			this.hint = new System.Windows.Forms.PictureBox();
 			this.tooltip = new System.Windows.Forms.ToolTip(this.components);
+			this.importtexturesetdialog = new System.Windows.Forms.OpenFileDialog();
+			this.exporttexturesetdialog = new System.Windows.Forms.SaveFileDialog();
 			label5 = new System.Windows.Forms.Label();
 			label6 = new System.Windows.Forms.Label();
 			label3 = new System.Windows.Forms.Label();
@@ -527,6 +531,8 @@ namespace CodeImp.DoomBuilder.Windows
 			// 
 			// tabtextures
 			// 
+			this.tabtextures.Controls.Add(this.exporttexturesets);
+			this.tabtextures.Controls.Add(this.importtexturesets);
 			this.tabtextures.Controls.Add(this.listtextures);
 			this.tabtextures.Controls.Add(this.restoretexturesets);
 			this.tabtextures.Controls.Add(this.edittextureset);
@@ -542,6 +548,29 @@ namespace CodeImp.DoomBuilder.Windows
 			this.tabtextures.TabIndex = 3;
 			this.tabtextures.Text = "Textures";
 			this.tabtextures.UseVisualStyleBackColor = true;
+			// 
+			// exporttexturesets
+			// 
+			this.exporttexturesets.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.exporttexturesets.Enabled = false;
+			this.exporttexturesets.Location = new System.Drawing.Point(414, 282);
+			this.exporttexturesets.Name = "exporttexturesets";
+			this.exporttexturesets.Size = new System.Drawing.Size(68, 24);
+			this.exporttexturesets.TabIndex = 25;
+			this.exporttexturesets.Text = "Export";
+			this.exporttexturesets.UseVisualStyleBackColor = true;
+			this.exporttexturesets.Click += new System.EventHandler(this.exporttexturesets_Click);
+			// 
+			// importtexturesets
+			// 
+			this.importtexturesets.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.importtexturesets.Location = new System.Drawing.Point(340, 282);
+			this.importtexturesets.Name = "importtexturesets";
+			this.importtexturesets.Size = new System.Drawing.Size(68, 24);
+			this.importtexturesets.TabIndex = 25;
+			this.importtexturesets.Text = "Import";
+			this.importtexturesets.UseVisualStyleBackColor = true;
+			this.importtexturesets.Click += new System.EventHandler(this.importtexturesets_Click);
 			// 
 			// listtextures
 			// 
@@ -595,9 +624,9 @@ namespace CodeImp.DoomBuilder.Windows
 			// 
 			this.pastetexturesets.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.pastetexturesets.Enabled = false;
-			this.pastetexturesets.Location = new System.Drawing.Point(424, 244);
+			this.pastetexturesets.Location = new System.Drawing.Point(414, 244);
 			this.pastetexturesets.Name = "pastetexturesets";
-			this.pastetexturesets.Size = new System.Drawing.Size(58, 24);
+			this.pastetexturesets.Size = new System.Drawing.Size(68, 24);
 			this.pastetexturesets.TabIndex = 5;
 			this.pastetexturesets.Text = "Paste";
 			this.pastetexturesets.UseVisualStyleBackColor = true;
@@ -607,9 +636,9 @@ namespace CodeImp.DoomBuilder.Windows
 			// 
 			this.copytexturesets.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.copytexturesets.Enabled = false;
-			this.copytexturesets.Location = new System.Drawing.Point(360, 244);
+			this.copytexturesets.Location = new System.Drawing.Point(340, 244);
 			this.copytexturesets.Name = "copytexturesets";
-			this.copytexturesets.Size = new System.Drawing.Size(58, 24);
+			this.copytexturesets.Size = new System.Drawing.Size(68, 24);
 			this.copytexturesets.TabIndex = 4;
 			this.copytexturesets.Text = "Copy";
 			this.copytexturesets.UseVisualStyleBackColor = true;
@@ -682,6 +711,7 @@ namespace CodeImp.DoomBuilder.Windows
             this.colmodeplugin});
 			this.listmodes.FullRowSelect = true;
 			this.listmodes.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
+			this.listmodes.HideSelection = false;
 			this.listmodes.Location = new System.Drawing.Point(15, 70);
 			this.listmodes.MultiSelect = false;
 			this.listmodes.Name = "listmodes";
@@ -823,6 +853,18 @@ namespace CodeImp.DoomBuilder.Windows
 			this.tooltip.UseAnimation = false;
 			this.tooltip.UseFading = false;
 			// 
+			// importtexturesetdialog
+			// 
+			this.importtexturesetdialog.Filter = "Texture Set Configuration File|*.cfg|All files|*.*";
+			this.importtexturesetdialog.RestoreDirectory = true;
+			// 
+			// exporttexturesetdialog
+			// 
+			this.exporttexturesetdialog.DefaultExt = "cfg";
+			this.exporttexturesetdialog.FileName = "ExportedTextureSets.cfg";
+			this.exporttexturesetdialog.Filter = "Texture Set Configuration File|*.cfg|All files|*.*";
+			this.exporttexturesetdialog.RestoreDirectory = true;
+			// 
 			// ConfigForm
 			// 
 			this.AcceptButton = this.apply;
@@ -840,7 +882,7 @@ namespace CodeImp.DoomBuilder.Windows
 			this.MaximizeBox = false;
 			this.MinimizeBox = false;
 			this.Name = "ConfigForm";
-			this.Opacity = 0;
+			this.Opacity = 0D;
 			this.ShowIcon = false;
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
@@ -918,5 +960,9 @@ namespace CodeImp.DoomBuilder.Windows
 		private System.Windows.Forms.PictureBox hint;
 		private System.Windows.Forms.ToolTip tooltip;
         private System.Windows.Forms.CheckBox linuxpaths;
-    }
+		private System.Windows.Forms.Button importtexturesets;
+		private System.Windows.Forms.OpenFileDialog importtexturesetdialog;
+		private System.Windows.Forms.Button exporttexturesets;
+		private System.Windows.Forms.SaveFileDialog exporttexturesetdialog;
+	}
 }
