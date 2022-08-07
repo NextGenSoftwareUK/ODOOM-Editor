@@ -132,6 +132,7 @@ namespace CodeImp.DoomBuilder.Data
 		// Things combined with things created from Decorate
 		private DecorateParser decorate;
         private ZScriptParser zscript;
+		private Dictionary<DataReader, ICollection<string>> classesbyarchive;
         private Dictionary<string, ActorStructure> zdoomclasses;
 		private List<ThingCategory> thingcategories;
 		private Dictionary<int, ThingTypeInfo> thingtypes;
@@ -323,6 +324,29 @@ namespace CodeImp.DoomBuilder.Data
 			Load(configlistcopy, maplistcopy);
 		}
 
+		// This is used in Load to check for erroneous configuration
+		private bool MatchRequiredArchive(DataReader dr, RequiredArchive arc)
+		{
+			foreach (RequiredArchiveEntry e in arc.Entries)
+			{
+				if (e.Class != null && (!classesbyarchive.ContainsKey(dr) || !classesbyarchive[dr].Contains(e.Class.ToLowerInvariant())))
+				{
+					ICollection<string> coll = null;
+					classesbyarchive.TryGetValue(dr, out coll);
+					DebugConsole.WriteLine(string.Format("Class {0} does not exist in {1} (classes: {2})", e.Class, dr.GetTitle(), coll != null ? string.Join("; ", coll) : null));
+					return false;
+				}
+
+				if (e.Lump != null && !dr.FileExists(e.Lump))
+				{
+					DebugConsole.WriteLine(string.Format("File {0} does not exist in {1}", e.Lump, dr.GetTitle()));
+					return false;
+				}
+			}
+
+			return true;
+		}
+
 		// This loads all data resources
 		internal void Load(DataLocationList configlist, DataLocationList maplist)
 		{
@@ -358,6 +382,8 @@ namespace CodeImp.DoomBuilder.Data
 			knowncolors = new Dictionary<string, PixelColor>(StringComparer.OrdinalIgnoreCase);
 			cvars = new CvarsCollection();
 			ambientsounds = new Dictionary<int, AmbientSoundInfo>();
+
+			classesbyarchive = new Dictionary<DataReader, ICollection<string>>();
 			
 			// Load texture sets
 			foreach(DefinedTextureSet ts in General.Map.ConfigSettings.TextureSets)
@@ -432,7 +458,7 @@ namespace CodeImp.DoomBuilder.Data
 					resourcetextures.Add(c.TextureSet);
 				}
 			}
-			
+
 			// Load stuff
 			LoadX11R6RGB(); //mxd
 			LoadPalette();
@@ -619,6 +645,36 @@ namespace CodeImp.DoomBuilder.Data
 				gldefsentries.Count + " dynamic light definitions, " + 
 				glowingflats.Count + " glowing flat definitions, " + skyboxes.Count + " skybox definitions, " +
 				reverbs.Count + " sound environment definitions");
+
+
+			// [ZZ] Error out if a required archive is not present.
+			foreach (RequiredArchive arc in General.Map.Config.RequiredArchives)
+			{
+				bool found = false;
+				foreach (DataReader dr in containers)
+                {
+					if (MatchRequiredArchive(dr, arc))
+                    {
+						found = true;
+						break;
+                    }
+                }
+
+#if !DEBUG
+				if (!found)
+                {
+					string err = string.Format("A file that is required for this game configuration ({0}) was not found. The map is loaded with limited functionality.\n\nPlease check that this file is in the resources list.", arc.FileName);
+					if (arc.ExcludeFromTesting)
+						err += "\n\nNOTE: This archive needs to be excluded from testing.";
+					MessageBox.Show(
+						err,
+						Application.ProductName,
+						MessageBoxButtons.OK, MessageBoxIcon.Warning
+					);
+					General.ErrorLogger.Add(ErrorType.Error, err);
+				}
+#endif
+			}
 		}
 		
 		// This unloads all data
@@ -666,9 +722,9 @@ namespace CodeImp.DoomBuilder.Data
 			mapinfo = null; //mxd
 		}
 		
-		#endregion
+#endregion
 		
-		#region ================== Suspend / Resume
+#region ================== Suspend / Resume
 
 		// This suspends data resources
 		internal void Suspend()
@@ -709,9 +765,9 @@ namespace CodeImp.DoomBuilder.Data
 			StartBackgroundLoader();
 		}
 		
-		#endregion
+#endregion
 
-		#region ================== Background Loading
+#region ================== Background Loading
 		
 		// This starts background loading
 		private void StartBackgroundLoader()
@@ -827,9 +883,9 @@ namespace CodeImp.DoomBuilder.Data
 			return false;
 		}
 
-        #endregion
+#endregion
 
-        #region ================== Palette
+#region ================== Palette
 
         // This loads the PLAYPAL palette
         private void LoadPalette()
@@ -868,9 +924,9 @@ namespace CodeImp.DoomBuilder.Data
 	        }
         }
 
-		#endregion
+#endregion
 
-		#region ================== Colormaps
+#region ================== Colormaps
 
 		// This loads the colormaps
 		private int LoadColormaps(Dictionary<long, ImageData> list)
@@ -914,9 +970,9 @@ namespace CodeImp.DoomBuilder.Data
 			return null;
 		}
 
-		#endregion
+#endregion
 
-		#region ================== Textures
+#region ================== Textures
 
 		// This loads the textures
 		private int LoadTextures(Dictionary<long, ImageData> list, Dictionary<long, long> nametranslation, Dictionary<string, TexturesParser> cachedparsers)
@@ -1136,9 +1192,9 @@ namespace CodeImp.DoomBuilder.Data
 			return result;
 		}
 		
-		#endregion
+#endregion
 
-		#region ================== Flats
+#region ================== Flats
 
 		// This loads the flats
 		private int LoadFlats(Dictionary<long, ImageData> list, Dictionary<long, long> nametranslation, Dictionary<string, TexturesParser> cachedparsers)
@@ -1267,9 +1323,9 @@ namespace CodeImp.DoomBuilder.Data
 			return (flatnamesfulltoshort.ContainsKey(hash) ? flatnamesfulltoshort[hash] : hash);
 		}
 		
-		#endregion
+#endregion
 
-		#region ================== mxd. HiRes textures
+#region ================== mxd. HiRes textures
 
 		// This loads the textures
 		private int LoadHiResTextures()
@@ -1363,9 +1419,9 @@ namespace CodeImp.DoomBuilder.Data
 			return null;
 		}
 
-		#endregion
+#endregion
 
-		#region ================== Sprites
+#region ================== Sprites
 
 		// This loads the hard defined sprites (not all the lumps, we do that on a need-to-know basis, see LoadThingSprites)
 		private int LoadSprites(Dictionary<string, TexturesParser> cachedparsers)
@@ -1687,9 +1743,9 @@ namespace CodeImp.DoomBuilder.Data
 			return result;
 		}
 		
-		#endregion
+#endregion
 
-		#region ================== mxd. Voxels
+#region ================== mxd. Voxels
 
 		// This returns a specific voxel stream
 		internal Stream GetVoxelData(string pname, ref string voxellocation)
@@ -1709,9 +1765,9 @@ namespace CodeImp.DoomBuilder.Data
 			return null;
 		}
 
-		#endregion
+#endregion
 
-		#region ================== Things
+#region ================== Things
 		
         private void LoadZScriptThings()
         {
@@ -1733,6 +1789,10 @@ namespace CodeImp.DoomBuilder.Data
                         // Parse the data
                         data.Stream.Seek(0, SeekOrigin.Begin);
                         zscript.Parse(data, true);
+
+						if (!classesbyarchive.ContainsKey(dr)) classesbyarchive[dr] = new HashSet<string>();
+						foreach (string cls in zscript.LastClasses)
+							classesbyarchive[dr].Add(cls);
 
                         //mxd. DECORATE lumps are interdepandable. Can't carry on...
                         if (zscript.HasError)
@@ -1777,9 +1837,13 @@ namespace CodeImp.DoomBuilder.Data
 						// Parse the data
 						data.Stream.Seek(0, SeekOrigin.Begin);
 						decorate.Parse(data, true);
-						
+
+						if (!classesbyarchive.ContainsKey(dr)) classesbyarchive[dr] = new HashSet<string>();
+						foreach (string cls in decorate.LastClasses)
+							classesbyarchive[dr].Add(cls);
+
 						//mxd. DECORATE lumps are interdepandable. Can't carry on...
-						if(decorate.HasError)
+						if (decorate.HasError)
 						{
 							decorate.LogError();
 							break;
@@ -2325,9 +2389,9 @@ namespace CodeImp.DoomBuilder.Data
 			return null;
 		}
 		
-		#endregion
+#endregion
 
-		#region ================== mxd. Modeldef, Voxeldef, Gldefs, Mapinfo
+#region ================== mxd. Modeldef, Voxeldef, Gldefs, Mapinfo
 
 		//mxd. This creates <Actor Class, Thing.Type> dictionary. Should be called after all DECORATE actors are parsed
 		private Dictionary<string, int> CreateActorsByClassList() 
@@ -3141,9 +3205,9 @@ namespace CodeImp.DoomBuilder.Data
 			return null;
 		}
 
-		#endregion
+#endregion
 
-		#region ================== Tools
+#region ================== Tools
 
 		// This finds the first IWAD or IPK3 resource
 		// Returns false when not found
@@ -3324,9 +3388,9 @@ namespace CodeImp.DoomBuilder.Data
             General.MainWindow.UpdateStatus();
         }
 
-        #endregion
+#endregion
 
-        #region ================== mxd. Skybox Making
+#region ================== mxd. Skybox Making
 
         internal void SetupSkybox()
 		{
@@ -3858,6 +3922,6 @@ namespace CodeImp.DoomBuilder.Data
             }
 		}
 		
-		#endregion
+#endregion
 	}
 }

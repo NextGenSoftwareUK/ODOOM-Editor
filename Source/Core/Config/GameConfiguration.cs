@@ -194,6 +194,9 @@ namespace CodeImp.DoomBuilder.Config
 		//mxd. Stuff to ignore
 		private HashSet<string> ignoreddirectories;
 		private HashSet<string> ignoredextensions;
+
+		// [ZZ] This implements error message if GZDoom.pk3 is required but not loaded
+		private List<RequiredArchive> requiredarchives;
 		
 		// Defaults
 		private readonly List<DefinedTextureSet> texturesets;
@@ -349,6 +352,9 @@ namespace CodeImp.DoomBuilder.Config
 		//mxd. Stuff to ignore
 		internal HashSet<string> IgnoredFileExtensions { get { return ignoredextensions; } }
 		internal HashSet<string> IgnoredDirectoryNames { get { return ignoreddirectories; } }
+
+		// [ZZ] This implements error message if GZDoom.pk3 is required but not loaded
+		internal List<RequiredArchive> RequiredArchives { get { return requiredarchives; } }
 
 		// Defaults
 		internal List<DefinedTextureSet> TextureSets { get { return texturesets; } }
@@ -526,6 +532,25 @@ namespace CodeImp.DoomBuilder.Config
 			//mxd. Load stuff to ignore
 			ignoreddirectories = new HashSet<string>(cfg.ReadSetting("ignoreddirectories", string.Empty).Split(splitter, StringSplitOptions.RemoveEmptyEntries), StringComparer.OrdinalIgnoreCase);
 			ignoredextensions = new HashSet<string>(cfg.ReadSetting("ignoredextensions", string.Empty).Split(splitter, StringSplitOptions.RemoveEmptyEntries), StringComparer.OrdinalIgnoreCase);
+
+			// [ZZ]
+			IDictionary requiredArchives = cfg.ReadSetting("requiredarchives", new Hashtable());
+			requiredarchives = new List<RequiredArchive>();
+			foreach (DictionaryEntry cde in requiredArchives)
+            {
+				string filename = cfg.ReadSetting("requiredarchives." + cde.Key + ".filename", "gzdoom.pk3");
+				bool exclude = cfg.ReadSetting("requiredarchives." + cde.Key + ".need_exclude", true);
+				IDictionary entries = cfg.ReadSetting("requiredarchives." + cde.Key, new Hashtable());
+				List<RequiredArchiveEntry> reqEntries = new List<RequiredArchiveEntry>();
+				foreach (DictionaryEntry cde2 in entries)
+                {
+					if ((string)cde2.Key == "filename") continue;
+					string lumpname = cfg.ReadSetting("requiredarchives." + cde.Key + "." + cde2.Key + ".lump", (string)null);
+					string classname = cfg.ReadSetting("requiredarchives." + cde.Key + "." + cde2.Key + ".class", (string)null);
+					reqEntries.Add(new RequiredArchiveEntry(classname, lumpname));
+                }
+				requiredarchives.Add(new RequiredArchive(filename, exclude, reqEntries));
+            }
 
 			// Things
 			LoadThingFlags();

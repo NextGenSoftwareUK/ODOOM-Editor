@@ -144,6 +144,7 @@
     <Compile Include="Compilers\NodesCompiler.cs" />
     <Compile Include="Config\ArgumentInfo.cs" />
     <Compile Include="Config\ExternalCommandSettings.cs" />
+    <Compile Include="Config\RequiredArchive.cs" />
     <Compile Include="Config\StaticLimits.cs" />
     <Compile Include="Config\MapLumpInfo.cs" />
     <Compile Include="Config\ScriptConfiguration.cs" />

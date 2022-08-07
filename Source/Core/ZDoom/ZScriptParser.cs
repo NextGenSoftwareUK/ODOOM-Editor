@@ -88,11 +88,18 @@ namespace CodeImp.DoomBuilder.ZDoom
 
 						if(_pname == _pstruct.ClassName.ToLowerInvariant())
 						{
-							Parser.ReportError("Class \"" + _pstruct.ClassName + "\" is trying to inherit from itself. Class is being skipped.");
+							Parser.ReportError("Fatal: Class \"" + _pstruct.ClassName + "\" is trying to inherit from itself.");
 							return false;
 						}
 
+                        string _cname = _pstruct.ClassName;
+
                         Parser.allclasses.TryGetValue(_pname, out _pstruct);
+                        if (_pstruct == null)
+                        {
+                            Parser.ReportError("Fatal: Class \"" + _cname + "\" is trying to inherit from \"" + _pname + "\" which does not exist.");
+                            return false;
+                        }
                     }
                     else _pstruct = null;
                 }
@@ -209,6 +216,12 @@ namespace CodeImp.DoomBuilder.ZDoom
         /// mxd. All actors defined in the loaded DECORATE structures. This includes actors not supported in the current game.
         /// </summary>
         internal Dictionary<string, ActorStructure> AllActorsByClass { get { return archivedactors; } }
+
+
+        /// <summary>
+        /// This is used to find out what classes were parsed from specific archive
+        /// </summary>
+        public HashSet<string> LastClasses { get; internal set; }
 
         #endregion
 
@@ -768,7 +781,8 @@ namespace CodeImp.DoomBuilder.ZDoom
 
 				allclasses.Add(cls.ClassName.ToLowerInvariant(), cls);
 				allclasseslist.Add(cls);
-			}
+                LastClasses.Add(cls.ClassName.ToLowerInvariant());
+            }
 			else if(!isstruct && extend)
 			{
 				string clskey = tok_classname.Value.ToLowerInvariant();
@@ -816,6 +830,8 @@ namespace CodeImp.DoomBuilder.ZDoom
         // Returns false on errors
         public override bool Parse(TextResourceData data, bool clearerrors)
         {
+            if (clearerrors) LastClasses = new HashSet<string>();
+
             //mxd. Already parsed?
             if (!base.AddTextResource(data))
             {
