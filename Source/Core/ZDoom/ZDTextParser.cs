@@ -169,7 +169,7 @@ namespace CodeImp.DoomBuilder.ZDoom
 		}
 		
 		// This returns true if the given character is whitespace
-		private bool IsWhitespace(char c)
+		protected internal bool IsWhitespace(char c)
 		{
 			return (whitespace.IndexOf(c) > -1);
 		}
