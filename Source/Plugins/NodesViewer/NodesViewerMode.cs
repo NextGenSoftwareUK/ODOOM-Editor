@@ -92,12 +92,36 @@ namespace CodeImp.DoomBuilder.Plugins.NodesViewer
 		/// </summary>
 		private bool LoadClassicStructures()
 		{
+			List<string> unsupportedheaders = new List<string>() { "ZNOD", "XNOD" };
+
 			// Load the nodes structure
 			MemoryStream nodesstream = General.Map.GetLumpData("NODES");
+
+			if(nodesstream.Length < 4)
+			{
+				MessageBox.Show("The NODES lump is too short.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+				General.Editing.CancelMode();
+				return false;
+			}
+
+			BinaryReader nodesreader = new BinaryReader(nodesstream);
+
+			string header = new string(nodesreader.ReadChars(4));
+
+			if(unsupportedheaders.Contains(header))
+			{
+				MessageBox.Show("ZDBSP compressed nodes are currently not supported.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+				General.Editing.CancelMode();
+				return false;
+			}
+
+			// Rewind stream position
+			nodesreader.BaseStream.Position = 0;
+
 			int numnodes = (int)nodesstream.Length / 28;
 
 			//mxd. Boilerplate!
-			if(numnodes < 1)
+			if (numnodes < 1)
 			{
 				// Cancel mode
 				MessageBox.Show("The map has only one subsector. Please add more sectors, then try running this mode again.", "THY NODETH ARETH BROKH!", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -105,7 +129,7 @@ namespace CodeImp.DoomBuilder.Plugins.NodesViewer
 				return false;
 			}
 
-			BinaryReader nodesreader = new BinaryReader(nodesstream);
+			
 			nodes = new Node[numnodes];
 			for(int i = 0; i < nodes.Length; i++)
 			{
