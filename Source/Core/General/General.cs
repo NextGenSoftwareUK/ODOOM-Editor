@@ -231,6 +231,7 @@ namespace CodeImp.DoomBuilder
 		private static bool delaymainwindow;
 		private static bool nosettings;
 		private static bool portablemode; //mxd
+		private static bool debugrenderdevice;
 
 		//misc
 		private static readonly Random random = new Random(); //mxd
@@ -275,6 +276,7 @@ namespace CodeImp.DoomBuilder
 		public static DataLocationList AutoLoadResources { get { return new DataLocationList(autoloadresources); } }
 		public static bool DelayMainWindow { get { return delaymainwindow; } }
 		public static bool NoSettings { get { return nosettings; } }
+		public static bool DebugRenderDevice { get { return debugrenderdevice; } }
 		public static EditingManager Editing { get { return editing; } }
 		public static ErrorLogger ErrorLogger { get { return errorlogger; } }
 		public static string CommitHash { get { return commithash; } } //mxd
@@ -955,6 +957,10 @@ namespace CodeImp.DoomBuilder
 					// Add resource to list
 					if(!string.IsNullOrEmpty(dl.location))
 						autoloadresources.Add(dl);
+				}
+				else if (string.Compare(curarg, "-DEBUGRENDERDEVICE", true) == 0)
+				{
+					debugrenderdevice = true;
 				}
 				// Every other arg
 				else

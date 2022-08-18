@@ -44,27 +44,30 @@ static const char* GLLogCheckNull(const GLubyte* str)
 	return str ? (const char*)str : "null";
 }
 
-GLRenderDevice::GLRenderDevice(void* disp, void* window)
+GLRenderDevice::GLRenderDevice(void* disp, void* window, bool debug)
 {
 	Context = IOpenGLContext::Create(disp, window);
 	if (Context)
 	{
 		Context->MakeCurrent();
 
-#ifdef _DEBUG
-		FILE* f = fopen("OpenGLDebug.log", "wb");
-		if (f)
+//#ifdef _DEBUG
+		if (debug)
 		{
-			fprintf(f, "GL_VENDOR = %s\r\n", GLLogCheckNull(glGetString(GL_VENDOR)));
-			fprintf(f, "GL_RENDERER = %s\r\n", GLLogCheckNull(glGetString(GL_RENDERER)));
-			fprintf(f, "GL_VERSION = %s\r\n", GLLogCheckNull(glGetString(GL_VERSION)));
-			fprintf(f, "GL_SHADING_LANGUAGE_VERSION = %s\r\n", GLLogCheckNull(glGetString(GL_SHADING_LANGUAGE_VERSION)));
-			fclose(f);
+			FILE* f = fopen("OpenGLDebug.log", "wb");
+			if (f)
+			{
+				fprintf(f, "GL_VENDOR = %s\r\n", GLLogCheckNull(glGetString(GL_VENDOR)));
+				fprintf(f, "GL_RENDERER = %s\r\n", GLLogCheckNull(glGetString(GL_RENDERER)));
+				fprintf(f, "GL_VERSION = %s\r\n", GLLogCheckNull(glGetString(GL_VERSION)));
+				fprintf(f, "GL_SHADING_LANGUAGE_VERSION = %s\r\n", GLLogCheckNull(glGetString(GL_SHADING_LANGUAGE_VERSION)));
+				fclose(f);
 
-			glEnable(GL_DEBUG_OUTPUT);
-			glDebugMessageCallback(&GLLogCallback, nullptr);
+				glEnable(GL_DEBUG_OUTPUT);
+				glDebugMessageCallback(&GLLogCallback, nullptr);
+			}
 		}
-#endif
+//#endif
 
 		glGenVertexArrays(1, &mStreamVAO);
 		glGenBuffers(1, &mStreamVertexBuffer);

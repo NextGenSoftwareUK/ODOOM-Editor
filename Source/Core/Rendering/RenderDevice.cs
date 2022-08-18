@@ -134,7 +134,7 @@ namespace CodeImp.DoomBuilder.Rendering
                 display = (IntPtr)xplatui.GetField("DisplayHandle", BindingFlags.Static | BindingFlags.NonPublic).GetValue(null);
             }
 
-            Handle = RenderDevice_New(display, RenderTarget.Handle);
+            Handle = RenderDevice_New(display, RenderTarget.Handle, General.DebugRenderDevice);
             if (Handle == IntPtr.Zero)
             {
                 StringBuilder sb = new StringBuilder(4096);
@@ -571,7 +571,7 @@ namespace CodeImp.DoomBuilder.Rendering
         IntPtr Handle;
 
         [DllImport("BuilderNative", CallingConvention = CallingConvention.Cdecl)]
-        static extern IntPtr RenderDevice_New(IntPtr display, IntPtr window);
+        static extern IntPtr RenderDevice_New(IntPtr display, IntPtr window, bool debug);
 
         [DllImport("BuilderNative", CallingConvention = CallingConvention.Cdecl)]
         static extern void RenderDevice_Delete(IntPtr handle);
