@@ -323,8 +323,7 @@ namespace CodeImp.DoomBuilder.ColorPicker.Windows
 		{
 			General.Map.UndoRedo.CreateUndo(description);
 
-			//tricky way to actually store undo information...
-			foreach(Thing t in selection) t.Move(t.Position);
+			foreach (Thing t in selection) t.Fields.BeforeFieldsChange();
 		}
 
 		//this is called only once
