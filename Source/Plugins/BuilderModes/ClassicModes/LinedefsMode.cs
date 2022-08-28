@@ -1395,7 +1395,9 @@ namespace CodeImp.DoomBuilder.BuilderModes
 				else
 					counter++;
 			}
-			
+
+			UpdateSelectionInfo();
+
 			General.Interface.DisplayStatus(StatusType.Action, "Selected only single-sided linedefs (" + counter + ")");
 			General.Interface.RedrawDisplay();
 		}
@@ -1413,6 +1415,8 @@ namespace CodeImp.DoomBuilder.BuilderModes
 				else
 					counter++;
 			}
+
+			UpdateSelectionInfo();
 
 			General.Interface.DisplayStatus(StatusType.Action, "Selected only double-sided linedefs (" + counter + ")");
 			General.Interface.RedrawDisplay();
