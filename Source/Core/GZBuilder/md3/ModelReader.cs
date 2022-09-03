@@ -1527,7 +1527,7 @@ namespace CodeImp.DoomBuilder.GZBuilder.MD3
 			{
 				t.x = float.Parse(fields[0], CultureInfo.InvariantCulture);
 
-				if (fields.Length == 2)
+				if (fields.Length >= 2)
 					t.y = 1.0f - float.Parse(fields[1], CultureInfo.InvariantCulture);
 				else
 					t.y = 1.0f;
