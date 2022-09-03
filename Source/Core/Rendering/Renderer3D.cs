@@ -281,6 +281,10 @@ namespace CodeImp.DoomBuilder.Rendering
 			
 			// Make the projection matrix
 			projection = Matrix.PerspectiveFov(fovy, aspect, PROJ_NEAR_PLANE, General.Settings.ViewDistance);
+
+			CreateMatrices2D();
+
+			crosshairverts = null;
 		}
 		
 		// This creates matrices for a camera view
