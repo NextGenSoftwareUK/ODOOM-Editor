@@ -3639,7 +3639,18 @@ namespace CodeImp.DoomBuilder.Windows
 
 
 				folder = General.DefaultScreenshotsPath;
-				if(!Directory.Exists(folder)) Directory.CreateDirectory(folder);
+				if (!Directory.Exists(folder))
+				{
+					try
+					{
+						Directory.CreateDirectory(folder);
+					}
+					catch(Exception e)
+					{
+						General.ShowErrorMessage($"Could not create folder \"{folder}\":\n{e}", MessageBoxButtons.OK);
+						return;
+					}
+				}
 			}
 
 			// Create name and bounds
