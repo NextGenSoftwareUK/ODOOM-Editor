@@ -282,8 +282,11 @@ namespace CodeImp.DoomBuilder.Rendering
 			// Make the projection matrix
 			projection = Matrix.PerspectiveFov(fovy, aspect, PROJ_NEAR_PLANE, General.Settings.ViewDistance);
 
+			// We also need to re-create the 2D matrices, otherwise the corsshair will be distorted after the viewport is resized. See
+			// https://github.com/jewalky/UltimateDoomBuilder/issues/321
+			// and
+			// https://github.com/jewalky/UltimateDoomBuilder/issues/777
 			CreateMatrices2D();
-
 			crosshairverts = null;
 		}
 		
