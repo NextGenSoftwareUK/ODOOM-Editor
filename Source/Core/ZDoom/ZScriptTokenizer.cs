@@ -735,6 +735,7 @@ namespace CodeImp.DoomBuilder.ZDoom
 
                 // token not found.
                 tok = new ZScriptToken();
+                tok.Position = reader.BaseStream.Position;
                 tok.Type = ZScriptTokenType.Invalid;
                 tok.Value = "" + reader.ReadChar();
                 tok.IsValid = false;

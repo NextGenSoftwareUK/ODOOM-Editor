@@ -1780,9 +1780,11 @@ namespace CodeImp.DoomBuilder.Data
                 // Go for all opened containers
                 foreach (DataReader dr in containers)
                 {
-                    // Load Decorate info cumulatively (the last Decorate is added to the previous)
-                    // I'm not sure if this is the right thing to do though.
-                    currentreader = dr;
+					// Load Decorate info cumulatively (the last Decorate is added to the previous)
+					// I'm not sure if this is the right thing to do though.
+					long t = DateTimeOffset.Now.ToUnixTimeMilliseconds();
+
+					currentreader = dr;
                     IEnumerable<TextResourceData> streams = dr.GetDecorateData("ZSCRIPT");
                     foreach (TextResourceData data in streams)
                     {
@@ -1801,6 +1803,8 @@ namespace CodeImp.DoomBuilder.Data
                             break;
                         }
                     }
+
+					DebugConsole.WriteLine(string.Format("Loading ZScript lumps from {0} took {1}ms", DateTimeOffset.Now.ToUnixTimeMilliseconds() - t));
                 }
 
                 zscript.Finalize();
