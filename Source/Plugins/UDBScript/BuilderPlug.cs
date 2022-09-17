@@ -132,13 +132,18 @@ namespace CodeImp.DoomBuilder.UDBScript
 
 			General.Actions.BindMethods(this);
 
-			watcher = new FileSystemWatcher(Path.Combine(General.AppPath, SCRIPT_FOLDER, "scripts"));
-			watcher.NotifyFilter = NotifyFilters.CreationTime | NotifyFilters.DirectoryName | NotifyFilters.FileName | NotifyFilters.LastWrite | NotifyFilters.Size;
-			watcher.IncludeSubdirectories = true;
-			watcher.Changed += OnWatcherEvent;
-			watcher.Created += OnWatcherEvent;
-			watcher.Deleted += OnWatcherEvent;
-			watcher.Renamed += OnWatcherEvent;
+			string scriptspath = Path.Combine(General.AppPath, SCRIPT_FOLDER, "scripts");
+
+			if (Directory.Exists(scriptspath))
+			{
+				watcher = new FileSystemWatcher(Path.Combine(General.AppPath, SCRIPT_FOLDER, "scripts"));
+				watcher.NotifyFilter = NotifyFilters.CreationTime | NotifyFilters.DirectoryName | NotifyFilters.FileName | NotifyFilters.LastWrite | NotifyFilters.Size;
+				watcher.IncludeSubdirectories = true;
+				watcher.Changed += OnWatcherEvent;
+				watcher.Created += OnWatcherEvent;
+				watcher.Deleted += OnWatcherEvent;
+				watcher.Renamed += OnWatcherEvent;
+			}
 
 			editorexepath = General.Settings.ReadPluginSetting("externaleditor", string.Empty);
 
@@ -154,7 +159,8 @@ namespace CodeImp.DoomBuilder.UDBScript
 			// Methods called by LoadScripts might sleep for some time, so call LoadScripts asynchronously
 			new Task(LoadScripts).Start();
 
-			watcher.EnableRaisingEvents = true;
+			if (watcher != null)
+				watcher.EnableRaisingEvents = true;
 		}
 
 		public override void OnMapOpenEnd()
@@ -164,12 +170,14 @@ namespace CodeImp.DoomBuilder.UDBScript
 			// Methods called by LoadScripts might sleep for some time, so call LoadScripts asynchronously
 			new Task(LoadScripts).Start();
 
-			watcher.EnableRaisingEvents = true;
+			if (watcher != null)
+				watcher.EnableRaisingEvents = true;
 		}
 
 		public override void OnMapCloseBegin()
 		{
-			watcher.EnableRaisingEvents = false;
+			if (watcher != null)
+				watcher.EnableRaisingEvents = false;
 
 			SaveScriptSlotsAndOptions();
 			SaveScriptDirectoryExpansionStatus(scriptdirectorystructure);
@@ -230,6 +238,9 @@ namespace CodeImp.DoomBuilder.UDBScript
 
 		internal void SaveScriptDirectoryExpansionStatus(ScriptDirectoryStructure root)
 		{
+			if (root == null)
+				return;
+
 			if(root.Expanded)
 			{
 				General.Settings.DeletePluginSetting("directoryexpand." + root.Hash);

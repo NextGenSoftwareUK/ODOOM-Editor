@@ -284,6 +284,9 @@ namespace CodeImp.DoomBuilder.UDBScript
 		{
 			List<TreeNode> newnodes = new List<TreeNode>();
 
+			if (sds == null)
+				return newnodes.ToArray();
+
 			// Go through folders and add files (and other folders) recusrively
 			foreach (ScriptDirectoryStructure subsds in sds.Directories.OrderBy(s => s.Name))
 			{
