@@ -734,9 +734,6 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <EmbeddedResource Include="Resources\display2d.shader" />
-    <None Include="Resources\Loader.ani" />
-    <None Include="Resources\Loader1.ani" />
-    <None Include="Resources\Loader2.ani" />
     <None Include="Resources\MissingTexture.png" />
     <EmbeddedResource Include="Resources\things2d.shader" />
     <None Include="Resources\UnknownImage.png" />
