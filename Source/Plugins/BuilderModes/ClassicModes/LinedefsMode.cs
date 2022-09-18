@@ -64,7 +64,6 @@ namespace CodeImp.DoomBuilder.BuilderModes
 		
 		// Interface
 		new private bool editpressed;
-		private bool selectionfromhighlight; //mxd
 
 		// The blockmap makes is used to make finding lines faster
 		BlockMap<BlockEntry> blockmap;
@@ -438,13 +437,6 @@ namespace CodeImp.DoomBuilder.BuilderModes
 			{
 				// Dispose old labels
 				foreach(SelectionLabel l in labels.Values) l.Dispose();
-				
-				// Don't show lables for selected-from-highlight item
-				if(selectionfromhighlight)
-				{
-					labels.Clear();
-					return;
-				}
 			}
 
 			// Make text labels for selected linedefs
@@ -785,22 +777,28 @@ namespace CodeImp.DoomBuilder.BuilderModes
 				// Edit pressed in this mode
 				editpressed = true;
 
+				// We use the marks to determine what to edit/drag, so clear it first
+				General.Map.Map.ClearMarkedLinedefs(false);
+
 				// Highlighted item not selected?
-				if(!highlighted.Selected && (BuilderPlug.Me.AutoClearSelection || (General.Map.Map.SelectedLinedefsCount == 0)))
+				if(!highlighted.Selected)
 				{
 					// Make this the only selection
-					selectionfromhighlight = true; //mxd
 					General.Map.Map.ClearSelectedLinedefs();
-					highlighted.Selected = true;
+					highlighted.Marked = true;
 					UpdateSelectionInfo(); //mxd
 					General.Interface.RedrawDisplay();
+				}
+				else
+				{
+					General.Map.Map.MarkSelectedLinedefs(true, true);
 				}
 
 				// Update display
 				if(renderer.StartPlotter(false))
 				{
 					// Redraw highlight to show selection
-					renderer.PlotLinedef(highlighted, renderer.DetermineLinedefColor(highlighted));
+					renderer.PlotLinedef(highlighted, General.Colors.Highlight);
 					renderer.PlotVertex(highlighted.Start, renderer.DetermineVertexColor(highlighted.Start));
 					renderer.PlotVertex(highlighted.End, renderer.DetermineVertexColor(highlighted.End));
 					renderer.Finish();
@@ -831,28 +829,19 @@ namespace CodeImp.DoomBuilder.BuilderModes
 			if(editpressed)
 			{
 				// Anything selected?
-				ICollection<Linedef> selected = General.Map.Map.GetSelectedLinedefs(true);
-				if(selected.Count > 0)
+				ICollection<Linedef> editlines = General.Map.Map.GetMarkedLinedefs(true);
+
+				if(editlines.Count > 0)
 				{
 					if(General.Interface.IsActiveWindow)
 					{
 						// Show line edit dialog
 						General.Interface.OnEditFormValuesChanged += linedefEditForm_OnValuesChanged;
-						DialogResult result = General.Interface.ShowEditLinedefs(selected);
+						DialogResult result = General.Interface.ShowEditLinedefs(editlines);
 						General.Interface.OnEditFormValuesChanged -= linedefEditForm_OnValuesChanged;
 
 						General.Map.Map.Update();
 						
-						// When a single line was selected, deselect it now
-						if(selected.Count == 1 && selectionfromhighlight) 
-						{
-							General.Map.Map.ClearSelectedLinedefs();
-						} 
-						else if(result == DialogResult.Cancel) //mxd. Restore selection...
-						{ 
-							foreach(Linedef l in selected) l.Selected = true;
-						}
-
 						// Update entire display
 						SetupSectorLabels();
 						General.Map.Renderer2D.UpdateExtraFloorFlag(); //mxd
@@ -863,7 +852,6 @@ namespace CodeImp.DoomBuilder.BuilderModes
 			}
 
 			editpressed = false;
-			selectionfromhighlight = false; //mxd
 			base.OnEditEnd();
 		}
 
@@ -1075,17 +1063,24 @@ namespace CodeImp.DoomBuilder.BuilderModes
 				// Anything highlighted?
 				if((highlighted != null) && !highlighted.IsDisposed)
 				{
+					List<Linedef> draglines = new List<Linedef>();
+
 					// Highlighted item not selected?
 					if(!highlighted.Selected)
 					{
 						// Select only this linedef for dragging
 						General.Map.Map.ClearSelectedLinedefs();
-						highlighted.Selected = true;
+						draglines.Add(highlighted);
+					}
+					else
+					{
+						// Add all selected linedefs to the linedefs we want to drag
+						draglines.AddRange(General.Map.Map.GetSelectedLinedefs(true));
 					}
 
 					// Start dragging the selection
 					if(!BuilderPlug.Me.DontMoveGeometryOutsideMapBoundary || CanDrag()) //mxd
-						General.Editing.ChangeMode(new DragLinedefsMode(mousedownmappos));
+						General.Editing.ChangeMode(new DragLinedefsMode(mousedownmappos, draglines));
 				}
 			}
 		}

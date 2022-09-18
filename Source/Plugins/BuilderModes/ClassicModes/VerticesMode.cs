@@ -55,7 +55,6 @@ namespace CodeImp.DoomBuilder.BuilderModes
 
 		// Interface
 		new private bool editpressed;
-		private bool selectionfromhighlight; //mxd
 
 		// The blockmap makes is used to make finding lines faster
 		BlockMap<BlockEntry> blockmap;
@@ -287,22 +286,28 @@ namespace CodeImp.DoomBuilder.BuilderModes
 				// Edit pressed in this mode
 				editpressed = true;
 
+				// We use the marks to determine what to edit/drag, so clear it first
+				General.Map.Map.ClearMarkedVertices(false);
+
 				// Highlighted item not selected?
-				if(!highlighted.Selected && (BuilderPlug.Me.AutoClearSelection || (General.Map.Map.SelectedVerticessCount == 0)))
+				if(!highlighted.Selected)
 				{
 					// Make this the only selection
-					selectionfromhighlight = true; //mxd
 					General.Map.Map.ClearSelectedVertices();
-					highlighted.Selected = true;
+					highlighted.Marked = true;
 					UpdateSelectionInfo(); //mxd
 					General.Interface.RedrawDisplay();
+				}
+				else
+				{
+					General.Map.Map.MarkSelectedVertices(true, true);
 				}
 
 				// Update display
 				if(renderer.StartPlotter(false))
 				{
 					// Redraw highlight to show selection
-					renderer.PlotVertex(highlighted, renderer.DetermineVertexColor(highlighted));
+					renderer.PlotVertex(highlighted, ColorCollection.HIGHLIGHT);
 					renderer.Finish();
 					renderer.Present();
 				}
@@ -396,25 +401,16 @@ namespace CodeImp.DoomBuilder.BuilderModes
 			if(editpressed)
 			{
 				// Anything selected?
-				ICollection<Vertex> selected = General.Map.Map.GetSelectedVertices(true);
-				if(selected.Count > 0)
+				ICollection<Vertex> editvertices = General.Map.Map.GetMarkedVertices(true);
+
+				if(editvertices.Count > 0)
 				{
 					if(General.Interface.IsActiveWindow)
 					{
 						//mxd. Show realtime vertex edit dialog
 						General.Interface.OnEditFormValuesChanged += vertexEditForm_OnValuesChanged;
-						DialogResult result = General.Interface.ShowEditVertices(selected);
+						DialogResult result = General.Interface.ShowEditVertices(editvertices);
 						General.Interface.OnEditFormValuesChanged -= vertexEditForm_OnValuesChanged;
-
-						// When a single vertex was selected, deselect it now
-						if(selected.Count == 1 && selectionfromhighlight) 
-						{
-							General.Map.Map.ClearSelectedVertices();
-						} 
-						else if(result == DialogResult.Cancel) //mxd. Restore selection...
-						{ 
-							foreach(Vertex v in selected) v.Selected = true;
-						}
 
 						// Update entire display
 						UpdateSelectionInfo(); //mxd
@@ -424,7 +420,6 @@ namespace CodeImp.DoomBuilder.BuilderModes
 			}
 
 			editpressed = false;
-			selectionfromhighlight = false; //mxd
 			base.OnEditEnd();
 		}
 
@@ -640,17 +635,24 @@ namespace CodeImp.DoomBuilder.BuilderModes
 				// Anything highlighted?
 				if((highlighted != null) && !highlighted.IsDisposed)
 				{
+					List<Vertex> dragvertices = new List<Vertex>();
+
 					// Highlighted item not selected?
 					if(!highlighted.Selected)
 					{
 						// Select only this vertex for dragging
 						General.Map.Map.ClearSelectedVertices();
-						highlighted.Selected = true;
+						dragvertices.Add(highlighted);
+					}
+					else
+					{
+						// Add all selected vertices to the vertices we want to drag
+						dragvertices.AddRange(General.Map.Map.GetSelectedVertices(true));
 					}
 
 					// Start dragging the selection
 					if(!BuilderPlug.Me.DontMoveGeometryOutsideMapBoundary || CanDrag()) //mxd
-						General.Editing.ChangeMode(new DragVerticesMode(mousedownmappos));
+						General.Editing.ChangeMode(new DragVerticesMode(mousedownmappos, dragvertices));
 				}
 			}
 		}
