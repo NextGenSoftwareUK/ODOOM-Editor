@@ -708,7 +708,7 @@ namespace CodeImp.DoomBuilder.ZDoom
 
 		//mxd. This adds a warning to the ErrorLogger
 		protected internal void LogWarning(string message) { LogWarning(message, CompilerError.NO_LINE_NUMBER); }
-		protected internal void LogWarning(string message, int linenumber)
+		protected internal virtual void LogWarning(string message, int linenumber)
 		{
 			// Add a warning
 			int errline = (linenumber != CompilerError.NO_LINE_NUMBER 

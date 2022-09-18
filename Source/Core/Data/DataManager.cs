@@ -39,6 +39,7 @@ using CodeImp.DoomBuilder.ZDoom;
 using Matrix = CodeImp.DoomBuilder.Rendering.Matrix;
 using CodeImp.DoomBuilder.Controls;
 using CodeImp.DoomBuilder.Dehacked;
+using System.Diagnostics;
 
 #endregion
 
@@ -132,7 +133,6 @@ namespace CodeImp.DoomBuilder.Data
 		// Things combined with things created from Decorate
 		private DecorateParser decorate;
         private ZScriptParser zscript;
-		private Dictionary<DataReader, ICollection<string>> classesbyarchive;
         private Dictionary<string, ActorStructure> zdoomclasses;
 		private List<ThingCategory> thingcategories;
 		private Dictionary<int, ThingTypeInfo> thingtypes;
@@ -324,29 +324,6 @@ namespace CodeImp.DoomBuilder.Data
 			Load(configlistcopy, maplistcopy);
 		}
 
-		// This is used in Load to check for erroneous configuration
-		private bool MatchRequiredArchive(DataReader dr, RequiredArchive arc)
-		{
-			foreach (RequiredArchiveEntry e in arc.Entries)
-			{
-				if (e.Class != null && (!classesbyarchive.ContainsKey(dr) || !classesbyarchive[dr].Contains(e.Class.ToLowerInvariant())))
-				{
-					ICollection<string> coll = null;
-					classesbyarchive.TryGetValue(dr, out coll);
-					DebugConsole.WriteLine(string.Format("Class {0} does not exist in {1} (classes: {2})", e.Class, dr.GetTitle(), coll != null ? string.Join("; ", coll) : null));
-					return false;
-				}
-
-				if (e.Lump != null && !dr.FileExists(e.Lump))
-				{
-					DebugConsole.WriteLine(string.Format("File {0} does not exist in {1}", e.Lump, dr.GetTitle()));
-					return false;
-				}
-			}
-
-			return true;
-		}
-
 		// This loads all data resources
 		internal void Load(DataLocationList configlist, DataLocationList maplist)
 		{
@@ -383,8 +360,6 @@ namespace CodeImp.DoomBuilder.Data
 			cvars = new CvarsCollection();
 			ambientsounds = new Dictionary<int, AmbientSoundInfo>();
 
-			classesbyarchive = new Dictionary<DataReader, ICollection<string>>();
-			
 			// Load texture sets
 			foreach(DefinedTextureSet ts in General.Map.ConfigSettings.TextureSets)
 				texturesets.Add(new MatchingTextureSet(ts));
@@ -413,7 +388,7 @@ namespace CodeImp.DoomBuilder.Data
 				try
 				{
 					// Choose container type
-					switch(dl.type)
+					switch (dl.type)
 					{
 						//mxd. Load resource in read-only mode if:
 						// 1. UseResourcesInReadonlyMode map option is set.
@@ -423,10 +398,10 @@ namespace CodeImp.DoomBuilder.Data
 
 						// WAD file container
 						case DataLocation.RESOURCE_WAD:
-							c = new WADReader(dl, true);
-							if(((WADReader)c).WadFile.IsOfficialIWAD) //mxd
+							c = new WADReader(dl, General.Map.Config, true);
+							if (((WADReader)c).WadFile.IsOfficialIWAD) //mxd
 							{
-								if(!string.IsNullOrEmpty(prevofficialiwad))
+								if (!string.IsNullOrEmpty(prevofficialiwad))
 									General.ErrorLogger.Add(ErrorType.Warning, "Using more than one official IWAD as a resource is not recommended. Consider removing \"" + prevofficialiwad + "\" or \"" + dl.GetDisplayName() + "\".");
 								prevofficialiwad = dl.GetDisplayName();
 							}
@@ -434,22 +409,22 @@ namespace CodeImp.DoomBuilder.Data
 
 						// Directory container
 						case DataLocation.RESOURCE_DIRECTORY:
-							c = new DirectoryReader(dl, true);
+							c = new DirectoryReader(dl, General.Map.Config, true);
 							break;
 
 						// PK3 file container
 						case DataLocation.RESOURCE_PK3:
-							c = new PK3Reader(dl, true);
+							c = new PK3Reader(dl, General.Map.Config, true);
 							break;
 					}
 				}
-				catch(Exception e)
+				catch (Exception e)
 				{
 					// Unable to load resource
 					General.ErrorLogger.Add(ErrorType.Error, "Unable to load resources from location \"" + dl.location + "\". Please make sure the location is accessible and not in use by another program. The resources will now be loaded with this location excluded. You may reload the resources to try again.\n" + e.GetType().Name + " when creating data reader: " + e.Message);
 					General.WriteLogLine(e.StackTrace);
 					continue;
-				}	
+				}
 
 				// Add container
 				if(c != null)
@@ -645,36 +620,6 @@ namespace CodeImp.DoomBuilder.Data
 				gldefsentries.Count + " dynamic light definitions, " + 
 				glowingflats.Count + " glowing flat definitions, " + skyboxes.Count + " skybox definitions, " +
 				reverbs.Count + " sound environment definitions");
-
-
-			// [ZZ] Error out if a required archive is not present.
-			foreach (RequiredArchive arc in General.Map.Config.RequiredArchives)
-			{
-				bool found = false;
-				foreach (DataReader dr in containers)
-                {
-					if (MatchRequiredArchive(dr, arc))
-                    {
-						found = true;
-						break;
-                    }
-                }
-
-#if !DEBUG
-				if (!found)
-                {
-					string err = string.Format("A file that is required for this game configuration ({0}) was not found. The map is loaded with limited functionality.\n\nPlease check that this file is in the resources list.", arc.FileName);
-					if (arc.ExcludeFromTesting)
-						err += "\n\nNOTE: This archive needs to be excluded from testing.";
-					MessageBox.Show(
-						err,
-						Application.ProductName,
-						MessageBoxButtons.OK, MessageBoxIcon.Warning
-					);
-					General.ErrorLogger.Add(ErrorType.Error, err);
-				}
-#endif
-			}
 		}
 		
 		// This unloads all data
@@ -1782,19 +1727,15 @@ namespace CodeImp.DoomBuilder.Data
                 {
 					// Load Decorate info cumulatively (the last Decorate is added to the previous)
 					// I'm not sure if this is the right thing to do though.
-					long t = DateTimeOffset.Now.ToUnixTimeMilliseconds();
+					Stopwatch t = new Stopwatch();
+					t.Start();
 
 					currentreader = dr;
-                    IEnumerable<TextResourceData> streams = dr.GetDecorateData("ZSCRIPT");
-                    foreach (TextResourceData data in streams)
+                    foreach (TextResourceData data in dr.GetZScriptData("ZSCRIPT"))
                     {
                         // Parse the data
                         data.Stream.Seek(0, SeekOrigin.Begin);
                         zscript.Parse(data, true);
-
-						if (!classesbyarchive.ContainsKey(dr)) classesbyarchive[dr] = new HashSet<string>();
-						foreach (string cls in zscript.LastClasses)
-							classesbyarchive[dr].Add(cls);
 
                         //mxd. DECORATE lumps are interdepandable. Can't carry on...
                         if (zscript.HasError)
@@ -1802,13 +1743,16 @@ namespace CodeImp.DoomBuilder.Data
                             zscript.LogError();
                             break;
                         }
-                    }
+					}
 
-					DebugConsole.WriteLine(string.Format("Loading ZScript lumps from {0} took {1}ms", DateTimeOffset.Now.ToUnixTimeMilliseconds() - t));
+					DebugConsole.WriteLine(string.Format("Loading ZScript lumps from {0} took {1}ms", dr.Location.location, t.ElapsedMilliseconds));
                 }
 
+				Stopwatch t2 = new Stopwatch();
+				t2.Start();
                 zscript.Finalize();
-                if (zscript.HasError)
+				DebugConsole.WriteLine(string.Format("Finalizing ZScript lumps took {0}ms", t2.ElapsedMilliseconds));
+				if (zscript.HasError)
                     zscript.LogError();
 
                 //mxd. Add to text resources collection
@@ -1835,16 +1779,11 @@ namespace CodeImp.DoomBuilder.Data
 					// Load Decorate info cumulatively (the last Decorate is added to the previous)
 					// I'm not sure if this is the right thing to do though.
 					currentreader = dr;
-					IEnumerable<TextResourceData> decostreams = dr.GetDecorateData("DECORATE");
-					foreach(TextResourceData data in decostreams)
+					foreach(TextResourceData data in dr.GetDecorateData("DECORATE"))
 					{
 						// Parse the data
 						data.Stream.Seek(0, SeekOrigin.Begin);
 						decorate.Parse(data, true);
-
-						if (!classesbyarchive.ContainsKey(dr)) classesbyarchive[dr] = new HashSet<string>();
-						foreach (string cls in decorate.LastClasses)
-							classesbyarchive[dr].Add(cls);
 
 						//mxd. DECORATE lumps are interdepandable. Can't carry on...
 						if (decorate.HasError)

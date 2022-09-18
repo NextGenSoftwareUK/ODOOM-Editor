@@ -549,7 +549,7 @@ namespace CodeImp.DoomBuilder.Config
 					string classname = cfg.ReadSetting("requiredarchives." + cde.Key + "." + cde2.Key + ".class", (string)null);
 					reqEntries.Add(new RequiredArchiveEntry(classname, lumpname));
                 }
-				requiredarchives.Add(new RequiredArchive(filename, exclude, reqEntries));
+				requiredarchives.Add(new RequiredArchive((string)cde.Key, filename, exclude, reqEntries));
             }
 
 			// Things

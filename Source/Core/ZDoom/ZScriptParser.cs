@@ -193,6 +193,9 @@ namespace CodeImp.DoomBuilder.ZDoom
         // [ZZ] custom tokenizer class
         internal ZScriptTokenizer tokenizer;
 
+        //
+        public bool NoWarnings = false;
+
         #endregion
 
         #region ================== Properties
@@ -344,6 +347,13 @@ namespace CodeImp.DoomBuilder.ZDoom
             tokenizer = localtokenizer;
 
             return true;
+        }
+
+        protected internal override void LogWarning(string message, int linenumber)
+        {
+            if (NoWarnings)
+                return;
+            base.LogWarning(message, linenumber);
         }
 
         // read in an expression as a token list.

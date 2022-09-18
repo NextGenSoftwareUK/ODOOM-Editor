@@ -23,17 +23,20 @@ namespace CodeImp.DoomBuilder.Config
 
     class RequiredArchive
     {
+        private string id;
         private string filename;
         private bool excludeFromTesting;
         private List<RequiredArchiveEntry> entries;
 
-        public RequiredArchive(string filename, bool excludeFromTesting, List<RequiredArchiveEntry> entries)
+        public RequiredArchive(string id, string filename, bool excludeFromTesting, List<RequiredArchiveEntry> entries)
         {
+            this.id = id;
             this.filename = filename;
             this.excludeFromTesting = excludeFromTesting;
             this.entries = entries;
         }
 
+        public string ID { get { return id;  } }
         public string FileName { get { return filename; } }
         public bool ExcludeFromTesting { get { return excludeFromTesting; } }
         public IReadOnlyCollection<RequiredArchiveEntry> Entries {  get { return entries; } }

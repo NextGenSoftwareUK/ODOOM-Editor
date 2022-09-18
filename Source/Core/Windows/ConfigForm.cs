@@ -41,6 +41,7 @@ namespace CodeImp.DoomBuilder.Windows
 		private List<DefinedTextureSet> copiedsets;
 		private bool preventchanges;
 		private bool reloadresources;
+		private readonly int initialformheight;
 
 		//mxd. "Copy/Paste" stuff
 		private ConfigurationInfo configinfocopy;
@@ -109,6 +110,9 @@ namespace CodeImp.DoomBuilder.Windows
 
 			//mxd. Trigger change to update the right panel...
 			listconfigs_MouseUp(this, new MouseEventArgs(MouseButtons.None, 0, 0, 0, 0));
+
+			//
+			initialformheight = Height;
 		}
 		
 		// This shows a specific page
@@ -140,8 +144,9 @@ namespace CodeImp.DoomBuilder.Windows
 
 				// Set defaults
 				configinfo.ApplyDefaults(gameconfig);
-				
+
 				// Fill resources list
+				configdata.GameConfiguration = gameconfig;
 				configdata.EditResourceLocationList(configinfo.Resources);
 				
 				// Go for all nodebuilder save items
@@ -1125,6 +1130,12 @@ namespace CodeImp.DoomBuilder.Windows
 			General.Interface.DisplayStatus(StatusType.Info, "Pasted color presets from \"" + configinfocopy.Name + "\"");
 		}
 
-		#endregion
-	}
+        #endregion
+
+        private void configdata_OnWarningsChanged(int size)
+        {
+			Height = initialformheight + size;
+			Refresh();
+        }
+    }
 }

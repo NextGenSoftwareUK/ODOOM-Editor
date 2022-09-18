@@ -53,6 +53,9 @@ namespace CodeImp.DoomBuilder.Windows
             this.wadfiledialog = new System.Windows.Forms.OpenFileDialog();
             this.pk3filedialog = new System.Windows.Forms.OpenFileDialog();
             this.notfortesting = new System.Windows.Forms.CheckBox();
+            this.checkingloader = new System.Windows.Forms.Panel();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.label4 = new System.Windows.Forms.Label();
             label1 = new System.Windows.Forms.Label();
             label2 = new System.Windows.Forms.Label();
             label3 = new System.Windows.Forms.Label();
@@ -60,6 +63,8 @@ namespace CodeImp.DoomBuilder.Windows
             this.wadfiletab.SuspendLayout();
             this.directorytab.SuspendLayout();
             this.pk3filetab.SuspendLayout();
+            this.checkingloader.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
             // label1
@@ -280,7 +285,7 @@ namespace CodeImp.DoomBuilder.Windows
             // 
             this.cancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.cancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.cancel.Location = new System.Drawing.Point(262, 260);
+            this.cancel.Location = new System.Drawing.Point(262, 304);
             this.cancel.Name = "cancel";
             this.cancel.Size = new System.Drawing.Size(112, 25);
             this.cancel.TabIndex = 2;
@@ -291,7 +296,7 @@ namespace CodeImp.DoomBuilder.Windows
             // apply
             // 
             this.apply.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.apply.Location = new System.Drawing.Point(144, 260);
+            this.apply.Location = new System.Drawing.Point(144, 304);
             this.apply.Name = "apply";
             this.apply.Size = new System.Drawing.Size(112, 25);
             this.apply.TabIndex = 1;
@@ -313,12 +318,47 @@ namespace CodeImp.DoomBuilder.Windows
             // 
             this.notfortesting.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.notfortesting.AutoSize = true;
-            this.notfortesting.Location = new System.Drawing.Point(12, 232);
+            this.notfortesting.Location = new System.Drawing.Point(12, 233);
             this.notfortesting.Name = "notfortesting";
             this.notfortesting.Size = new System.Drawing.Size(239, 17);
             this.notfortesting.TabIndex = 3;
             this.notfortesting.Text = "Exclude this resource from testing parameters";
             this.notfortesting.UseVisualStyleBackColor = true;
+            // 
+            // checkingloader
+            // 
+            this.checkingloader.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.checkingloader.BackColor = System.Drawing.SystemColors.Info;
+            this.checkingloader.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.checkingloader.Controls.Add(this.pictureBox1);
+            this.checkingloader.Controls.Add(this.label4);
+            this.checkingloader.Cursor = System.Windows.Forms.Cursors.AppStarting;
+            this.checkingloader.ForeColor = System.Drawing.SystemColors.InfoText;
+            this.checkingloader.Location = new System.Drawing.Point(12, 263);
+            this.checkingloader.Name = "checkingloader";
+            this.checkingloader.Size = new System.Drawing.Size(362, 32);
+            this.checkingloader.TabIndex = 4;
+            this.checkingloader.Visible = false;
+            // 
+            // pictureBox1
+            // 
+            this.pictureBox1.Image = global::CodeImp.DoomBuilder.Properties.Resources.Loader;
+            this.pictureBox1.InitialImage = global::CodeImp.DoomBuilder.Properties.Resources.Loader;
+            this.pictureBox1.Location = new System.Drawing.Point(8, 7);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(16, 16);
+            this.pictureBox1.TabIndex = 2;
+            this.pictureBox1.TabStop = false;
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(29, 8);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(176, 13);
+            this.label4.TabIndex = 0;
+            this.label4.Text = "Please wait, checking the archive...";
             // 
             // ResourceOptionsForm
             // 
@@ -326,7 +366,8 @@ namespace CodeImp.DoomBuilder.Windows
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.CancelButton = this.cancel;
-            this.ClientSize = new System.Drawing.Size(386, 293);
+            this.ClientSize = new System.Drawing.Size(386, 337);
+            this.Controls.Add(this.checkingloader);
             this.Controls.Add(this.notfortesting);
             this.Controls.Add(this.cancel);
             this.Controls.Add(this.apply);
@@ -348,6 +389,9 @@ namespace CodeImp.DoomBuilder.Windows
             this.directorytab.PerformLayout();
             this.pk3filetab.ResumeLayout(false);
             this.pk3filetab.PerformLayout();
+            this.checkingloader.ResumeLayout(false);
+            this.checkingloader.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -376,5 +420,8 @@ namespace CodeImp.DoomBuilder.Windows
 		private System.Windows.Forms.CheckBox strictpatches;
 		private System.Windows.Forms.Label label6;
 		private System.Windows.Forms.CheckBox notfortesting;
-	}
+        private System.Windows.Forms.Panel checkingloader;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.PictureBox pictureBox1;
+    }
 }

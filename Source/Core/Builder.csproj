@@ -677,6 +677,7 @@
     <Reference Include="TabControlEX, Version=0.0.3271.41578, Culture=neutral, PublicKeyToken=1db242dc828e4b4e">
       <Private>False</Private>
     </Reference>
+    <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Controls\CommandPaletteControl.resx">
@@ -733,6 +734,9 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <EmbeddedResource Include="Resources\display2d.shader" />
+    <None Include="Resources\Loader.ani" />
+    <None Include="Resources\Loader1.ani" />
+    <None Include="Resources\Loader2.ani" />
     <None Include="Resources\MissingTexture.png" />
     <EmbeddedResource Include="Resources\things2d.shader" />
     <None Include="Resources\UnknownImage.png" />
@@ -1372,6 +1376,7 @@
     <None Include="Resources\MergeGeo.png" />
     <None Include="Resources\MergeGeoClassic.png" />
     <None Include="Resources\MergeGeoRemoveLines.png" />
+    <None Include="Resources\Loader.gif" />
     <Content Include="Resources\Model.png" />
     <None Include="Resources\ModelDisabled.png" />
     <None Include="Resources\ModelFiltered.png" />

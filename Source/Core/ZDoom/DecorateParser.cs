@@ -35,7 +35,7 @@ namespace CodeImp.DoomBuilder.ZDoom
 		public delegate void IncludeDelegate(DecorateParser parser, string includefile);
 		
 		public IncludeDelegate OnInclude;
-		
+
 		#endregion
 		
 		#region ================== Constants
@@ -64,11 +64,14 @@ namespace CodeImp.DoomBuilder.ZDoom
 
 		//mxd. Disposing. Is that really needed?..
 		private bool isdisposed;
-		
+
+		//
+		public bool NoWarnings = false;
+
 		#endregion
-		
+
 		#region ================== Properties
-		
+
 		/// <summary>
 		/// All actors that are supported by the current game.
 		/// </summary>
@@ -129,10 +132,17 @@ namespace CodeImp.DoomBuilder.ZDoom
 				isdisposed = true;
 			}
 		}
-		
+
 		#endregion
 
 		#region ================== Parsing
+
+		protected internal override void LogWarning(string message, int linenumber)
+		{
+			if (NoWarnings)
+				return;
+			base.LogWarning(message, linenumber);
+		}
 
 		// This parses the given decorate stream
 		// Returns false on errors
