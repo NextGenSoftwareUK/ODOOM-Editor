@@ -41,7 +41,7 @@ namespace CodeImp.DoomBuilder.Windows
 		private string selectedmapname;
 		private static readonly Regex episodemapregex = new Regex("^E[1-9]M[1-9]$");
 		private static readonly Regex noepisodemapregex = new Regex("^MAP[0-9][0-9]$");
-		private readonly int initialformsize;
+		private readonly int initialformheight;
 
 		// Properties
 		//public string FilePathName { get { return filepathname; } }
@@ -52,13 +52,13 @@ namespace CodeImp.DoomBuilder.Windows
 		{
 			// Initialize
 			InitializeComponent();
+			this.initialformheight = Height;
 			General.ApplyMonoListViewFix(mapslist);
 			this.Text = "Open Map from " + Path.GetFileName(filepathname);
 			this.filepathname = filepathname;
 			datalocations.StartPath = filepathname; //mxd
 			datalocations.IsMapControl = true;
 			this.options = null;
-			this.initialformsize = Height;
 		}
 
 		// Constructor
@@ -66,13 +66,13 @@ namespace CodeImp.DoomBuilder.Windows
 		{
 			// Initialize
 			InitializeComponent();
+			this.initialformheight = Height;
 			General.ApplyMonoListViewFix(mapslist);
 			this.Text = "Open Map from " + Path.GetFileName(filepathname);
 			this.filepathname = filepathname;
 			this.options = options;
 			datalocations.StartPath = filepathname; //mxd
 			datalocations.IsMapControl = true;
-			this.initialformsize = Height;
 		}
 
 		private GameConfiguration GetGameConfiguration()
@@ -643,7 +643,7 @@ namespace CodeImp.DoomBuilder.Windows
 
         private void datalocations_OnWarningsChanged(int size)
         {
-			Height = initialformsize + size;
+			Height = initialformheight + size;
 			Refresh();
 		}
     }

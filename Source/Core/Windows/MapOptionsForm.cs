@@ -51,6 +51,7 @@ namespace CodeImp.DoomBuilder.Windows
 
 			// Initialize
 			InitializeComponent();
+			this.initialformheight = Height;
 
 			// Keep settings
 			this.options = options;
@@ -128,8 +129,6 @@ namespace CodeImp.DoomBuilder.Windows
 			datalocations.EditResourceLocationList(options.Resources);
 
 			//reloadresourceprecmd.Text = options.ReloadResourcePreCommand;
-
-			this.initialformheight = Height;
 		}
 
 		private GameConfiguration GetGameConfiguration()

@@ -56,7 +56,8 @@ namespace CodeImp.DoomBuilder.Windows
 			
 			// Initialize
 			InitializeComponent();
-			CodeImp.DoomBuilder.General.ApplyMonoListViewFix(listtextures);
+			this.initialformheight = Height;
+			General.ApplyMonoListViewFix(listtextures);
 
 			#if NO_WIN32
 			// Linux doesn't require .exe or .bat file extensions
@@ -110,9 +111,6 @@ namespace CodeImp.DoomBuilder.Windows
 
 			//mxd. Trigger change to update the right panel...
 			listconfigs_MouseUp(this, new MouseEventArgs(MouseButtons.None, 0, 0, 0, 0));
-
-			//
-			initialformheight = Height;
 		}
 		
 		// This shows a specific page
