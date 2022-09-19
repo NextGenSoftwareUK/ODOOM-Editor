@@ -30,11 +30,11 @@ namespace CodeImp.DoomBuilder.Controls
 		{
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ResourceListEditor));
-            System.Windows.Forms.ListViewItem listViewItem4 = new System.Windows.Forms.ListViewItem(new string[] {
+            System.Windows.Forms.ListViewItem listViewItem1 = new System.Windows.Forms.ListViewItem(new string[] {
             "C:\\Windows\\Doom\\Doom2.wad"}, 3, System.Drawing.SystemColors.GrayText, System.Drawing.SystemColors.Window, null);
-            System.Windows.Forms.ListViewItem listViewItem5 = new System.Windows.Forms.ListViewItem(new string[] {
+            System.Windows.Forms.ListViewItem listViewItem2 = new System.Windows.Forms.ListViewItem(new string[] {
             "C:\\My\\Little\\Textures\\"}, 2, System.Drawing.SystemColors.GrayText, System.Drawing.SystemColors.Window, null);
-            System.Windows.Forms.ListViewItem listViewItem6 = new System.Windows.Forms.ListViewItem("C:\\My\\Little\\Pony.wad", 1);
+            System.Windows.Forms.ListViewItem listViewItem3 = new System.Windows.Forms.ListViewItem("C:\\My\\Little\\Pony.wad", 1);
             this.editresource = new System.Windows.Forms.Button();
             this.deleteresources = new System.Windows.Forms.Button();
             this.addresource = new System.Windows.Forms.Button();
@@ -54,8 +54,7 @@ namespace CodeImp.DoomBuilder.Controls
             // 
             // editresource
             // 
-            this.editresource.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.editresource.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.editresource.Enabled = false;
             this.editresource.Location = new System.Drawing.Point(122, 140);
             this.editresource.Name = "editresource";
@@ -67,7 +66,7 @@ namespace CodeImp.DoomBuilder.Controls
             // 
             // deleteresources
             // 
-            this.deleteresources.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.deleteresources.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.deleteresources.Enabled = false;
             this.deleteresources.Location = new System.Drawing.Point(259, 140);
             this.deleteresources.Name = "deleteresources";
@@ -79,7 +78,7 @@ namespace CodeImp.DoomBuilder.Controls
             // 
             // addresource
             // 
-            this.addresource.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.addresource.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.addresource.Location = new System.Drawing.Point(3, 140);
             this.addresource.Name = "addresource";
             this.addresource.Size = new System.Drawing.Size(118, 24);
@@ -167,9 +166,7 @@ namespace CodeImp.DoomBuilder.Controls
             // resourceitems
             // 
             this.resourceitems.AllowDrop = true;
-            this.resourceitems.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.resourceitems.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.resourceitems.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.column});
             this.resourceitems.ContextMenuStrip = this.copypastemenu;
@@ -177,9 +174,9 @@ namespace CodeImp.DoomBuilder.Controls
             this.resourceitems.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.None;
             this.resourceitems.HideSelection = false;
             this.resourceitems.Items.AddRange(new System.Windows.Forms.ListViewItem[] {
-            listViewItem4,
-            listViewItem5,
-            listViewItem6});
+            listViewItem1,
+            listViewItem2,
+            listViewItem3});
             this.resourceitems.Location = new System.Drawing.Point(0, 0);
             this.resourceitems.Name = "resourceitems";
             this.resourceitems.ShowGroups = false;

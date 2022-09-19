@@ -114,6 +114,9 @@ namespace CodeImp.DoomBuilder.Controls
 			// Start with a clear list
 			resourceitems.Items.Clear();
 			copiedresources = new DataLocationList(); //mxd
+
+			Resize += HandleResize;
+			HandleResize(null, null);
 		}
 
 		#endregion
@@ -915,5 +918,34 @@ namespace CodeImp.DoomBuilder.Controls
 		}
 
 		#endregion
-    }
+
+
+		#region ================== Events (mxd)
+
+		//mxd. Because anchor-based alignment fails when using high-Dpi settings...
+		private void HandleResize(object sender, EventArgs e)
+		{
+			int warningsH = GetWarningsHeight();
+
+			resourceitems.Width = this.Width;
+			resourceitems.Top = warningsH;
+			resourceitems.Left = 0;
+			resourceitems.Height = this.Height - addresource.Height - addresource.Margin.Top - addresource.Margin.Bottom - resourceitems.Top;
+
+			addresource.Top = resourceitems.Bottom + addresource.Margin.Top;
+			editresource.Top = addresource.Top;
+			deleteresources.Top = addresource.Top;
+
+			int buttonwidth = (this.Width - addresource.Margin.Left * 2) / 3;
+			addresource.Width = buttonwidth;
+			editresource.Width = buttonwidth;
+			deleteresources.Width = buttonwidth;
+
+			addresource.Left = 0;
+			editresource.Left = addresource.Right + addresource.Margin.Left;
+			deleteresources.Left = editresource.Right + addresource.Margin.Left;
+		}
+
+		#endregion
+	}
 }
