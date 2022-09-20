@@ -76,6 +76,9 @@ namespace CodeImp.DoomBuilder.BuilderModes
 		// Stores sizes of the text for text labels so that they only have to be computed once
 		private Dictionary<string, float> textlabelsizecache;
 
+		// Things that will be edited
+		private ICollection<Thing> editthings;
+
 		#endregion
 
 		#region ================== Properties
@@ -483,22 +486,21 @@ namespace CodeImp.DoomBuilder.BuilderModes
 			{
 				// Edit pressed in this mode
 				editpressed = true;
-
-				// We use the marks to determine what do edit/drag, so clear it first
-				General.Map.Map.ClearMarkedThings(false);
 				
 				// Highlighted item not selected?
 				if(!highlighted.Selected)
 				{
 					// Make this the only selection
 					General.Map.Map.ClearSelectedThings();
-					highlighted.Marked = true;
+
+					editthings = new List<Thing> { highlighted };
+
 					UpdateSelectionInfo(); //mxd
 					General.Interface.RedrawDisplay();
 				}
 				else
 				{
-					General.Map.Map.MarkSelectedThings(true, true);
+					editthings = General.Map.Map.GetSelectedThings(true);
 				}
 
 				// Update display
@@ -528,7 +530,7 @@ namespace CodeImp.DoomBuilder.BuilderModes
 				{
 					General.Map.Map.ClearSelectedThings();
 					General.Map.Map.ClearMarkedThings(false);
-					t.Marked = true;
+					editthings = new List<Thing> { t };
 					Highlight(t);
 					General.Interface.RedrawDisplay();
 				}
@@ -543,10 +545,7 @@ namespace CodeImp.DoomBuilder.BuilderModes
 			// Edit pressed in this mode?
 			if(editpressed)
 			{
-				// Anything selected?
-				ICollection<Thing> editthings = General.Map.Map.GetMarkedThings(true);
-
-				if(editthings.Count > 0)
+				if(editthings?.Count > 0)
 				{
 					if(General.Interface.IsActiveWindow)
 					{
@@ -743,19 +742,19 @@ namespace CodeImp.DoomBuilder.BuilderModes
 				// Anything highlighted?
 				if((highlighted != null) && !highlighted.IsDisposed)
 				{
-					List<Thing> dragthings = new List<Thing>();
+					ICollection<Thing> dragthings;
 
 					// Highlighted item not selected?
 					if(!highlighted.Selected)
 					{
 						// Select only this thing for dragging
 						General.Map.Map.ClearSelectedThings();
-						dragthings.Add(highlighted);
+						dragthings = new List<Thing> { highlighted };
 					}
 					else
 					{
 						// Add all selected things to the things we want to drag
-						dragthings.AddRange(General.Map.Map.GetSelectedThings(true));
+						dragthings = General.Map.Map.GetSelectedThings(true);
 					}
 
 					// Start dragging the selection
@@ -765,7 +764,7 @@ namespace CodeImp.DoomBuilder.BuilderModes
 						bool thingscloned = false;
 						if(General.Interface.ShiftState) 
 						{
-							List<Thing> clonedthings = new List<Thing>(dragthings.Count);
+							ICollection<Thing> clonedthings = new List<Thing>(dragthings.Count);
 							if(dragthings.Count > 0)
 							{
 								// Make undo

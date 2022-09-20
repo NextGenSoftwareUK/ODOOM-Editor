@@ -114,7 +114,7 @@ namespace CodeImp.DoomBuilder.BuilderModes
 		#region ================== Constructor / Disposer
 
 		// Constructor to start dragging immediately
-		public DragThingsMode(EditMode basemode, Vector2D dragstartmappos, List<Thing> things, bool makeundo)
+		public DragThingsMode(EditMode basemode, Vector2D dragstartmappos, ICollection<Thing> things, bool makeundo)
 		{
 			// Initialize
 			this.dragstartmappos = dragstartmappos;

@@ -57,7 +57,7 @@ namespace CodeImp.DoomBuilder.BuilderModes
 		#region ================== Constructor / Disposer
 
 		// Constructor to start dragging immediately
-		public DragLinedefsMode(Vector2D dragstartmappos, List<Linedef> lines)
+		public DragLinedefsMode(Vector2D dragstartmappos, ICollection<Linedef> lines)
 		{
 			// Mark what we are dragging
 			General.Map.Map.ClearAllMarks(false);

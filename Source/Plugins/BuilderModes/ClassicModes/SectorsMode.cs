@@ -83,6 +83,9 @@ namespace CodeImp.DoomBuilder.BuilderModes
 
 		private ConcurrentDictionary<Thing, bool> determinedsectorthings;
 
+		// Sectors that will be edited
+		private ICollection<Sector> editsectors;
+
 		#endregion
 
 		#region ================== Properties
@@ -1056,24 +1059,23 @@ namespace CodeImp.DoomBuilder.BuilderModes
 				// Edit pressed in this mode
 				editpressed = true;
 
-				// We use the marks to determine what to edit/drag, so clear it first
-				General.Map.Map.ClearMarkedSectors(false);
-
 				// Highlighted item not selected?
 				if (!highlighted.Selected)
 				{
 					// Make this the only selection
 					General.Map.Map.ClearSelectedSectors();
 					General.Map.Map.ClearSelectedLinedefs();
-					highlighted.Marked = true;
+
+					editsectors = new List<Sector> { highlighted };
+
 					UpdateSelectedLabels(); //mxd
 					UpdateOverlaySurfaces(); //mxd
 					UpdateSelectionInfo(); //mxd
 					General.Interface.RedrawDisplay();
 				}
-				else
+				else // Highlight is selected, so take all selected sectors
 				{
-					General.Map.Map.MarkSelectedSectors(true, true);
+					editsectors = General.Map.Map.GetSelectedSectors(true);
 				}
 
 				// Update display
@@ -1108,10 +1110,7 @@ namespace CodeImp.DoomBuilder.BuilderModes
 			// Edit pressed in this mode?
 			if(editpressed)
 			{
-				// Anything selected?
-				ICollection<Sector> editsectors = General.Map.Map.GetMarkedSectors(true);
-
-				if(editsectors.Count > 0)
+				if(editsectors?.Count > 0)
 				{
 					if(General.Interface.IsActiveWindow)
 					{
@@ -1315,19 +1314,19 @@ namespace CodeImp.DoomBuilder.BuilderModes
 				// Anything highlighted?
 				if((highlighted != null) && !highlighted.IsDisposed)
 				{
-					List<Sector> dragsectors = new List<Sector>();
+					ICollection<Sector> dragsectors;
 
 					// Highlighted item not selected?
 					if (!highlighted.Selected)
 					{
 						// Select only this sector for dragging
 						General.Map.Map.ClearSelectedSectors();
-						dragsectors.Add(highlighted);
+						dragsectors = new List<Sector> { highlighted };
 						UpdateOverlaySurfaces(); //mxd
 					}
 					else
 					{
-						dragsectors.AddRange(General.Map.Map.GetSelectedSectors(true));
+						dragsectors = General.Map.Map.GetSelectedSectors(true);
 					}
 
 					// Start dragging the selection

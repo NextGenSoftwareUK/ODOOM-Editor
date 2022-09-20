@@ -59,7 +59,7 @@ namespace CodeImp.DoomBuilder.BuilderModes
 		#region ================== Constructor / Disposer
 
 		// Constructor to start dragging immediately
-		public DragVerticesMode(Vector2D dragstartmappos, List<Vertex> vertices)
+		public DragVerticesMode(Vector2D dragstartmappos, ICollection<Vertex> vertices)
 		{
 			// Mark what we are dragging
 			General.Map.Map.ClearAllMarks(false);

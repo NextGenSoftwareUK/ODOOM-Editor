@@ -71,6 +71,9 @@ namespace CodeImp.DoomBuilder.BuilderModes
 		// Stores sizes of the text for text labels so that they only have to be computed once
 		private Dictionary<string, float> textlabelsizecache;
 
+		// Linedefs that will be edited
+		ICollection<Linedef> editlines;
+
 		#endregion
 
 		#region ================== Properties
@@ -777,21 +780,20 @@ namespace CodeImp.DoomBuilder.BuilderModes
 				// Edit pressed in this mode
 				editpressed = true;
 
-				// We use the marks to determine what to edit/drag, so clear it first
-				General.Map.Map.ClearMarkedLinedefs(false);
-
 				// Highlighted item not selected?
 				if(!highlighted.Selected)
 				{
 					// Make this the only selection
 					General.Map.Map.ClearSelectedLinedefs();
-					highlighted.Marked = true;
+
+					editlines = new List<Linedef> { highlighted };
+
 					UpdateSelectionInfo(); //mxd
 					General.Interface.RedrawDisplay();
 				}
 				else
 				{
-					General.Map.Map.MarkSelectedLinedefs(true, true);
+					editlines = General.Map.Map.GetSelectedLinedefs(true);
 				}
 
 				// Update display
@@ -828,10 +830,7 @@ namespace CodeImp.DoomBuilder.BuilderModes
 			// Edit pressed in this mode?
 			if(editpressed)
 			{
-				// Anything selected?
-				ICollection<Linedef> editlines = General.Map.Map.GetMarkedLinedefs(true);
-
-				if(editlines.Count > 0)
+				if(editlines?.Count > 0)
 				{
 					if(General.Interface.IsActiveWindow)
 					{
@@ -1063,19 +1062,19 @@ namespace CodeImp.DoomBuilder.BuilderModes
 				// Anything highlighted?
 				if((highlighted != null) && !highlighted.IsDisposed)
 				{
-					List<Linedef> draglines = new List<Linedef>();
+					ICollection<Linedef> draglines;
 
 					// Highlighted item not selected?
 					if(!highlighted.Selected)
 					{
 						// Select only this linedef for dragging
 						General.Map.Map.ClearSelectedLinedefs();
-						draglines.Add(highlighted);
+						draglines = new List<Linedef> { highlighted };
 					}
 					else
 					{
 						// Add all selected linedefs to the linedefs we want to drag
-						draglines.AddRange(General.Map.Map.GetSelectedLinedefs(true));
+						draglines = General.Map.Map.GetSelectedLinedefs(true);
 					}
 
 					// Start dragging the selection

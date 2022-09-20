@@ -59,6 +59,9 @@ namespace CodeImp.DoomBuilder.BuilderModes
 		// The blockmap makes is used to make finding lines faster
 		BlockMap<BlockEntry> blockmap;
 
+		// Vertices that will be edited
+		ICollection<Vertex> editvertices;
+
 		#endregion
 
 		#region ================== Properties
@@ -294,13 +297,15 @@ namespace CodeImp.DoomBuilder.BuilderModes
 				{
 					// Make this the only selection
 					General.Map.Map.ClearSelectedVertices();
-					highlighted.Marked = true;
+
+					editvertices = new List<Vertex> { highlighted };
+
 					UpdateSelectionInfo(); //mxd
 					General.Interface.RedrawDisplay();
 				}
 				else
 				{
-					General.Map.Map.MarkSelectedVertices(true, true);
+					editvertices = General.Map.Map.GetSelectedVertices(true);
 				}
 
 				// Update display
@@ -400,10 +405,7 @@ namespace CodeImp.DoomBuilder.BuilderModes
 			// Edit pressed in this mode?
 			if(editpressed)
 			{
-				// Anything selected?
-				ICollection<Vertex> editvertices = General.Map.Map.GetMarkedVertices(true);
-
-				if(editvertices.Count > 0)
+				if(editvertices?.Count > 0)
 				{
 					if(General.Interface.IsActiveWindow)
 					{
@@ -635,19 +637,19 @@ namespace CodeImp.DoomBuilder.BuilderModes
 				// Anything highlighted?
 				if((highlighted != null) && !highlighted.IsDisposed)
 				{
-					List<Vertex> dragvertices = new List<Vertex>();
+					ICollection<Vertex> dragvertices;
 
 					// Highlighted item not selected?
 					if(!highlighted.Selected)
 					{
 						// Select only this vertex for dragging
 						General.Map.Map.ClearSelectedVertices();
-						dragvertices.Add(highlighted);
+						dragvertices = new List<Vertex> { highlighted };
 					}
 					else
 					{
 						// Add all selected vertices to the vertices we want to drag
-						dragvertices.AddRange(General.Map.Map.GetSelectedVertices(true));
+						dragvertices = General.Map.Map.GetSelectedVertices(true);
 					}
 
 					// Start dragging the selection
