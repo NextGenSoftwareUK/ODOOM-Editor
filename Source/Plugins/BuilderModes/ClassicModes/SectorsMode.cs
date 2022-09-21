@@ -1121,6 +1121,8 @@ namespace CodeImp.DoomBuilder.BuilderModes
 
 						General.Map.Renderer2D.UpdateExtraFloorFlag(); //mxd
 
+						UpdateEffectLabels();
+
 						UpdateOverlaySurfaces(); //mxd
 						General.Interface.RedrawDisplay();
 					}
