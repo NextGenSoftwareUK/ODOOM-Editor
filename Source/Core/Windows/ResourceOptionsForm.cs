@@ -285,11 +285,17 @@ namespace CodeImp.DoomBuilder.Windows
 			{
 				dispatcher.Invoke(() =>
 				{
-					if (!t.IsFaulted && !t.IsCanceled)
-						requiredarchives = t.Result;
-					else requiredarchives = new List<string>();
-					ApplyDefaultRequiredArchivesSetting();
-					IsCheckingRequiredArchives = false;
+					try
+					{
+						if (!t.IsFaulted && !t.IsCanceled)
+							requiredarchives = t.Result;
+						else requiredarchives = new List<string>();
+						ApplyDefaultRequiredArchivesSetting();
+					}
+					finally
+					{
+						IsCheckingRequiredArchives = false;
+					}
 				});
 			});
         }
