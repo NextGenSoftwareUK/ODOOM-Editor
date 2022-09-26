@@ -23,7 +23,6 @@ using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Windows.Threading;
 using CodeImp.DoomBuilder.Config;
 using CodeImp.DoomBuilder.Data;
 using CodeImp.DoomBuilder.Windows;
@@ -147,7 +146,7 @@ namespace CodeImp.DoomBuilder.Controls
 			return ResourceOptionsForm.CheckRequiredArchives(GameConfiguration, loc, token);
 		}
 
-		private void StartRequiredArchivesCheck(string location)
+		private async void StartRequiredArchivesCheck(string location)
 		{
 			if (GameConfiguration == null) return;
 
@@ -173,60 +172,49 @@ namespace CodeImp.DoomBuilder.Controls
 
 			loadingrequiredarchives.Add(location, cancellation);
 			RefreshLoading();
-			var dispatcher = Dispatcher.CurrentDispatcher;
-			Task.Run(() => RunCheckRequiredArchives(loc, cancellation.Token)).ContinueWith((t) =>
+
+			try
 			{
-				dispatcher.Invoke(() =>
+				loc.requiredarchives = await Task.Run(() => RunCheckRequiredArchives(loc, cancellation.Token));
+				
+				// in case of dir, option1/2 should be erased
+				if (loc.type == DataLocation.RESOURCE_DIRECTORY)
+					loc.option1 = loc.option2 = false;
+				// check if it has to be force-excluded from testing
+				foreach (var arc in GameConfiguration.RequiredArchives)
 				{
-					try
+					if (loc.requiredarchives.Contains(arc.ID) && arc.ExcludeFromTesting)
+						loc.notfortesting = true;
+				}
+
+				foreach (ListViewItem item in resourceitems.Items)
+				{
+					if (((DataLocation)item.Tag).location == location)
 					{
-						if (!t.IsFaulted)
-						{
-							loc.requiredarchives = t.Result;
-							// in case of dir, option1/2 should be erased
-							if (loc.type == DataLocation.RESOURCE_DIRECTORY)
-								loc.option1 = loc.option2 = false;
-							// check if it has to be force-excluded from testing
-							foreach (var arc in GameConfiguration.RequiredArchives)
-							{
-								if (loc.requiredarchives.Contains(arc.ID) && arc.ExcludeFromTesting)
-									loc.notfortesting = true;
-							}
-						}
-						else loc.requiredarchives = new List<string>();
-
-						if (!t.IsCanceled)
-						{
-							foreach (ListViewItem item in resourceitems.Items)
-							{
-								if (((DataLocation)item.Tag).location == location)
-								{
-									item.Tag = loc;
-									if (OnContentChanged != null) OnContentChanged();
-									break;
-								}
-							}
-						}
+						item.Tag = loc;
+						if (OnContentChanged != null) OnContentChanged();
+						break;
 					}
-					catch (Exception e)
-					{
-						General.WriteLogLine(e.ToString());
-					}
+				}
+			}
+			catch (Exception e)
+			{
+				loc.requiredarchives = new List<string>();
+				General.WriteLogLine(e.ToString());
+			}
 
-					cancellation.Dispose();
+			cancellation.Dispose();
 
-					if (!t.IsCanceled && loadingrequiredarchives[location] == cancellation)
-					{
-						General.WriteLogLine(string.Format("Resource check completed for: {0} (Completed = {1}, Faulted = {2}, Canceled = {3}, Match = {4})", location, t.IsCompleted, t.IsFaulted, t.IsCanceled, loadingrequiredarchives[location] == cancellation));
-						loadingrequiredarchives.Remove(location);
-						RefreshLoading();
-					}
+			if (loadingrequiredarchives[location] == cancellation)
+			{
+				General.WriteLogLine(string.Format("Resource check completed for: {0} (Match = {1}, RequiredArchives = {2})", location, loadingrequiredarchives[location] == cancellation, string.Join(",", loc.requiredarchives)));
+				loadingrequiredarchives.Remove(location);
+				RefreshLoading();
+			}
 
-					// if nothing is loading, update warnings if any
-					if (loadingrequiredarchives.Count == 0)
-						UpdateWarnings();
-				});
-			});
+			// if nothing is loading, update warnings if any
+			if (loadingrequiredarchives.Count == 0)
+				UpdateWarnings();
 		}
 
 		private void ShowWarning(string text, bool loading)
@@ -297,8 +285,7 @@ namespace CodeImp.DoomBuilder.Controls
 
 			warnings.Clear();
 
-			resourceitems.Height = Height - 32;
-			resourceitems.Top = 0;
+			HandleResize(this, null);
 
 			List<string> requiredarchives = new List<string>();
 			foreach (ListViewItem item in resourceitems.Items)
@@ -307,6 +294,8 @@ namespace CodeImp.DoomBuilder.Controls
 				if (loc.requiredarchives != null)
 					requiredarchives.AddRange(loc.requiredarchives);
 			}
+
+			General.WriteLogLine(string.Format("Archive check: RequiredArchives = {0}", string.Join(",", requiredarchives)));
 
 			// warning 1: you do not have a required file
 			if (GameConfiguration != null)
@@ -346,8 +335,7 @@ namespace CodeImp.DoomBuilder.Controls
 			{
 				OnWarningsChanged(h);
 				// possibly recalculate size
-				resourceitems.Height = Height - h - 32;
-				resourceitems.Top = h;
+				HandleResize(this, null);
 			}
         }
 

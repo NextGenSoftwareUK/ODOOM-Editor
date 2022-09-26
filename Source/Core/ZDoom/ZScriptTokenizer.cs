@@ -135,7 +135,7 @@ namespace CodeImp.DoomBuilder.ZDoom
         private static Dictionary<string, ZScriptTokenType> namedtokentypes; // these are tokens that have precise equivalent in the enum (like operators)
         private static Dictionary<ZScriptTokenType, string> namedtokentypesreverse; // these are tokens that have precise equivalent in the enum (like operators)
         private static List<string> namedtokentypesorder; // this is the list of said tokens ordered by length.
-        private static StringBuilder SB;
+        private StringBuilder SB = new StringBuilder();
 
         public BinaryReader Reader { get { return reader; } }
         public long LastPosition { get; private set; }
@@ -156,9 +156,6 @@ namespace CodeImp.DoomBuilder.ZDoom
                     LinePositions.Add(br.BaseStream.Position);
             }
             br.BaseStream.Position = cpos;
-
-            if (SB == null)
-                SB = new StringBuilder();
 
             if (namedtokentypes == null || namedtokentypesreverse == null || namedtokentypesorder == null)
             {

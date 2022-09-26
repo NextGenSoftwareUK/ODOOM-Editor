@@ -1712,28 +1712,34 @@ namespace CodeImp.DoomBuilder
 		// This outputs log information
 		public static void WriteLogLine(string line)
 		{
+			lock (random)
+			{
 #if DEBUG
-			// Output to consoles
-			Console.WriteLine(line);
-			DebugConsole.WriteLine(DebugMessageType.LOG, line); //mxd
+				// Output to consoles
+				Console.WriteLine(line);
+				DebugConsole.WriteLine(DebugMessageType.LOG, line); //mxd
 #endif
-			// Write to log file
-			try { File.AppendAllText(logfile, line + Environment.NewLine); }
-			catch(Exception) { }
+				// Write to log file
+				try { File.AppendAllText(logfile, line + Environment.NewLine); }
+				catch (Exception) { }
+			}
 		}
 
 		// This outputs log information
 		public static void WriteLog(string text)
 		{
+			lock (random)
+			{
 #if DEBUG
-			// Output to consoles
-			Console.Write(text);
-			DebugConsole.Write(DebugMessageType.LOG, text);
+				// Output to consoles
+				Console.Write(text);
+				DebugConsole.Write(DebugMessageType.LOG, text);
 #endif
 
-			// Write to log file
-			try { File.AppendAllText(logfile, text); }
-			catch(Exception) { }
+				// Write to log file
+				try { File.AppendAllText(logfile, text); }
+				catch (Exception) { }
+			}
 		}
 		
 #endregion

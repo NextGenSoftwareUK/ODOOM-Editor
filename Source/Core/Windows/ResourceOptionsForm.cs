@@ -26,7 +26,6 @@ using System.ComponentModel;
 using System.Threading.Tasks;
 using CodeImp.DoomBuilder.ZDoom;
 using System.Threading;
-using System.Windows.Threading;
 
 #endregion
 
@@ -130,6 +129,10 @@ namespace CodeImp.DoomBuilder.Windows
 
 		public static List<string> CheckRequiredArchives(GameConfiguration config, DataLocation loc, CancellationToken token)
         {
+			#if DEBUG
+			General.WriteLogLine(string.Format("CheckRequiredArchives (Config = {0})", config?.Name));
+			#endif
+
 			if (config == null)
 				return new List<string>();
 
@@ -202,6 +205,11 @@ namespace CodeImp.DoomBuilder.Windows
 										classes.Add(cls.ToLowerInvariant());
 								}
 
+								#if DEBUG
+								if (zscript.HasError)
+									General.WriteLogLine(string.Format("CRA({0}): ZScript error: {1}", loc.location, zscript.ErrorDescription));
+								#endif
+
 								// load DECORATE
 								var decorate = new DecorateParser(zscript.AllActorsByClass) {
 									NoWarnings = true,
@@ -231,10 +239,18 @@ namespace CodeImp.DoomBuilder.Windows
 									foreach (string cls in decorate.LastClasses)
 										classes.Add(cls.ToLowerInvariant());
 								}
+
+								#if DEBUG
+								if (decorate.HasError)
+									General.WriteLogLine(string.Format("CRA({0}): DECORATE error: {1}", loc.location, decorate.ErrorDescription));
+								#endif
 							}
 
 							if (!classes.Contains(e.Class.ToLowerInvariant()))
                             {
+								#if DEBUG
+								General.WriteLogLine(string.Format("CRA({2}): Does not contain class: {1} <- {0}", string.Join(",", classes), e.Class, loc.location));
+								#endif
 								found = false;
 								break;
                             }
@@ -242,6 +258,9 @@ namespace CodeImp.DoomBuilder.Windows
 
 						if (e.Lump != null && !dr.FileExists(e.Lump))
 						{
+							#if DEBUG
+							General.WriteLogLine(string.Format("CRA({1}): Does not contain lump: {0}", e.Lump, loc.location));
+							#endif
 							found = false;
 							break;
 						}
@@ -277,27 +296,22 @@ namespace CodeImp.DoomBuilder.Windows
 			return output;
         }
 
-		private void StartRequiredArchivesCheck()
+		private async void StartRequiredArchivesCheck()
         {
 			IsCheckingRequiredArchives = true;
-			var dispatcher = Dispatcher.CurrentDispatcher;
-			Task.Run(RunCheckRequiredArchives).ContinueWith((t) =>
+
+			try
 			{
-				dispatcher.Invoke(() =>
-				{
-					try
-					{
-						if (!t.IsFaulted && !t.IsCanceled)
-							requiredarchives = t.Result;
-						else requiredarchives = new List<string>();
-						ApplyDefaultRequiredArchivesSetting();
-					}
-					finally
-					{
-						IsCheckingRequiredArchives = false;
-					}
-				});
-			});
+				requiredarchives = await Task.Run(() => RunCheckRequiredArchives());
+			}
+			catch
+            {
+				requiredarchives = new List<string>();
+            }
+
+			ApplyDefaultRequiredArchivesSetting();
+
+			IsCheckingRequiredArchives = false;
         }
 
 		private void ApplyDefaultRequiredArchivesSetting()
