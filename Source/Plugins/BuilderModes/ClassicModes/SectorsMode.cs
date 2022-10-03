@@ -1596,7 +1596,7 @@ namespace CodeImp.DoomBuilder.BuilderModes
 		//mxd
 		public override void OnViewSelectionNumbersChanged(bool enabled)
 		{
-			if(enabled) UpdateSelectedLabels();
+			UpdateSelectedLabels();
 		}
 
 		//mxd
