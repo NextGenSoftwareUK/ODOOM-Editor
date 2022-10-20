@@ -502,5 +502,23 @@ namespace CodeImp.DoomBuilder.Windows
 			General.ShowHelp("w_resourceoptions.html");
 			hlpevent.Handled = true;
 		}
-    }
+
+		private void wadlocation_Enter(object sender, EventArgs e)
+		{
+			// Stop textbox control from getting focus
+			browsewad.Focus();
+		}
+
+		private void dirlocation_Enter(object sender, EventArgs e)
+		{
+			// Stop textbox control from getting focus
+			browsedir.Focus();
+		}
+
+		private void pk3location_Enter(object sender, EventArgs e)
+		{
+			// Stop textbox control from getting focus
+			browsepk3.Focus();
+		}
+	}
 }
