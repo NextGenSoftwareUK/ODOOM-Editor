@@ -208,8 +208,8 @@ namespace CodeImp.DoomBuilder.Controls
 
             //mxd. Set argument value and label
             if (isarg0str) arg1.Text = arg0str;
-            else SetArgumentText(act.Args[0], arg1, t.Args[0]);
-            SetArgumentText(arginfo[1], arg2, t.Args[1]);
+			else SetArgumentText(arginfo[0], arg1, t.Args[0]);
+			SetArgumentText(arginfo[1], arg2, t.Args[1]);
 			SetArgumentText(arginfo[2], arg3, t.Args[2]);
 			SetArgumentText(arginfo[3], arg4, t.Args[3]);
 			SetArgumentText(arginfo[4], arg5, t.Args[4]);
