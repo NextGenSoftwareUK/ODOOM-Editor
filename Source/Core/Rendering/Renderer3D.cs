@@ -1603,7 +1603,10 @@ namespace CodeImp.DoomBuilder.Rendering
 				Matrix modelscale = Matrix.Scaling((float)sx, (float)sx, (float)sy);
 				Matrix modelrotation = Matrix.RotationY((float)-t.Thing.RollRad) * Matrix.RotationX((float)-t.Thing.PitchRad) * Matrix.RotationZ((float)t.Thing.Angle);
 
-				world = General.Map.Data.ModeldefEntries[t.Thing.Type].Transform * modelscale * modelrotation * t.Position;
+				if(General.Map.Data.ModeldefEntries[t.Thing.Type].UseRotationCenter)
+					world = General.Map.Data.ModeldefEntries[t.Thing.Type].Transform * modelscale * Matrix.Translation(-General.Map.Data.ModeldefEntries[t.Thing.Type].RotationCenter) * modelrotation * Matrix.Translation(General.Map.Data.ModeldefEntries[t.Thing.Type].RotationCenter) * t.Position;
+				else
+					world = General.Map.Data.ModeldefEntries[t.Thing.Type].Transform * modelscale * modelrotation  * t.Position;
                 graphics.SetUniform(UniformName.world, world);
 
                 // Set variables for fog rendering

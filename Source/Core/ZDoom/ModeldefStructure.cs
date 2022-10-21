@@ -34,12 +34,14 @@ namespace CodeImp.DoomBuilder.ZDoom
 		private string path;
 		private Vector3f scale;
 		private Vector3f offset;
+		private Vector3f rotationcenter;
 		private float angleoffset;
 		private float pitchoffset;
 		private float rolloffset;
 		private bool inheritactorpitch;
 		private bool useactorpitch;
 		private bool useactorroll;
+		private bool userotationcenter;
 
 		private Dictionary<string, HashSet<FrameStructure>> frames;
 
@@ -52,12 +54,14 @@ namespace CodeImp.DoomBuilder.ZDoom
 		public Dictionary<int, string> ModelNames { get { return modelnames; } }
 		public Vector3f Scale { get { return scale; } }
 		public Vector3f Offset { get { return offset; } }
+		public Vector3f RotationCenter { get { return rotationcenter; } }
 		public float AngleOffset { get { return angleoffset; } }
 		public float PitchOffset { get { return pitchoffset; } }
 		public float RollOffset { get { return rolloffset; } }
 		public bool InheritActorPitch { get { return inheritactorpitch; } }
 		public bool UseActorPitch { get { return useactorpitch; } }
 		public bool UseActorRoll { get { return useactorroll; } }
+		public bool UseRotationCenter { get { return userotationcenter; } }
 		public string DataPath { get { return path; } } // biwa
 
 		public Dictionary<string, HashSet<FrameStructure>> Frames { get { return frames; } }
@@ -351,6 +355,35 @@ namespace CodeImp.DoomBuilder.ZDoom
 						}
 						break;
 
+					case "rotation-center":
+						parser.SkipWhitespace(true);
+						token = parser.ReadToken();
+						if (!parser.ReadSignedFloat(token, ref rotationcenter.X))
+						{
+							// Not numeric!
+							parser.ReportError("Expected rotation center X value, but got \"" + token + "\"");
+							return false;
+						}
+
+						parser.SkipWhitespace(true);
+						token = parser.ReadToken();
+						if (!parser.ReadSignedFloat(token, ref rotationcenter.Y))
+						{
+							// Not numeric!
+							parser.ReportError("Expected rotation center Y value, but got \"" + token + "\"");
+							return false;
+						}
+
+						parser.SkipWhitespace(true);
+						token = parser.ReadToken();
+						if (!parser.ReadSignedFloat(token, ref rotationcenter.Z))
+						{
+							// Not numeric!
+							parser.ReportError("Expected rotation center Z value, but got \"" + token + "\"");
+							return false;
+						}
+						break;
+
 					case "useactorpitch":
 						inheritactorpitch = false;
 						useactorpitch = true;
@@ -358,6 +391,11 @@ namespace CodeImp.DoomBuilder.ZDoom
 
 					case "useactorroll":
 						useactorroll = true;
+						break;
+
+					case "rotating":
+					case "userotationcenter":
+						userotationcenter = true;
 						break;
 
 					case "inheritactorpitch":
