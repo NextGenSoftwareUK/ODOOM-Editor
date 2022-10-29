@@ -205,7 +205,9 @@ namespace CodeImp.DoomBuilder.Controls
 
 			cancellation.Dispose();
 
-			if (loadingrequiredarchives[location] == cancellation)
+			// Loading might have been canceled outside of here, so make sure that the location is still in the list.
+			// See https://github.com/jewalky/UltimateDoomBuilder/issues/813
+			if (loadingrequiredarchives.ContainsKey(location) && loadingrequiredarchives[location] == cancellation)
 			{
 				General.WriteLogLine(string.Format("Resource check completed for: {0} (Match = {1}, RequiredArchives = {2})", location, loadingrequiredarchives[location] == cancellation, string.Join(",", loc.requiredarchives)));
 				loadingrequiredarchives.Remove(location);
