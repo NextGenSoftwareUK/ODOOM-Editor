@@ -150,7 +150,7 @@ namespace CodeImp.DoomBuilder.Config
 		private bool classicRendering;
 		private bool flatShadeVertices;
 		private bool alwaysShowVertices;
-		
+
 		// These are not stored in the configuration, only used at runtime
 		private int defaultbrightness;
 		private int defaultfloorheight;
@@ -420,7 +420,7 @@ namespace CodeImp.DoomBuilder.Config
 				classicRendering = cfg.ReadSetting("classicrendering", false);
 				alwaysShowVertices = cfg.ReadSetting("alwaysshowvertices", true);
 				flatShadeVertices = cfg.ReadSetting("flatshadevertices", false);
-				
+
 				//mxd. Sector defaults
 				defaultceilheight = cfg.ReadSetting("defaultceilheight", 128);
 				defaultfloorheight = cfg.ReadSetting("defaultfloorheight", 0);
@@ -565,6 +565,9 @@ namespace CodeImp.DoomBuilder.Config
 			cfg.WriteSetting("classicrendering", classicRendering);
 			cfg.WriteSetting("alwaysshowvertices", alwaysShowVertices);
 			cfg.WriteSetting("flatshadevertices", flatShadeVertices);
+
+			// Toasts
+			General.ToastManager.WriteSettings(cfg);
 			
 			//mxd. Sector defaults
 			cfg.WriteSetting("defaultceilheight", defaultceilheight);

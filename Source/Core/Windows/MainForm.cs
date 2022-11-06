@@ -183,7 +183,7 @@ namespace CodeImp.DoomBuilder.Windows
 		public static Size ScaledIconSize = new Size(16, 16); //mxd
 		public static SizeF DPIScaler = new SizeF(1.0f, 1.0f); //mxd
 		public int ProcessingCount { get { return processingcount; } }
-		
+
 		#endregion
 
 		#region ================== Constructor / Disposer
@@ -750,9 +750,9 @@ namespace CodeImp.DoomBuilder.Windows
 		}
 
 		#endregion
-		
+
 		#region ================== Statusbar
-		
+
 		// This updates the status bar
 		private void UpdateStatusbar()
 		{
@@ -3042,7 +3042,15 @@ namespace CodeImp.DoomBuilder.Windows
 			Renderer.FullBrightness = !Renderer.FullBrightness;
 			buttonfullbrightness.Checked = Renderer.FullBrightness;
 			itemfullbrightness.Checked = Renderer.FullBrightness;
-			General.Interface.DisplayStatus(StatusType.Action, "Full Brightness is now " + (Renderer.FullBrightness ? "ON" : "OFF"));
+
+			string shorttext = "Full brightness is now " + (Renderer.FullBrightness ? "ON" : "OFF") + ".";
+			string text = shorttext;
+			string key = Actions.Action.GetShortcutKeyDesc(General.Actions.Current.ShortcutKey);
+
+			if (!string.IsNullOrEmpty(key))
+				text += $" Press '{key}' to toggle.";
+
+			General.ToastManager.ShowToast("togglebrightness", ToastType.INFO, "Changed full brightness", text, shorttext);
 
 			// Redraw display to show changes
 			General.Interface.RedrawDisplay();
@@ -3252,9 +3260,17 @@ namespace CodeImp.DoomBuilder.Windows
 			General.Settings.GZDrawLightsMode = (General.Settings.EnhancedRenderingEffects ? LightRenderMode.ALL : LightRenderMode.NONE);
 			General.Settings.GZDrawModelsMode = (General.Settings.EnhancedRenderingEffects ? ModelRenderMode.ALL : ModelRenderMode.NONE);
 
+			string shorttext = "Enhanced rendering effects are " + (General.Settings.EnhancedRenderingEffects ? "ENABLED" : "DISABLED") + ".";
+			string text = shorttext;
+			string key = Actions.Action.GetShortcutKeyDesc(General.Actions.Current.ShortcutKey);
+
+			if (!string.IsNullOrEmpty(key))
+				text += $" Press '{key}' to toggle.";
+
+			General.ToastManager.ShowToast("gztoggleenhancedrendering", ToastType.INFO, "Changed enhanced rendering", text, shorttext);
+
 			UpdateGZDoomPanel();
 			UpdateViewMenu();
-			DisplayStatus(StatusType.Info, "Enhanced rendering effects are " + (General.Settings.EnhancedRenderingEffects ? "ENABLED" : "DISABLED"));
 		}
 
 		//mxd
@@ -3307,7 +3323,15 @@ namespace CodeImp.DoomBuilder.Windows
 			itemtoggleeventlines.Checked = General.Settings.GZShowEventLines;
 			buttontoggleeventlines.Checked = General.Settings.GZShowEventLines;
 
-			General.MainWindow.DisplayStatus(StatusType.Action, "Event lines are " + (General.Settings.GZShowEventLines ? "ENABLED" : "DISABLED"));
+			string shorttext = "Event lines are now " + (General.Settings.GZShowEventLines ? "ENABLED" : "DISABLED") + ".";
+			string text = shorttext;
+			string key = Actions.Action.GetShortcutKeyDesc(General.Actions.Current.ShortcutKey);
+
+			if (!string.IsNullOrEmpty(key))
+				text += $" Press '{key}' to toggle.";
+
+			General.ToastManager.ShowToast("gztoggleeventlines", ToastType.INFO, "Changed event line visibility", text, shorttext);
+
 			General.MainWindow.RedrawDisplay();
 			General.MainWindow.UpdateGZDoomPanel();
 		}

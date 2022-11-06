@@ -181,6 +181,7 @@ namespace CodeImp.DoomBuilder.ThreeDFloorMode
 			// TMP
 			drawlines = new List<Line3D>();
 			drawpoints = new List<Vector3D>();
+
 		}
 
 		// This is called when the plugin is terminated

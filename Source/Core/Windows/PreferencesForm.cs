@@ -19,6 +19,7 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using System.Windows.Forms;
 using CodeImp.DoomBuilder.Actions;
 using System.Globalization;
@@ -268,6 +269,28 @@ namespace CodeImp.DoomBuilder.Windows
 			// Paste options
 			pasteoptions.Setup(General.Settings.PasteOptions.Copy());
 
+			// Toasts
+			cbToastsEnabled.Checked = General.ToastManager.Enabled;
+			tbToastDuration.Text = (General.ToastManager.Duration / 1000).ToString();
+			RadioButton rb = gbToastPosition.Controls.OfType<RadioButton>().FirstOrDefault(r => (string)r.Tag == ((int)General.ToastManager.Anchor).ToString());
+			if (rb != null)
+				rb.Checked = true;
+
+			SetToastSettingEnabled(cbToastsEnabled.Checked);
+
+			// Add checkboxes for all registered toasts
+			foreach(ToastRegistryEntry tre in General.ToastManager.Registry.Values.OrderBy(e => e.Title))
+			{
+				ListViewItem lvi = lvToastActions.Items.Add(tre.Title);
+				lvi.SubItems.Add(tre.Description);
+				lvi.Checked = tre.Enabled;
+				lvi.Tag = tre;
+			}
+
+			// Make the columns fit the contents
+			title.Width = -1;
+			description.Width = -1;
+
 			// Allow plugins to add tabs
 			this.SuspendLayout();
 			controller = new PreferencesController(this) { AllowAddTab = true };
@@ -424,9 +447,21 @@ namespace CodeImp.DoomBuilder.Windows
 
 			// Paste options
 			General.Settings.PasteOptions = pasteoptions.GetOptions();
+
+			// Toasts
+			General.ToastManager.Enabled = cbToastsEnabled.Checked;
+			General.ToastManager.Anchor = (ToastAnchor)int.Parse((string)gbToastPosition.Controls.OfType<RadioButton>().FirstOrDefault(rb => rb.Checked).Tag);
+			General.ToastManager.Duration = tbToastDuration.GetResult(1) * 1000;
+
+			foreach(ListViewItem lvi in lvToastActions.Items)
+			{
+				if(lvi.Tag is ToastRegistryEntry tre)
+					General.ToastManager.Registry[tre.Name].Enabled = lvi.Checked;
+			}
 			
 			// Let the plugins know we're closing
 			General.Plugins.OnClosePreferences(controller);
+
 			
 			// Close
 			this.DialogResult = DialogResult.OK;
@@ -1260,6 +1295,39 @@ namespace CodeImp.DoomBuilder.Windows
 
 		#endregion
 
+		#region ================== Toasts
+
+		private void tbToastDuration_WhenTextChanged(object sender, EventArgs e)
+		{
+			if (!allowapplycontrol)
+				return;
+
+			if (tbToastDuration.GetResult(1) <= 0)
+			{
+				allowapplycontrol = false;
+				tbToastDuration.Text = "1";
+				allowapplycontrol = true;
+			}
+		}
+
+		private void cbToastsEnabled_CheckedChanged(object sender, EventArgs e)
+		{
+			SetToastSettingEnabled(cbToastsEnabled.Checked);
+		}
+
+		private void SetToastSettingEnabled(bool enabled)
+		{
+			foreach (Control c in tabtoasts.Controls)
+			{
+				if (c == cbToastsEnabled)
+					continue;
+
+				c.Enabled = cbToastsEnabled.Checked;
+			}
+		}
+
+		#endregion
+
 		#region ================== Screenshots Stuff (mxd)
 
 		private void resetscreenshotsdir_Click(object sender, EventArgs e) 
@@ -1286,7 +1354,7 @@ namespace CodeImp.DoomBuilder.Windows
 			}
 		}
 
-        /*
+		/*
 		// This writes all action help files using a template and some basic info from the actions.
 		// Also writes actioncontents.txt with all files to be inserted into Contents.hhc.
 		// Only used during development. Actual button to call this has been removed.
@@ -1318,5 +1386,5 @@ namespace CodeImp.DoomBuilder.Windows
 			File.WriteAllText(filename, contents.ToString());
 		}
 		*/
-    }
+	}
 }

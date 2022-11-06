@@ -620,6 +620,20 @@ namespace CodeImp.DoomBuilder.Data
 				gldefsentries.Count + " dynamic light definitions, " + 
 				glowingflats.Count + " glowing flat definitions, " + skyboxes.Count + " skybox definitions, " +
 				reverbs.Count + " sound environment definitions");
+
+			if (General.ErrorLogger.HasChanged)
+			{
+				string key = Actions.Action.GetShortcutKeyDesc(General.Actions.GetActionByName("builder_showerrors").ShortcutKey);
+				string keymessage = "";
+
+				if (!string.IsNullOrEmpty(key))
+					keymessage = $" ({key})";
+
+				if (General.ErrorLogger.IsWarningAdded)
+					General.ToastManager.ShowToast("resourcewarningsanderrors", ToastType.WARNING, ToastManager.TITLE_WARNING, $"There were warnings while loading the resources. Please review the messages in the Warnings and Errors window{keymessage}.", "There were warnings while loading the resources.");
+				else if(General.ErrorLogger.IsErrorAdded)
+					General.ToastManager.ShowToast("resourcewarningsanderrors", ToastType.ERROR, ToastManager.TITLE_ERROR, $"There were errors while loading the resources. Please review the messages in the Warnings and Errors window{keymessage}.", "There were errors while loading the resources.");
+			}
 		}
 		
 		// This unloads all data

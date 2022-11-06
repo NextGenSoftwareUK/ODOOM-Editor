@@ -3640,8 +3640,15 @@ namespace CodeImp.DoomBuilder.BuilderModes
 		public void ToggleGravity()
 		{
 			BuilderPlug.Me.UseGravity = !BuilderPlug.Me.UseGravity;
-			string onoff = BuilderPlug.Me.UseGravity ? "ON" : "OFF";
-			General.Interface.DisplayStatus(StatusType.Action, "Gravity is now " + onoff + ".");
+
+			string shortmessage = "Gravity is now " + (BuilderPlug.Me.UseGravity ? "ON" : "OFF") + ".";
+			string message = shortmessage;
+			string key = Actions.Action.GetShortcutKeyDesc(General.Actions.Current.ShortcutKey);
+
+			if (!string.IsNullOrEmpty(key))
+				message += $" Press '{key}' to toggle.";
+
+			General.ToastManager.ShowToast("togglegravity", ToastType.INFO, "Changed gravity", message, new StatusInfo(StatusType.Action, shortmessage));
 		}
 
 		[BeginAction("resettexture")]
