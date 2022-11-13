@@ -60,11 +60,16 @@ Source: BuilderNative.pdb; DestDir: {app}; Flags: ignoreversion
 Source: SharpCompress.dll; DestDir: {app}; Flags: ignoreversion
 Source: ScintillaNET.dll; DestDir: {app}; Flags: ignoreversion
 Source: TabControlEX.dll; DestDir: {app}; Flags: ignoreversion
+Source: System.Buffers.dll; DestDir: {app}; Flags: ignoreversion
+Source: System.Memory.dll; DestDir: {app}; Flags: ignoreversion
+Source: System.Numerics.Vectors.dll; DestDir: {app}; Flags: ignoreversion
+Source: System.Runtime.CompilerServices.Unsafe.dll; DestDir: {app}; Flags: ignoreversion
 Source: LICENSE.txt; DestDir: {app}; Flags: ignoreversion
 Source: Compilers\*; DestDir: {app}\Compilers; Flags: ignoreversion recursesubdirs
 Source: Configurations\*; DestDir: {app}\Configurations; Flags: ignoreversion recursesubdirs
 Source: Scripting\*; DestDir: {app}\Scripting; Flags: ignoreversion recursesubdirs
 Source: Snippets\*; DestDir: {app}\Snippets; Flags: ignoreversion recursesubdirs
+Source: UDBScript\udbscript.d.ts; DestDir: {app}\UDBScript; Flags: ignoreversion
 Source: UDBScript\Libraries\*; DestDir: {app}\UDBScript\Libraries; Flags: ignoreversion recursesubdirs
 Source: UDBScript\Scripts\Examples\*; DestDir: {app}\UDBScript\Scripts\Examples; Flags: ignoreversion recursesubdirs
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
