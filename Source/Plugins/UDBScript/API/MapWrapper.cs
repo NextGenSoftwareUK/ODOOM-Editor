@@ -38,6 +38,27 @@ namespace CodeImp.DoomBuilder.UDBScript.Wrapper
 {
 	internal class MapWrapper
 	{
+		#region ================== Enums
+
+		/// <summary>
+		/// How geometry should be merged when geometry is stitched.
+		/// ```
+		/// UDB.Map.stitchGeometry(UDB.Map.MergeometryMode.MERGE);
+		/// ```
+		/// </summary>
+		/// <enum name="CLASSIC">Merge vertices only</enum>
+		/// <enum name="MERGE">Merge vertices and lines</enum>
+		/// <enum name="REPLACE">Merge vertices and lines, replacing sector geometry</enum>
+		[UDBScriptSettings(MinVersion = 5)]
+		public enum MergeGeometryMode
+		{
+			CLASSIC = Map.MergeGeometryMode.CLASSIC,
+			MERGE = Map.MergeGeometryMode.MERGE,
+			REPLACE = Map.MergeGeometryMode.REPLACE
+		}
+
+		#endregion
+
 		#region ================== Variables
 
 		private MapSet map;
@@ -135,7 +156,7 @@ namespace CodeImp.DoomBuilder.UDBScript.Wrapper
 		{
 			try
 			{
-				return new Vector2DWrapper(General.Map.Grid.SnappedToGrid((Vector2D)BuilderPlug.Me.GetVectorFromObject(pos, false)));
+				return new Vector2DWrapper(General.Map.Grid.SnappedToGrid(BuilderPlug.Me.GetVector3DFromObject(pos)));
 			}
 			catch (CantConvertToVectorException e)
 			{
@@ -221,11 +242,18 @@ namespace CodeImp.DoomBuilder.UDBScript.Wrapper
 		/// <summary>
 		/// Stitches marked geometry with non-marked geometry.
 		/// </summary>
-		/// <param name="mergemode">Mode to merge by</param>
+		/// <param name="mergemode">Mode to merge by as `MergeGeometryMode`</param>
 		/// <returns>`true` if successful, `false` if failed</returns>
 		public bool stitchGeometry(MergeGeometryMode mergemode = MergeGeometryMode.CLASSIC)
 		{
-			return General.Map.Map.StitchGeometry(mergemode);
+			if(mergemode == MergeGeometryMode.CLASSIC)
+				return General.Map.Map.StitchGeometry(Map.MergeGeometryMode.CLASSIC);
+			else if(mergemode == MergeGeometryMode.MERGE)
+				return General.Map.Map.StitchGeometry(Map.MergeGeometryMode.MERGE);
+			else if(mergemode == MergeGeometryMode.REPLACE)
+				return General.Map.Map.StitchGeometry(Map.MergeGeometryMode.REPLACE);
+
+			throw BuilderPlug.Me.ScriptRunner.CreateRuntimeException("Unknown MergeGeometryMode value");
 		}
 
 		/// <summary>
@@ -270,7 +298,7 @@ namespace CodeImp.DoomBuilder.UDBScript.Wrapper
 		{
 			try
 			{
-				Vector2D v = (Vector2D)BuilderPlug.Me.GetVectorFromObject(pos, false);
+				Vector2D v = BuilderPlug.Me.GetVector3DFromObject(pos);
 				Linedef nearest = null;
 
 				if (double.IsNaN(maxrange))
@@ -299,7 +327,7 @@ namespace CodeImp.DoomBuilder.UDBScript.Wrapper
 		{
 			try
 			{
-				Vector2D v = (Vector2D)BuilderPlug.Me.GetVectorFromObject(pos, false);
+				Vector2D v = BuilderPlug.Me.GetVector3DFromObject(pos);
 				Thing nearest = null;
 
 				if (double.IsNaN(maxrange))
@@ -328,7 +356,7 @@ namespace CodeImp.DoomBuilder.UDBScript.Wrapper
 		{
 			try
 			{
-				Vector2D v = (Vector2D)BuilderPlug.Me.GetVectorFromObject(pos, false);
+				Vector2D v = BuilderPlug.Me.GetVector3DFromObject(pos);
 				Vertex nearest = null;
 
 				if (double.IsNaN(maxrange))
@@ -357,7 +385,7 @@ namespace CodeImp.DoomBuilder.UDBScript.Wrapper
 		{
 			try
 			{
-				Vector2D v = (Vector2D)BuilderPlug.Me.GetVectorFromObject(pos, false);
+				Vector2D v = BuilderPlug.Me.GetVector3DFromObject(pos);
 				Sidedef nearest = MapSet.NearestSidedef(General.Map.Map.Sidedefs, v);
 
 				if (nearest == null)
@@ -404,7 +432,7 @@ namespace CodeImp.DoomBuilder.UDBScript.Wrapper
 			{
 				try
 				{
-					Vector2D v = (Vector2D)BuilderPlug.Me.GetVectorFromObject(item, false);
+					Vector2D v = BuilderPlug.Me.GetVector3DFromObject(item);
 					DrawnVertex dv = new DrawnVertex();
 					dv.pos = v;
 					dv.stitch = dv.stitchline = true;
@@ -1064,7 +1092,7 @@ namespace CodeImp.DoomBuilder.UDBScript.Wrapper
 		{
 			try
 			{
-				Vector2D v = (Vector2D)BuilderPlug.Me.GetVectorFromObject(pos, false);
+				Vector2D v = BuilderPlug.Me.GetVector3DFromObject(pos);
 				Vertex newvertex = General.Map.Map.CreateVertex(v);
 
 				if(newvertex == null)
@@ -1097,7 +1125,7 @@ namespace CodeImp.DoomBuilder.UDBScript.Wrapper
 				if(type < 0)
 					throw BuilderPlug.Me.ScriptRunner.CreateRuntimeException("Thing type can not be negative.");
 
-				object v = BuilderPlug.Me.GetVectorFromObject(pos, true);
+				Vector2D v = BuilderPlug.Me.GetVector3DFromObject(pos);
 				Thing t = General.Map.Map.CreateThing();
 
 				if(t == null)
@@ -1105,10 +1133,7 @@ namespace CodeImp.DoomBuilder.UDBScript.Wrapper
 
 				General.Settings.ApplyCleanThingSettings(t, type);
 
-				if(v is Vector2D)
-					t.Move((Vector2D)v);
-				else if(v is Vector3D)
-					t.Move((Vector3D)v);
+				t.Move(v);
 
 				t.UpdateConfiguration();
 

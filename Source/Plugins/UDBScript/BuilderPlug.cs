@@ -30,6 +30,7 @@ using System.Dynamic;
 using System.Windows.Forms;
 using System.IO;
 using System.Linq;
+using System.Numerics;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Text.RegularExpressions;
@@ -72,7 +73,7 @@ namespace CodeImp.DoomBuilder.UDBScript
 		#region ================== Constants
 
 		private static readonly string SCRIPT_FOLDER = "udbscript";
-		public static readonly uint UDB_SCRIPT_VERSION = 4;
+		public static readonly uint UDB_SCRIPT_VERSION = 5;
 
 		#endregion
 
@@ -465,41 +466,44 @@ namespace CodeImp.DoomBuilder.UDBScript
 			panel.EndEdit();
 		}
 
-		internal object GetVectorFromObject(object data, bool allow3d)
+		internal Vector3D GetVector3DFromObject(object data)
 		{
 			if (data is Vector2D)
 				return (Vector2D)data;
 			else if (data is Vector2DWrapper)
 				return new Vector2D(((Vector2DWrapper)data)._x, ((Vector2DWrapper)data)._y);
+			else if (data is Vector3D)
+				return (Vector3D)data;
 			else if (data is Vector3DWrapper)
-			{
-				if(allow3d)
-					return new Vector3D(((Vector3DWrapper)data)._x, ((Vector3DWrapper)data)._y, ((Vector3DWrapper)data)._z);
-				else
-					return new Vector2D(((Vector3DWrapper)data)._x, ((Vector3DWrapper)data)._y);
-			}
+				return new Vector3D(((Vector3DWrapper)data)._x, ((Vector3DWrapper)data)._y, ((Vector3DWrapper)data)._z);
 			else if (data.GetType().IsArray)
-			//else if(data is double[])
 			{
-				object[] vals = (object[])data;
-				//double[] vals = (double[])data;
+				object[] rawvals = (object[])data;
+				List<double> vals = new List<double>(rawvals.Length);
 
-				// Make sure all values in the array are doubles
-				foreach (object v in vals)
-					if (!(v is double))
+				// Make sure all values in the array are doubles or BigIntegers
+				foreach (object rv in rawvals)
+				{
+					if (!(rv is double || rv is BigInteger))
 						throw new CantConvertToVectorException("Values in array must be numbers.");
 
-				if (vals.Length == 2)
-					return new Vector2D((double)vals[0], (double)vals[1]);
-				if (vals.Length == 3)
-					return new Vector3D((double)vals[0], (double)vals[1], (double)vals[2]);
+					if (rv is double d)
+						vals.Add(d);
+					else if(rv is BigInteger bi)
+						vals.Add((double)bi);
+				}
+
+				if (vals.Count == 2)
+					return new Vector2D(vals[0], vals[1]);
+				if (vals.Count == 3)
+					return new Vector3D(vals[0], vals[1], vals[2]);
 			}
 			else if (data is ExpandoObject)
 			{
 				IDictionary<string, object> eo = data as IDictionary<string, object>;
 				double x = double.NaN;
 				double y = double.NaN;
-				double z = double.NaN;
+				double z = 0.0;
 
 				if (eo.ContainsKey("x"))
 				{
@@ -537,24 +541,11 @@ namespace CodeImp.DoomBuilder.UDBScript
 					}
 				}
 
-				if (allow3d)
-				{
-					if (!double.IsNaN(x) && !double.IsNaN(y) && double.IsNaN(z))
-						return new Vector2D(x, y);
-					else if (!double.IsNaN(x) && !double.IsNaN(y) && !double.IsNaN(z))
-						return new Vector3D(x, y, z);
-				}
-				else
-				{
-					if (x != double.NaN && y != double.NaN)
-						return new Vector2D(x, y);
-				}
+				if (!double.IsNaN(x) && !double.IsNaN(y) && !double.IsNaN(z))
+					return new Vector3D(x, y, z);
 			}
 
-			if (allow3d)
-				throw new CantConvertToVectorException("Data must be a Vector2D, Vector3D, or an array of numbers.");
-			else
-				throw new CantConvertToVectorException("Data must be a Vector2D, or an array of numbers.");
+			throw new CantConvertToVectorException("Data must be a Vector2D, Vector3D, an array of numbers, or an object with (x, y, z) members.");
 		}
 
 		internal object GetConvertedUniValue(UniValue uv)
