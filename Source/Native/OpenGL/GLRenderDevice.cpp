@@ -607,7 +607,11 @@ bool GLRenderDevice::SetVertexBufferData(VertexBuffer* ibuffer, void* data, int6
 	buffer->BufferStartIndex = buffer->BufferOffset / (format == VertexFormat::Flat ? VertexBuffer::FlatStride : VertexBuffer::WorldStride);
 	sharedbuf->NextPos += size;
 
-	glBufferSubData(GL_ARRAY_BUFFER, buffer->BufferOffset, size, data);
+	if (data)
+	{
+		glBufferSubData(GL_ARRAY_BUFFER, buffer->BufferOffset, size, data);
+	}
+
 	glBindBuffer(GL_ARRAY_BUFFER, oldbinding);
 	bool result = CheckGLError();
 	return result;
