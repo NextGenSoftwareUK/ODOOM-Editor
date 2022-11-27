@@ -4457,7 +4457,12 @@ namespace CodeImp.DoomBuilder.BuilderModes
 		{
 			if (!General.Map.UDMF)
 			{
-				General.Interface.DisplayStatus(StatusType.Warning, "Visual sloping is supported in UDMF only!");
+				General.ToastManager.ShowToast(ToastMessages.VISUALSLOPING, ToastType.WARNING, "Visual sloping", "Visual sloping is supported in UDMF only.");
+				return;
+			}
+			else if(!General.Map.Config.PlaneEquationSupport)
+			{
+				General.ToastManager.ShowToast(ToastMessages.VISUALSLOPING, ToastType.WARNING, "Visual sloping", "Visual sloping is not supported in this game configuration.");
 				return;
 			}
 
@@ -4483,7 +4488,12 @@ namespace CodeImp.DoomBuilder.BuilderModes
 		{
 			if (!General.Map.UDMF)
 			{
-				General.Interface.DisplayStatus(StatusType.Warning, "Visual sloping is supported in UDMF only!");
+				General.ToastManager.ShowToast(ToastMessages.VISUALSLOPING, ToastType.WARNING, "Visual sloping", "Visual sloping is supported in UDMF only.");
+				return;
+			}
+			else if (!General.Map.Config.PlaneEquationSupport)
+			{
+				General.ToastManager.ShowToast(ToastMessages.VISUALSLOPING, ToastType.WARNING, "Visual sloping", "Visual sloping is not supported in this game configuration.");
 				return;
 			}
 
@@ -4509,7 +4519,12 @@ namespace CodeImp.DoomBuilder.BuilderModes
 		{
 			if (!General.Map.UDMF)
 			{
-				General.Interface.DisplayStatus(StatusType.Warning, "Visual sloping is supported in UDMF only!");
+				General.ToastManager.ShowToast(ToastMessages.VISUALSLOPING, ToastType.WARNING, "Visual sloping", "Visual sloping is not supported in this game configuration.");
+				return;
+			}
+			else if (!General.Map.Config.PlaneEquationSupport)
+			{
+				General.ToastManager.ShowToast(ToastMessages.VISUALSLOPING, ToastType.WARNING, "Visual sloping", "Visual sloping is not supported in this game configuration.");
 				return;
 			}
 
