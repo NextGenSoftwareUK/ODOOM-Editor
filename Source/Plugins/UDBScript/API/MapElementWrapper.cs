@@ -231,7 +231,7 @@ namespace CodeImp.DoomBuilder.UDBScript.Wrapper
 						else if (newvalue is int)
 							UniFields.SetInteger(element.Fields, pname, (int)newvalue);
 						else if (newvalue is string)
-							UniFields.SetString(element.Fields, pname, (string)newvalue, string.Empty);
+							UniFields.SetString(element.Fields, pname, (string)newvalue, null);
 						else if (newvalue is bool)
 							element.Fields[pname] = new UniValue(UniversalType.Boolean, (bool)newvalue);
 						else if (newvalue is BigInteger nv)
