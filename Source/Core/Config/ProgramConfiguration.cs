@@ -98,6 +98,8 @@ namespace CodeImp.DoomBuilder.Config
 		private bool showfps;
 		private int[] colordialogcustomcolors;
 		private bool autolaunchontest;
+		private bool parallelizedlinedefplotting;
+		private bool parallelizedvertexplotting;
 
 		//mxd. Script editor settings
 		private string scriptfontname;
@@ -214,6 +216,8 @@ namespace CodeImp.DoomBuilder.Config
 		public bool ShowFPS { get { return showfps; } internal set { showfps = value; } }
 		public int[] ColorDialogCustomColors { get { return colordialogcustomcolors; } internal set { colordialogcustomcolors = value; } }
 		public bool AutoLaunchOnTest { get { return autolaunchontest; } internal set { autolaunchontest = value; } }
+		public bool ParallelizedLinedefPlotting { get { return parallelizedlinedefplotting; } internal set { parallelizedlinedefplotting = value; } }
+		public bool ParallelizedVertexPlotting { get { return parallelizedvertexplotting; } internal set { parallelizedvertexplotting = value; } }
 
 		//mxd. Highlight mode
 		public bool UseHighlight
@@ -369,6 +373,8 @@ namespace CodeImp.DoomBuilder.Config
 				switchviewmodes = cfg.ReadSetting("switchviewmodes", false); //mxd
 				showfps = cfg.ReadSetting("showfps", false);
 				autolaunchontest = cfg.ReadSetting("autolaunchontest", false);
+				parallelizedlinedefplotting = cfg.ReadSetting("parallelizedlinedefplotting", true);
+				parallelizedvertexplotting = cfg.ReadSetting("parallelizedvertexplotting", false);
 
 				//mxd. Script editor
 				scriptfontname = cfg.ReadSetting("scriptfontname", "Courier New");

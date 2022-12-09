@@ -19,7 +19,7 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Net;
+using System.Threading.Tasks;
 using CodeImp.DoomBuilder.Map;
 using CodeImp.DoomBuilder.Geometry;
 using CodeImp.DoomBuilder.Data;
@@ -2129,37 +2129,77 @@ namespace CodeImp.DoomBuilder.Rendering
 		// This renders a set of linedefs
 		public void PlotLinedefSet(ICollection<Linedef> linedefs)
 		{
-			// Go for all linedefs
-			foreach(Linedef l in linedefs)
+			// biwa. Code duplication because the performance hit from the overhead of calling PlotLinedef in a loop causes reduced FPS.
+			// Telling the compiler to agressively inline PlotLinedef seems to mostly alleviate the problem, but I'm not sure how reliable that is
+			if (General.Settings.ParallelizedLinedefPlotting)
 			{
-				// Transform vertex coordinates
-				Vector2D v1 = l.Start.Position.GetTransformed(translatex, translatey, scale, -scale);
-				Vector2D v2 = l.End.Position.GetTransformed(translatex, translatey, scale, -scale);
+				// Go for all linedefs
+				Parallel.ForEach(linedefs, l =>
+				{
+					// Transform vertex coordinates
+					Vector2D v1 = l.Start.Position.GetTransformed(translatex, translatey, scale, -scale);
+					Vector2D v2 = l.End.Position.GetTransformed(translatex, translatey, scale, -scale);
 
-				//mxd. Should we bother?
-				double lengthsq = (v2 - v1).GetLengthSq();
-				if(lengthsq < minlinelength) continue; //mxd
+					//mxd. Should we bother?
+					double lengthsq = (v2 - v1).GetLengthSq();
+					if (lengthsq < minlinelength) return; //mxd
 
-				// Determine color
-				PixelColor c = DetermineLinedefColor(l);
+					// Determine color
+					PixelColor c = DetermineLinedefColor(l);
 
-				// Draw line. mxd: added 3d-floor indication
-				if(l.ExtraFloorFlag && General.Settings.GZMarkExtraFloors)
-					plotter.DrawLine3DFloor((int)v1.x, TransformY((int)v1.y), (int)v2.x, TransformY((int)v2.y), ref c, General.Colors.ThreeDFloor);
-				else
-					plotter.DrawLineSolid((int)v1.x, TransformY((int)v1.y), (int)v2.x, TransformY((int)v2.y), ref c);
+					// Draw line. mxd: added 3d-floor indication
+					if (l.ExtraFloorFlag && General.Settings.GZMarkExtraFloors)
+						plotter.DrawLine3DFloor((int)v1.x, TransformY((int)v1.y), (int)v2.x, TransformY((int)v2.y), ref c, General.Colors.ThreeDFloor);
+					else
+						plotter.DrawLineSolid((int)v1.x, TransformY((int)v1.y), (int)v2.x, TransformY((int)v2.y), ref c);
 
-				//mxd. Should we bother?
-				if(lengthsq < minlinenormallength) continue; //mxd
+					//mxd. Should we bother?
+					if (lengthsq < minlinenormallength) return; //mxd
 
-				// Calculate normal indicator
-				double mx = (v2.x - v1.x) * 0.5f;
-				double my = (v2.y - v1.y) * 0.5f;
+					// Calculate normal indicator
+					double mx = (v2.x - v1.x) * 0.5f;
+					double my = (v2.y - v1.y) * 0.5f;
 
-				// Draw normal indicator
-				plotter.DrawLineSolid((int)(v1.x + mx), TransformY((int)(v1.y + my)),
-									  (int)((v1.x + mx) - (my * l.LengthInv) * linenormalsize),
-									  TransformY((int)((v1.y + my) + (mx * l.LengthInv) * linenormalsize)), ref c);
+					// Draw normal indicator
+					plotter.DrawLineSolid((int)(v1.x + mx), TransformY((int)(v1.y + my)),
+										 (int)((v1.x + mx) - (my * l.LengthInv) * linenormalsize),
+										 TransformY((int)((v1.y + my) + (mx * l.LengthInv) * linenormalsize)), ref c);
+				});
+			}
+			else
+			{
+				// Go for all linedefs
+				foreach (Linedef l in linedefs)
+				{
+					// Transform vertex coordinates
+					Vector2D v1 = l.Start.Position.GetTransformed(translatex, translatey, scale, -scale);
+					Vector2D v2 = l.End.Position.GetTransformed(translatex, translatey, scale, -scale);
+
+					//mxd. Should we bother?
+					double lengthsq = (v2 - v1).GetLengthSq();
+					if (lengthsq < minlinelength) continue; //mxd
+
+					// Determine color
+					PixelColor c = DetermineLinedefColor(l);
+
+					// Draw line. mxd: added 3d-floor indication
+					if (l.ExtraFloorFlag && General.Settings.GZMarkExtraFloors)
+						plotter.DrawLine3DFloor((int)v1.x, TransformY((int)v1.y), (int)v2.x, TransformY((int)v2.y), ref c, General.Colors.ThreeDFloor);
+					else
+						plotter.DrawLineSolid((int)v1.x, TransformY((int)v1.y), (int)v2.x, TransformY((int)v2.y), ref c);
+
+					//mxd. Should we bother?
+					if (lengthsq < minlinenormallength) continue; //mxd
+
+					// Calculate normal indicator
+					double mx = (v2.x - v1.x) * 0.5f;
+					double my = (v2.y - v1.y) * 0.5f;
+
+					// Draw normal indicator
+					plotter.DrawLineSolid((int)(v1.x + mx), TransformY((int)(v1.y + my)),
+										  (int)((v1.x + mx) - (my * l.LengthInv) * linenormalsize),
+										  TransformY((int)((v1.y + my) + (mx * l.LengthInv) * linenormalsize)), ref c);
+				}
 			}
 		}
 
@@ -2199,9 +2239,37 @@ namespace CodeImp.DoomBuilder.Rendering
 			{
 				return;
 			}
-			
-			// Go for all vertices
-			foreach(Vertex v in vertices) PlotVertex(v, DetermineVertexColor(v));
+
+			// biwa. Code duplication because the performance hit from the overhead of calling PlotLinedef in a loop causes reduced FPS.
+			// Telling the compiler to agressively inline PlotLinedef seems to mostly alleviate the problem, but I'm not sure how reliable that is
+			if (General.Settings.ParallelizedVertexPlotting)
+			{
+				// Go for all vertices
+				Parallel.ForEach(vertices, v =>
+				{
+					// Transform vertex coordinates
+					Vector2D nv = v.Position.GetTransformed(translatex, translatey, scale, -scale);
+
+					int colorindex = DetermineVertexColor(v);
+
+					// Draw pixel here
+					plotter.DrawVertexSolid((int)nv.x, TransformY((int)nv.y), vertexsize, ref General.Colors.Colors[colorindex], ref General.Colors.BrightColors[colorindex], ref General.Colors.DarkColors[colorindex]);
+				});
+			}
+			else
+			{
+				// Go for all vertices
+				foreach (Vertex v in vertices)
+				{
+					// Transform vertex coordinates
+					Vector2D nv = v.Position.GetTransformed(translatex, translatey, scale, -scale);
+
+					int colorindex = DetermineVertexColor(v);
+					
+					// Draw pixel here
+					plotter.DrawVertexSolid((int)nv.x, TransformY((int)nv.y), vertexsize, ref General.Colors.Colors[colorindex], ref General.Colors.BrightColors[colorindex], ref General.Colors.DarkColors[colorindex]);
+				}
+			}
 		}
 
 		#endregion

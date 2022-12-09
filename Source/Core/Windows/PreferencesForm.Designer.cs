@@ -74,6 +74,8 @@ namespace CodeImp.DoomBuilder.Windows
 			this.cbStretchView = new System.Windows.Forms.CheckBox();
 			this.scriptautoclosebrackets = new System.Windows.Forms.CheckBox();
 			this.scriptallmanstyle = new System.Windows.Forms.CheckBox();
+			this.cbParallelizedLinedefPlotting = new System.Windows.Forms.CheckBox();
+			this.cbParallelizedVertexPlotting = new System.Windows.Forms.CheckBox();
 			this.browseScreenshotsFolderDialog = new System.Windows.Forms.FolderBrowserDialog();
 			this.apply = new System.Windows.Forms.Button();
 			this.cancel = new System.Windows.Forms.Button();
@@ -657,7 +659,7 @@ namespace CodeImp.DoomBuilder.Windows
 			// cbMarkExtraFloors
 			// 
 			this.cbMarkExtraFloors.AutoSize = true;
-			this.cbMarkExtraFloors.Location = new System.Drawing.Point(18, 466);
+			this.cbMarkExtraFloors.Location = new System.Drawing.Point(18, 442);
 			this.cbMarkExtraFloors.Name = "cbMarkExtraFloors";
 			this.cbMarkExtraFloors.Size = new System.Drawing.Size(175, 17);
 			this.cbMarkExtraFloors.TabIndex = 1;
@@ -669,7 +671,7 @@ namespace CodeImp.DoomBuilder.Windows
 			// cbFlatShadeVertices
 			// 
 			this.cbFlatShadeVertices.AutoSize = true;
-			this.cbFlatShadeVertices.Location = new System.Drawing.Point(18, 489);
+			this.cbFlatShadeVertices.Location = new System.Drawing.Point(18, 465);
 			this.cbFlatShadeVertices.Name = "cbFlatShadeVertices";
 			this.cbFlatShadeVertices.Size = new System.Drawing.Size(115, 17);
 			this.cbFlatShadeVertices.TabIndex = 1;
@@ -703,7 +705,7 @@ namespace CodeImp.DoomBuilder.Windows
 			// cbOldHighlightMode
 			// 
 			this.cbOldHighlightMode.AutoSize = true;
-			this.cbOldHighlightMode.Location = new System.Drawing.Point(229, 443);
+			this.cbOldHighlightMode.Location = new System.Drawing.Point(229, 419);
 			this.cbOldHighlightMode.Name = "cbOldHighlightMode";
 			this.cbOldHighlightMode.Size = new System.Drawing.Size(207, 17);
 			this.cbOldHighlightMode.TabIndex = 15;
@@ -715,7 +717,7 @@ namespace CodeImp.DoomBuilder.Windows
 			// cbStretchView
 			// 
 			this.cbStretchView.AutoSize = true;
-			this.cbStretchView.Location = new System.Drawing.Point(229, 397);
+			this.cbStretchView.Location = new System.Drawing.Point(229, 373);
 			this.cbStretchView.Name = "cbStretchView";
 			this.cbStretchView.Size = new System.Drawing.Size(172, 17);
 			this.cbStretchView.TabIndex = 13;
@@ -746,6 +748,29 @@ namespace CodeImp.DoomBuilder.Windows
 			this.scriptallmanstyle.Text = "Allman-style bracing";
 			this.toolTip1.SetToolTip(this.scriptallmanstyle, resources.GetString("scriptallmanstyle.ToolTip"));
 			this.scriptallmanstyle.UseVisualStyleBackColor = true;
+			// 
+			// cbParallelizedLinedefPlotting
+			// 
+			this.cbParallelizedLinedefPlotting.AutoSize = true;
+			this.cbParallelizedLinedefPlotting.Location = new System.Drawing.Point(229, 465);
+			this.cbParallelizedLinedefPlotting.Name = "cbParallelizedLinedefPlotting";
+			this.cbParallelizedLinedefPlotting.Size = new System.Drawing.Size(150, 17);
+			this.cbParallelizedLinedefPlotting.TabIndex = 49;
+			this.cbParallelizedLinedefPlotting.Text = "Parallelized linedef plotting";
+			this.toolTip1.SetToolTip(this.cbParallelizedLinedefPlotting, "Parallelizes linedef plotting over all logical CPU cores.");
+			this.cbParallelizedLinedefPlotting.UseVisualStyleBackColor = true;
+			// 
+			// cbParallelizedVertexPlotting
+			// 
+			this.cbParallelizedVertexPlotting.AutoSize = true;
+			this.cbParallelizedVertexPlotting.Location = new System.Drawing.Point(18, 488);
+			this.cbParallelizedVertexPlotting.Name = "cbParallelizedVertexPlotting";
+			this.cbParallelizedVertexPlotting.Size = new System.Drawing.Size(148, 17);
+			this.cbParallelizedVertexPlotting.TabIndex = 50;
+			this.cbParallelizedVertexPlotting.Text = "Parallelized vertex plotting";
+			this.toolTip1.SetToolTip(this.cbParallelizedVertexPlotting, "Parallelizes vertex plotting over all logical CPU cores. Can result in vertices c" +
+        "lose to each other flickering when panning the view");
+			this.cbParallelizedVertexPlotting.UseVisualStyleBackColor = true;
 			// 
 			// browseScreenshotsFolderDialog
 			// 
@@ -1468,6 +1493,8 @@ namespace CodeImp.DoomBuilder.Windows
 			this.appearancegroup1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+			this.appearancegroup1.Controls.Add(this.cbParallelizedVertexPlotting);
+			this.appearancegroup1.Controls.Add(this.cbParallelizedLinedefPlotting);
 			this.appearancegroup1.Controls.Add(this.activethingsalphalabel);
 			this.appearancegroup1.Controls.Add(this.label31);
 			this.appearancegroup1.Controls.Add(this.cbMarkExtraFloors);
@@ -1593,7 +1620,7 @@ namespace CodeImp.DoomBuilder.Windows
 			// cbShowFPS
 			// 
 			this.cbShowFPS.AutoSize = true;
-			this.cbShowFPS.Location = new System.Drawing.Point(229, 466);
+			this.cbShowFPS.Location = new System.Drawing.Point(229, 442);
 			this.cbShowFPS.Name = "cbShowFPS";
 			this.cbShowFPS.Size = new System.Drawing.Size(148, 17);
 			this.cbShowFPS.TabIndex = 15;
@@ -1612,7 +1639,7 @@ namespace CodeImp.DoomBuilder.Windows
 			// qualitydisplay
 			// 
 			this.qualitydisplay.AutoSize = true;
-			this.qualitydisplay.Location = new System.Drawing.Point(18, 397);
+			this.qualitydisplay.Location = new System.Drawing.Point(18, 373);
 			this.qualitydisplay.Name = "qualitydisplay";
 			this.qualitydisplay.Size = new System.Drawing.Size(128, 17);
 			this.qualitydisplay.TabIndex = 10;
@@ -1666,7 +1693,7 @@ namespace CodeImp.DoomBuilder.Windows
 			// animatevisualselection
 			// 
 			this.animatevisualselection.AutoSize = true;
-			this.animatevisualselection.Location = new System.Drawing.Point(229, 420);
+			this.animatevisualselection.Location = new System.Drawing.Point(229, 396);
 			this.animatevisualselection.Name = "animatevisualselection";
 			this.animatevisualselection.Size = new System.Drawing.Size(190, 17);
 			this.animatevisualselection.TabIndex = 14;
@@ -1709,7 +1736,7 @@ namespace CodeImp.DoomBuilder.Windows
 			// visualbilinear
 			// 
 			this.visualbilinear.AutoSize = true;
-			this.visualbilinear.Location = new System.Drawing.Point(18, 443);
+			this.visualbilinear.Location = new System.Drawing.Point(18, 419);
 			this.visualbilinear.Name = "visualbilinear";
 			this.visualbilinear.Size = new System.Drawing.Size(171, 17);
 			this.visualbilinear.TabIndex = 12;
@@ -1719,7 +1746,7 @@ namespace CodeImp.DoomBuilder.Windows
 			// classicbilinear
 			// 
 			this.classicbilinear.AutoSize = true;
-			this.classicbilinear.Location = new System.Drawing.Point(18, 420);
+			this.classicbilinear.Location = new System.Drawing.Point(18, 396);
 			this.classicbilinear.Name = "classicbilinear";
 			this.classicbilinear.Size = new System.Drawing.Size(176, 17);
 			this.classicbilinear.TabIndex = 11;
@@ -2848,5 +2875,7 @@ namespace CodeImp.DoomBuilder.Windows
 		private System.Windows.Forms.ListView lvToastActions;
 		private System.Windows.Forms.ColumnHeader title;
 		private System.Windows.Forms.ColumnHeader description;
+		private System.Windows.Forms.CheckBox cbParallelizedVertexPlotting;
+		private System.Windows.Forms.CheckBox cbParallelizedLinedefPlotting;
 	}
 }

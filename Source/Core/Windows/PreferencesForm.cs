@@ -99,6 +99,8 @@ namespace CodeImp.DoomBuilder.Windows
 			cbShowFPS.Checked = General.Settings.ShowFPS;
 			autolaunchontest.Checked = General.Settings.AutoLaunchOnTest;
 			cbFlatShadeVertices.Checked = General.Settings.FlatShadeVertices;
+			cbParallelizedLinedefPlotting.Checked = General.Settings.ParallelizedLinedefPlotting;
+			cbParallelizedVertexPlotting.Checked = General.Settings.ParallelizedVertexPlotting;
 
 			//mxd
 			locatetexturegroup.Checked = General.Settings.LocateTextureGroup;
@@ -360,6 +362,8 @@ namespace CodeImp.DoomBuilder.Windows
 			General.Settings.ShowFPS = cbShowFPS.Checked;
 			General.Settings.AutoLaunchOnTest = autolaunchontest.Checked;
 			General.Settings.FlatShadeVertices = cbFlatShadeVertices.Checked;
+			General.Settings.ParallelizedLinedefPlotting = cbParallelizedLinedefPlotting.Checked;
+			General.Settings.ParallelizedVertexPlotting = cbParallelizedVertexPlotting.Checked;
 
 			// Script settings
 			General.Settings.ScriptFontBold = scriptfontbold.Checked;
