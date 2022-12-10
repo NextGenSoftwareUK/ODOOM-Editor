@@ -704,7 +704,7 @@ namespace CodeImp.DoomBuilder.Data
 			if (indexed && indexedTexture != null)
 				return indexedTexture;
 			if (!indexed && texture != null)
-          return texture;
+				return texture;
 
 			if (indexed && !wantIndexed)
 			{
@@ -713,42 +713,46 @@ namespace CodeImp.DoomBuilder.Data
 				imagestate = ImageLoadState.None;
 				wantIndexed = true;
 			}
-			
-			if (imagestate == ImageLoadState.Loading)
-          return General.Map.Data.LoadingTexture;
-      if (loadfailed)
-          return General.Map.Data.FailedTexture;
-      
-      if (imagestate == ImageLoadState.None)
-      {
-	      General.Map.Data.QueueLoadImage(this);
-        return General.Map.Data.LoadingTexture;
-      }
-      
-      if (loadedbitmap == null)
-      {
-	      return General.Map.Data.LoadingTexture;
-      }
-      
-      if (wantIndexed)
-      {
-	      Bitmap indexedBitmap = CreateIndexedBitmap(uncorrectedbitmap, General.Map.Data.Palette);
-	      indexedTexture = new Texture(General.Map.Graphics, indexedBitmap);
-	      indexedTexture.UserData = TEXTURE_INDEXED;
-      }
-      
-      texture = new Texture(General.Map.Graphics, loadedbitmap);
 
-      loadedbitmap.Dispose();
-      loadedbitmap = null;
-      uncorrectedbitmap.Dispose();
-      uncorrectedbitmap = null;
+			if (imagestate == ImageLoadState.Loading)
+				return General.Map.Data.LoadingTexture;
+			if (loadfailed)
+				return General.Map.Data.FailedTexture;
+
+			if (imagestate == ImageLoadState.None)
+			{
+				General.Map.Data.QueueLoadImage(this);
+				return General.Map.Data.LoadingTexture;
+			}
+
+			if (loadedbitmap == null)
+			{
+				return General.Map.Data.LoadingTexture;
+			}
+
+			if (wantIndexed)
+			{
+				Bitmap indexedBitmap = CreateIndexedBitmap(uncorrectedbitmap, General.Map.Data.Palette);
+				indexedTexture = new Texture(General.Map.Graphics, indexedBitmap);
+				indexedTexture.UserData = TEXTURE_INDEXED;
+			}
+
+			texture = new Texture(General.Map.Graphics, loadedbitmap);
+
+			loadedbitmap.Dispose();
+			loadedbitmap = null;
+
+			if (uncorrectedbitmap != null)
+			{
+				uncorrectedbitmap.Dispose();
+				uncorrectedbitmap = null;
+			}
 
 #if DEBUG
 			texture.Tag = name; //mxd. Helps with tracking undisposed resources...
 #endif
-			
-      return indexed ? indexedTexture : texture;
+
+			return indexed ? indexedTexture : texture;
 		}
 
 		Bitmap CreateIndexedBitmap(Bitmap original, Playpal palette)
