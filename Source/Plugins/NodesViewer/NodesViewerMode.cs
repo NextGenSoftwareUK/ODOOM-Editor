@@ -5,12 +5,13 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Windows.Forms;
 using CodeImp.DoomBuilder.Editing;
 using CodeImp.DoomBuilder.Geometry;
+using CodeImp.DoomBuilder.Map;
 using CodeImp.DoomBuilder.Rendering;
 using CodeImp.DoomBuilder.Windows;
-using CodeImp.DoomBuilder.Map;
 
 #endregion
 
@@ -93,7 +94,7 @@ namespace CodeImp.DoomBuilder.Plugins.NodesViewer
 		/// </summary>
 		private bool LoadClassicStructures()
 		{
-			List<char[]> unsupportedheaders = new List<char[]>() { "ZNOD".ToCharArray(), "XNOD".ToCharArray() };
+			List<byte[]> unsupportedheaders = new List<byte[]>() { Encoding.ASCII.GetBytes("ZNOD"), Encoding.ASCII.GetBytes("XNOD") };
 
 			// Load the nodes structure
 			MemoryStream nodesstream = General.Map.GetLumpData("NODES");
@@ -107,9 +108,9 @@ namespace CodeImp.DoomBuilder.Plugins.NodesViewer
 
 			BinaryReader nodesreader = new BinaryReader(nodesstream);
 
-			// Compare the char arrays. We can't do it by comparing strings, since the data read from the NODES
+			// Compare the byte arrays. We can't do it by comparing strings, since the data read from the NODES
 			// lump might be interpreted as some UTF value. See https://github.com/jewalky/UltimateDoomBuilder/issues/827
-			char[] header = nodesreader.ReadChars(4);
+			byte[] header = nodesreader.ReadBytes(4);
 			if(unsupportedheaders.Where(e => Enumerable.SequenceEqual(e, header)).Any())
 			{
 				MessageBox.Show("ZDBSP compressed nodes are currently not supported.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
