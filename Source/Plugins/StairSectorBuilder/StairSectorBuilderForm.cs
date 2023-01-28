@@ -278,16 +278,6 @@ namespace CodeImp.DoomBuilder.StairSectorBuilderMode
 				}
 			}
 
-			// Check if there's a "[Default]" prefab and load it if so
-			foreach (BuilderPlug.Prefab p in BuilderPlug.Me.Prefabs)
-			{
-				if(p.name == "[Default]")
-				{
-					LoadPrefab(p);
-					break;
-				}
-			}
-
 			// Show window
 			base.Show(owner);
         }
@@ -431,6 +421,16 @@ namespace CodeImp.DoomBuilder.StairSectorBuilderMode
 			ceilingbase.Text = "0";
 			autocurveflipping.SelectedIndex = 0;
 			MiddleTextureTexture = "-";
+
+			// Check if there's a "[Default]" prefab and load it if so
+			foreach (BuilderPlug.Prefab p in BuilderPlug.Me.Prefabs)
+			{
+				if (p.name == "[Default]")
+				{
+					LoadPrefab(p);
+					break;
+				}
+			}
 
 			fullyloaded = true;
 
