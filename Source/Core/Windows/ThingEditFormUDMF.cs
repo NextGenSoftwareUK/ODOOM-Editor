@@ -225,7 +225,7 @@ namespace CodeImp.DoomBuilder.Windows
 			floatbobphase.Text = ft.Fields.GetValue("floatbobphase", -1).ToString();
 			gravity.Text = ft.Fields.GetValue("gravity", 1.0).ToString();
 			score.Text = ft.Fields.GetValue("score", 0).ToString();
-			health.Text = ft.Fields.GetValue("health", 1).ToString();
+			health.Text = ft.Fields.GetValue("health", 1.0).ToString();
 			alpha.Text = ft.Fields.GetValue("alpha", 1.0).ToString();
 			color.SetValueFrom(ft.Fields, true);
 			scale.SetValues(ft.ScaleX, ft.ScaleY, true);
@@ -313,7 +313,7 @@ namespace CodeImp.DoomBuilder.Windows
 				if(t.Fields.GetValue("floatbobphase", -1).ToString() != floatbobphase.Text) floatbobphase.Text = "";
 				if(t.Fields.GetValue("gravity", 1.0).ToString() != gravity.Text) gravity.Text = "";
 				if(t.Fields.GetValue("score", 0).ToString() != score.Text) score.Text = "";
-				if(t.Fields.GetValue("health", 1).ToString() != health.Text) health.Text = "";
+				if(t.Fields.GetValue("health", 1.0).ToString() != health.Text) health.Text = "";
 				if(t.Fields.GetValue("alpha", 1.0).ToString() != alpha.Text) alpha.Text = "";
 
 				scale.SetValues(t.ScaleX, t.ScaleY, false);
@@ -575,7 +575,7 @@ namespace CodeImp.DoomBuilder.Windows
 				if(!string.IsNullOrEmpty(gravity.Text))
 					UniFields.SetFloat(t.Fields, "gravity", gravity.GetResultFloat(t.Fields.GetValue("gravity", 1.0)), 1.0);
 				if(!string.IsNullOrEmpty(health.Text))
-					UniFields.SetInteger(t.Fields, "health", health.GetResult(t.Fields.GetValue("health", 1)), 1);
+					UniFields.SetFloat(t.Fields, "health", health.GetResultFloat(t.Fields.GetValue("health", 1.0)), 1.0);
 				if(!string.IsNullOrEmpty(score.Text))
 					UniFields.SetInteger(t.Fields, "score", score.GetResult(t.Fields.GetValue("score", 0)), 0);
 
