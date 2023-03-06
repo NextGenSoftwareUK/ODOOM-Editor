@@ -235,7 +235,6 @@ namespace CodeImp.DoomBuilder.UDBScript
 
 			filetree.Nodes.Clear();
 			filetree.Nodes.AddRange(AddToTree(filtertext, BuilderPlug.Me.ScriptDirectoryStructure));
-			//filetree.ExpandAll();
 
 			foreach(TreeNode node in filetree.Nodes)
 			{
@@ -259,6 +258,10 @@ namespace CodeImp.DoomBuilder.UDBScript
 		/// <returns>Found TreeNode or null</returns>
 		private TreeNode FindScriptTreeNode(string name, TreeNode root)
 		{
+			// The "root" node might already be the one we're looking for
+			if (root.Tag is ScriptInfo && ((ScriptInfo)root.Tag).ScriptFile == name)
+				return root;
+
 			foreach (TreeNode node in root.Nodes)
 			{
 				if (node.Tag is ScriptInfo && ((ScriptInfo)node.Tag).ScriptFile == name)
