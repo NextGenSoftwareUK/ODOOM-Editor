@@ -38,7 +38,7 @@ namespace CodeImp.DoomBuilder.UDBScript.Wrapper
 		/// </summary>
 		/// <param name="doomangle">Doom angle in degrees</param>
 		/// <returns>Doom angle in degrees</returns>
-		public double doomToReal(int doomangle)
+		public static double doomToReal(int doomangle)
 		{
 			return normalized(doomangle + 90);
 		}
@@ -48,7 +48,7 @@ namespace CodeImp.DoomBuilder.UDBScript.Wrapper
 		/// </summary>
 		/// <param name="doomangle">Doom angle in degrees</param>
 		/// <returns>Doom angle in radians</returns>
-		public double doomToRealRad(int doomangle)
+		public static double doomToRealRad(int doomangle)
 		{
 			return Angle2D.DoomToReal(doomangle);
 		}
@@ -58,7 +58,7 @@ namespace CodeImp.DoomBuilder.UDBScript.Wrapper
 		/// </summary>
 		/// <param name="realangle">Real world angle in degrees</param>
 		/// <returns>Doom angle in degrees</returns>
-		public int realToDoom(double realangle)
+		public static int realToDoom(double realangle)
 		{
 			return normalized((int)(realangle - 90));
 		}
@@ -68,7 +68,7 @@ namespace CodeImp.DoomBuilder.UDBScript.Wrapper
 		/// </summary>
 		/// <param name="realangle">Real world angle in radians</param>
 		/// <returns>Doom angle in degrees</returns>
-		public int realToDoomRad(double realangle)
+		public static int realToDoomRad(double realangle)
 		{
 			return Angle2D.RealToDoom(realangle);
 		}
@@ -78,7 +78,7 @@ namespace CodeImp.DoomBuilder.UDBScript.Wrapper
 		/// </summary>
 		/// <param name="rad">Angle in radians</param>
 		/// <returns>Angle in degrees</returns>
-		public double radToDeg(double rad)
+		public static double radToDeg(double rad)
 		{
 			return Angle2D.RadToDeg(rad);
 		}
@@ -88,7 +88,7 @@ namespace CodeImp.DoomBuilder.UDBScript.Wrapper
 		/// </summary>
 		/// <param name="deg">Angle in degrees</param>
 		/// <returns>Angle in radians</returns>
-		public double degToRad(double deg)
+		public static double degToRad(double deg)
 		{
 			return Angle2D.DegToRad(deg);
 		}
@@ -98,7 +98,7 @@ namespace CodeImp.DoomBuilder.UDBScript.Wrapper
 		/// </summary>
 		/// <param name="angle">Angle in degrees</param>
 		/// <returns>Normalized angle in degrees</returns>
-		public int normalized(int angle)
+		public static int normalized(int angle)
 		{
 			while (angle < 0) angle += 360;
 			while (angle >= 360) angle -= 360;
@@ -110,7 +110,7 @@ namespace CodeImp.DoomBuilder.UDBScript.Wrapper
 		/// </summary>
 		/// <param name="angle">Angle in radians</param>
 		/// <returns>Normalized angle in radians</returns>
-		public double normalizedRad(double angle)
+		public static double normalizedRad(double angle)
 		{
 			return Angle2D.Normalized(angle);
 		}
@@ -122,7 +122,7 @@ namespace CodeImp.DoomBuilder.UDBScript.Wrapper
 		/// <param name="p2">Second position</param>
 		/// <param name="p3">Third position</param>
 		/// <returns>Angle in degrees</returns>
-		public double getAngle(object p1, object p2, object p3)
+		public static double getAngle(object p1, object p2, object p3)
 		{
 			try
 			{
@@ -145,7 +145,7 @@ namespace CodeImp.DoomBuilder.UDBScript.Wrapper
 		/// <param name="p2">Second position</param>
 		/// <param name="p3">Third position</param>
 		/// <returns>Angle in radians</returns>
-		public double getAngleRad(object p1, object p2, object p3)
+		public static double getAngleRad(object p1, object p2, object p3)
 		{
 			try
 			{

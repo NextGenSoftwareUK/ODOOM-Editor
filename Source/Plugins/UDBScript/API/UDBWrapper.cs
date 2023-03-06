@@ -45,7 +45,7 @@ namespace CodeImp.DoomBuilder.UDBScript.Wrapper
 		private TypeReference queryoptions;
 		private ExpandoObject scriptoptions;
 
-		private Angle2DWrapper angle2d;
+		private TypeReference angle2d;
 		private DataWrapper data;
 		private TypeReference line2d;
 		private MapWrapper map;
@@ -110,7 +110,7 @@ namespace CodeImp.DoomBuilder.UDBScript.Wrapper
 		/// let rad = UDB.Angle2D.degToRad(46);
 		/// ```
 		/// </summary>
-		public Angle2DWrapper Angle2D
+		public TypeReference Angle2D
 		{
 			get
 			{
@@ -242,7 +242,7 @@ namespace CodeImp.DoomBuilder.UDBScript.Wrapper
 			queryoptions = TypeReference.CreateTypeReference(engine, typeof(QueryOptions));
 			scriptoptions = scriptinfo.GetScriptOptionsObject();
 
-			angle2d = new Angle2DWrapper();
+			angle2d = TypeReference.CreateTypeReference(engine, typeof(Angle2DWrapper));
 			data = new DataWrapper();
 			line2d = TypeReference.CreateTypeReference(engine, typeof(Line2DWrapper));
 			map = new MapWrapper();
