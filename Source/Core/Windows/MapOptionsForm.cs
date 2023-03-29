@@ -188,6 +188,12 @@ namespace CodeImp.DoomBuilder.Windows
 				datalocations.Focus();
 				return;
 			}
+
+			// Save the last used config when creating a new map
+			if (newmap)
+			{
+				General.Settings.LastUsedConfigName = configinfo.Name;
+			}
 			
 			// Next checks are only for maps that are already opened
 			if(!newmap)
