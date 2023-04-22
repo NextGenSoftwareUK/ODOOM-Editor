@@ -277,6 +277,7 @@ special
 	280:Ceiling_MoveToValueAndCrush(4, 5),
 	281:Line_SetAutomapFlags(3),
 	282:Line_SetAutomapStyle(2),
+	283:Polyobj_StopSound(1),
 	
 	// new to Eternity
 //	300:Portal_Define(5),
@@ -360,7 +361,7 @@ special
 	-73:CheckFont(1),
 	-74:DropItem(2,4),
 	-75:CheckFlag(2),
-	-76:SetLineActivation(2),
+	-76:SetLineActivation(2, 3),
 	-77:GetLineActivation(1),
 	-78:GetActorPowerupTics(2),
 	-79:ChangeActorAngle(2,3),
@@ -428,6 +429,7 @@ special
 	-211:StartSlideshow(1),
 	-212:GetSectorHealth(2),
 	-213:GetLineHealth(1),
+	-214:SetSubtitleNumber(2),
 	
 	
 	// Eternity's
@@ -444,4 +446,3 @@ special
 	-19621:SetTeamScore(2),
 	
 	-100000:__EndOfList__(10);
-	
