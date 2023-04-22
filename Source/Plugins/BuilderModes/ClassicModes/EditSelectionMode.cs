@@ -914,8 +914,8 @@ namespace CodeImp.DoomBuilder.BuilderModes
 				fields["xpanning" + si.Part] = new UniValue(UniversalType.Float, si.Offset.x);
 				fields["ypanning" + si.Part] = new UniValue(UniversalType.Float, si.Offset.y);
 				fields["rotation" + si.Part] = new UniValue(UniversalType.AngleDegreesFloat, Angle2D.RadToDeg(si.Rotation));
-				fields["xscale" + si.Part] = new UniValue(UniversalType.Float, Math.Round(si.Scale.x * scale.x, General.Map.FormatInterface.VertexDecimals));
-				fields["yscale" + si.Part] = new UniValue(UniversalType.Float, Math.Round(-si.Scale.y * scale.y, General.Map.FormatInterface.VertexDecimals));
+				//fields["xscale" + si.Part] = new UniValue(UniversalType.Float, Math.Round(si.Scale.x * scale.x, General.Map.FormatInterface.VertexDecimals));
+				//fields["yscale" + si.Part] = new UniValue(UniversalType.Float, Math.Round(-si.Scale.y * scale.y, General.Map.FormatInterface.VertexDecimals));
 			}
 		}
 
