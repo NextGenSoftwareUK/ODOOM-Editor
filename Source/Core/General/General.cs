@@ -1525,7 +1525,12 @@ namespace CodeImp.DoomBuilder
 
 			// Show save as dialog
 			SaveFileDialog savefile = new SaveFileDialog();
+#if NO_WIN32
+			// No easy way to have case-insesitivity for non-Windows platforms
+			savefile.Filter = "Doom WAD Files (*.wad)|*.wad;*.Wad;*.wAd;*.WAd;*.waD;*.WaD;*.wAD;*.WAD";
+#else
 			savefile.Filter = "Doom WAD Files (*.wad)|*.wad";
+#endif
 			savefile.Title = "Save Map As";
 			savefile.AddExtension = true;
 			savefile.CheckPathExists = true;
@@ -1613,7 +1618,12 @@ namespace CodeImp.DoomBuilder
 
 			// Show save as dialog
 			SaveFileDialog savefile = new SaveFileDialog();
+#if NO_WIN32
+			// No easy way to have case-insesitivity for non-Windows platforms
+			savefile.Filter = "Doom WAD Files (*.wad)|*.wad;*.Wad;*.wAd;*.WAd;*.waD;*.WaD;*.wAD;*.WAD";
+#else
 			savefile.Filter = "Doom WAD Files (*.wad)|*.wad";
+#endif
 			savefile.Title = "Save Map Into";
 			savefile.AddExtension = true;
 			savefile.CheckPathExists = true;
