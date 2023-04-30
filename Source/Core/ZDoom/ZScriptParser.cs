@@ -1241,45 +1241,8 @@ namespace CodeImp.DoomBuilder.ZDoom
 					}
 
 					// Mixins. https://zdoom.org/wiki/ZScript_mixins
-					if (((ZScriptActorStructure)actor).Mixins.Count > 0)
-					{
-						foreach(string mixinclassname in ((ZScriptActorStructure)actor).Mixins)
-						{
-							if(!mixinclasses.ContainsKey(mixinclassname))
-							{
-								LogWarning("Unable to find \"" + mixinclassname + "\" mixin class while parsing \"" + actor.ClassName + "\"");
-								continue;
-							}
-
-							ZScriptClassStructure mixincls = mixinclasses[mixinclassname];
-
-							// States
-							if(actor.states.Count == 0 && mixincls.Actor.states.Count != 0)
-							{
-								// Can't use HasState and GetState here, because it does some magic that will not work for mixins
-								if (!actor.states.ContainsKey("spawn") && mixincls.Actor.states.ContainsKey("spawn"))
-									actor.states.Add("spawn", mixincls.Actor.GetState("spawn"));
-							}
-
-							// Properties
-							if (!actor.props.ContainsKey("height") && mixincls.Actor.props.ContainsKey("height"))
-								actor.props["height"] = new List<string>(mixincls.Actor.props["height"]);
-
-							if (!actor.props.ContainsKey("radius") && mixincls.Actor.props.ContainsKey("radius"))
-								actor.props["radius"] = new List<string>(mixincls.Actor.props["radius"]);
-
-							// Flags
-							if (!actor.flags.ContainsKey("spawnceiling") && mixincls.Actor.flags.ContainsKey("spawnceiling"))
-								actor.flags["spawnceiling"] = true;
-
-							if (!actor.flags.ContainsKey("solid") && mixincls.Actor.flags.ContainsKey("solid"))
-								actor.flags["solid"] = true;
-
-							// user_ variables
-							foreach (string uservarname in mixincls.Actor.uservars.Keys)
-								actor.uservars[uservarname] = mixincls.Actor.uservars[uservarname];
-						}
-					}
+					foreach(string mixinclassname in ((ZScriptActorStructure)actor).Mixins)
+                        ApplyMixin(actor, mixinclassname);
 
 					// Extensions. https://zdoom.org/wiki/ZScript_classes#Extending_Classes
 					if (cls.Extensions.Count > 0)
@@ -1291,9 +1254,13 @@ namespace CodeImp.DoomBuilder.ZDoom
 							if (extenseionactor == null)
 								continue;
 
-							// States
-							if (extenseionactor.states.ContainsKey("spawn"))
-								actor.states["spawn"] = extenseionactor.GetState("spawn");
+                            // Apply mixins to the extension class
+                            foreach (string mixinclassname in ((ZScriptActorStructure)extenseionactor).Mixins)
+                                ApplyMixin(extenseionactor, mixinclassname);
+
+                            // States
+                            if (extenseionactor.states.ContainsKey("spawn"))
+							    actor.states["spawn"] = extenseionactor.GetState("spawn");
 
 							// Properties
 							if (extenseionactor.props.ContainsKey("height"))
@@ -1347,6 +1314,43 @@ namespace CodeImp.DoomBuilder.ZDoom
         stopValidatingCompletely:
             datastream = odatastream;
             return true;
+        }
+
+        private void ApplyMixin(ActorStructure actor, string mixinclassname)
+		{
+            if (!mixinclasses.ContainsKey(mixinclassname))
+            {
+                LogWarning("Unable to find \"" + mixinclassname + "\" mixin class while parsing \"" + actor.ClassName + "\"");
+                return;
+            }
+
+            ZScriptClassStructure mixincls = mixinclasses[mixinclassname];
+
+            // States
+            if (actor.states.Count == 0 && mixincls.Actor.states.Count != 0)
+            {
+                // Can't use HasState and GetState here, because it does some magic that will not work for mixins
+                if (!actor.states.ContainsKey("spawn") && mixincls.Actor.states.ContainsKey("spawn"))
+                    actor.states.Add("spawn", mixincls.Actor.GetState("spawn"));
+            }
+
+            // Properties
+            if (!actor.props.ContainsKey("height") && mixincls.Actor.props.ContainsKey("height"))
+                actor.props["height"] = new List<string>(mixincls.Actor.props["height"]);
+
+            if (!actor.props.ContainsKey("radius") && mixincls.Actor.props.ContainsKey("radius"))
+                actor.props["radius"] = new List<string>(mixincls.Actor.props["radius"]);
+
+            // Flags
+            if (!actor.flags.ContainsKey("spawnceiling") && mixincls.Actor.flags.ContainsKey("spawnceiling"))
+                actor.flags["spawnceiling"] = true;
+
+            if (!actor.flags.ContainsKey("solid") && mixincls.Actor.flags.ContainsKey("solid"))
+                actor.flags["solid"] = true;
+
+            // user_ variables
+            foreach (string uservarname in mixincls.Actor.uservars.Keys)
+                actor.uservars[uservarname] = mixincls.Actor.uservars[uservarname];
         }
 
         #endregion
