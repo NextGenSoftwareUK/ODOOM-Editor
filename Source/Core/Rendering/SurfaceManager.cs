@@ -405,6 +405,7 @@ namespace CodeImp.DoomBuilder.Rendering
 					Array.Copy(update.ceilvertices, update.numvertices - vertsremaining, e.ceilvertices, 0, vertsinentry);
 					e.floortexture = update.floortexture;
 					e.ceiltexture = update.ceiltexture;
+					e.hidden = update.hidden;
                     e.desaturation = update.desaturation;
 					
 					entries.Add(e);
@@ -429,6 +430,7 @@ namespace CodeImp.DoomBuilder.Rendering
 						e.ceiltexture = update.ceiltexture;
 					}
 
+					e.hidden = update.hidden;
                     e.desaturation = update.desaturation;
 
                     vertsremaining -= e.numvertices;
@@ -510,7 +512,7 @@ namespace CodeImp.DoomBuilder.Rendering
 		#region ================== Rendering
 		
 		// This renders all sector floors
-		internal void RenderSectorFloors(RectangleF viewport)
+		internal void RenderSectorFloors(RectangleF viewport, bool skipHidden)
 		{
 			surfaces = new Dictionary<ImageData, List<SurfaceEntry>>();
 			surfacevertexoffsetmul = 0;
@@ -521,14 +523,14 @@ namespace CodeImp.DoomBuilder.Rendering
 			{
 				foreach(SurfaceEntry entry in set.Value.entries)
 				{
-					if(entry.bbox.IntersectsWith(viewport))
+					if(SurfaceEntryIsVisible(entry, viewport, skipHidden))
 						AddSurfaceEntryForRendering(entry, entry.floortexture);
 				}
 			}
 		}
 		
 		// This renders all sector ceilings
-		internal void RenderSectorCeilings(RectangleF viewport)
+		internal void RenderSectorCeilings(RectangleF viewport, bool skipHidden)
 		{
 			surfaces = new Dictionary<ImageData, List<SurfaceEntry>>();
 			surfacevertexoffsetmul = 1;
@@ -539,14 +541,14 @@ namespace CodeImp.DoomBuilder.Rendering
 			{
 				foreach(SurfaceEntry entry in set.Value.entries)
 				{
-					if(entry.bbox.IntersectsWith(viewport))
+					if(SurfaceEntryIsVisible(entry, viewport, skipHidden))
 						AddSurfaceEntryForRendering(entry, entry.ceiltexture);
 				}
 			}
 		}
 
 		// This renders all sector brightness levels
-		internal void RenderSectorBrightness(RectangleF viewport)
+		internal void RenderSectorBrightness(RectangleF viewport, bool skipHidden)
 		{
 			surfaces = new Dictionary<ImageData, List<SurfaceEntry>>();
 			surfacevertexoffsetmul = 0;
@@ -557,10 +559,19 @@ namespace CodeImp.DoomBuilder.Rendering
 			{
 				foreach(SurfaceEntry entry in set.Value.entries)
 				{
-					if(entry.bbox.IntersectsWith(viewport))
+					if(SurfaceEntryIsVisible(entry, viewport, skipHidden))
 						AddSurfaceEntryForRendering(entry, 0);
 				}
 			}
+		}
+
+		// Checks to see if a particular surface entry is visible in the viewport
+		private bool SurfaceEntryIsVisible(SurfaceEntry entry, RectangleF viewport, bool skipHidden)
+		{
+			if (skipHidden && entry.hidden)
+				return false;
+
+			return entry.bbox.IntersectsWith(viewport);
 		}
 
 		// This adds a surface entry to the list of surfaces

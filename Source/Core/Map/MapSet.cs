@@ -3710,7 +3710,7 @@ namespace CodeImp.DoomBuilder.Map
 			// Return result
 			return closest;
 		}
-		
+
 		#endregion
 
 		#region ================== Tools
@@ -4172,7 +4172,7 @@ namespace CodeImp.DoomBuilder.Map
 			// Return result
 			return closest;
 		}
-		
+
 		// This performs sidedefs compression
 		// Note: Only use this for saving, because this messes up the expected data structure horribly.
 		internal void CompressSidedefs()
