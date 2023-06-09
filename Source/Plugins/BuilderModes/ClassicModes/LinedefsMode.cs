@@ -2158,6 +2158,31 @@ namespace CodeImp.DoomBuilder.BuilderModes
 			General.Interface.DisplayStatus(StatusType.Action, "Added 'lightfog' flag to " + addedcout + " sidedefs, removed it from " + removedcount + " sidedefs.");
 		}
 
+		[BeginAction("changemapelementindex")]
+		private void ChangeMapElementIndex()
+		{
+			// Make list of selected linedefs
+			List<Linedef> selected = General.Map.Map.GetSelectedLinedefs(true).ToList();
+			if ((selected.Count == 0) && (highlighted != null) && !highlighted.IsDisposed) selected.Add(highlighted);
+			if (selected.Count != 1)
+			{
+				General.ToastManager.ShowToast(ToastMessages.CHANGEMAPELEMENTINDEX, ToastType.WARNING, "Changing linedef index failed", "You need to select or highlight exactly 1 linedef.");
+				return;
+			}
+
+			ChangeMapElementIndexForm f = new ChangeMapElementIndexForm("linedef", selected[0].Index, General.Map.Map.Linedefs.Count - 1);
+			if (f.ShowDialog() == DialogResult.OK)
+			{
+				int newindex = f.GetNewIndex();
+				int oldindex = selected[0].Index;
+				General.Map.UndoRedo.CreateUndo("Change linedef index");
+
+				selected[0].ChangeIndex(newindex);
+
+				General.ToastManager.ShowToast(ToastMessages.CHANGEMAPELEMENTINDEX, ToastType.INFO, "Successfully change linedef index", $"Changed index of linedef {oldindex} to {newindex}.");
+			}
+		}
+
 		#endregion
 	}
 }

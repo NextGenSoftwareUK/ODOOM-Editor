@@ -44,6 +44,7 @@ namespace CodeImp.DoomBuilder.BuilderModes
 			this.curvelinedefsitem = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem3 = new System.Windows.Forms.ToolStripSeparator();
 			this.splitlinedefsitem = new System.Windows.Forms.ToolStripMenuItem();
+			this.changeLindefIndexToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.updatelightfogitem = new System.Windows.Forms.ToolStripMenuItem();
 			this.aligntexturesitem = new System.Windows.Forms.ToolStripMenuItem();
 			this.alignFloorToFrontItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -79,27 +80,15 @@ namespace CodeImp.DoomBuilder.BuilderModes
 			this.selectSimilarVertsItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.globalstrip = new System.Windows.Forms.ToolStrip();
 			this.manualstrip = new System.Windows.Forms.ToolStrip();
-			this.buttoncopyproperties = new CodeImp.DoomBuilder.Controls.ToolStripActionButton();
-			this.buttonpasteproperties = new CodeImp.DoomBuilder.Controls.ToolStripActionButton();
-			this.buttonpastepropertiesoptions = new CodeImp.DoomBuilder.Controls.ToolStripActionButton();
 			this.seperatorcopypaste = new System.Windows.Forms.ToolStripSeparator();
 			this.buttonselectionnumbers = new System.Windows.Forms.ToolStripButton();
 			this.buttonselectioneffects = new System.Windows.Forms.ToolStripButton();
 			this.separatorsectors1 = new System.Windows.Forms.ToolStripSeparator();
-			this.buttonMakeDoor = new CodeImp.DoomBuilder.Controls.ToolStripActionButton();
 			this.separatorsectors2 = new System.Windows.Forms.ToolStripSeparator();
-			this.buttonbrightnessgradient = new CodeImp.DoomBuilder.Controls.ToolStripActionButton();
-			this.buttonfloorgradient = new CodeImp.DoomBuilder.Controls.ToolStripActionButton();
-			this.buttonceilinggradient = new CodeImp.DoomBuilder.Controls.ToolStripActionButton();
-			this.buttonflipselectionh = new CodeImp.DoomBuilder.Controls.ToolStripActionButton();
-			this.buttonflipselectionv = new CodeImp.DoomBuilder.Controls.ToolStripActionButton();
-			this.buttoncurvelinedefs = new CodeImp.DoomBuilder.Controls.ToolStripActionButton();
 			this.gradientModeMenu = new System.Windows.Forms.ToolStripComboBox();
 			this.gradientInterpolationMenu = new System.Windows.Forms.ToolStripComboBox();
 			this.separatorsectors3 = new System.Windows.Forms.ToolStripSeparator();
 			this.buttonMarqueSelectTouching = new System.Windows.Forms.ToolStripButton();
-			this.syncthingteditbutton = new CodeImp.DoomBuilder.Controls.ToolStripActionButton();
-			this.buttonAlignThingsToWall = new CodeImp.DoomBuilder.Controls.ToolStripActionButton();
 			this.buttonTextureOffsetLock = new System.Windows.Forms.ToolStripButton();
 			this.buttonTextureOffset3DFloorLock = new System.Windows.Forms.ToolStripButton();
 			this.buttonlightradii = new System.Windows.Forms.ToolStripButton();
@@ -116,6 +105,21 @@ namespace CodeImp.DoomBuilder.BuilderModes
 			this.viewmenuitem = new System.Windows.Forms.ToolStripMenuItem();
 			this.itemlightradii = new System.Windows.Forms.ToolStripMenuItem();
 			this.itemsoundradii = new System.Windows.Forms.ToolStripMenuItem();
+			this.changeThingIndexToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.changeSectorIndexToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.buttoncopyproperties = new CodeImp.DoomBuilder.Controls.ToolStripActionButton();
+			this.buttonpasteproperties = new CodeImp.DoomBuilder.Controls.ToolStripActionButton();
+			this.buttonpastepropertiesoptions = new CodeImp.DoomBuilder.Controls.ToolStripActionButton();
+			this.buttonMakeDoor = new CodeImp.DoomBuilder.Controls.ToolStripActionButton();
+			this.buttonbrightnessgradient = new CodeImp.DoomBuilder.Controls.ToolStripActionButton();
+			this.buttonfloorgradient = new CodeImp.DoomBuilder.Controls.ToolStripActionButton();
+			this.buttonceilinggradient = new CodeImp.DoomBuilder.Controls.ToolStripActionButton();
+			this.buttonflipselectionh = new CodeImp.DoomBuilder.Controls.ToolStripActionButton();
+			this.buttonflipselectionv = new CodeImp.DoomBuilder.Controls.ToolStripActionButton();
+			this.buttoncurvelinedefs = new CodeImp.DoomBuilder.Controls.ToolStripActionButton();
+			this.syncthingteditbutton = new CodeImp.DoomBuilder.Controls.ToolStripActionButton();
+			this.buttonAlignThingsToWall = new CodeImp.DoomBuilder.Controls.ToolStripActionButton();
+			this.changeVertexIndexToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.menustrip.SuspendLayout();
 			this.manualstrip.SuspendLayout();
 			this.fileMenuStrip.SuspendLayout();
@@ -150,6 +154,7 @@ namespace CodeImp.DoomBuilder.BuilderModes
             this.curvelinedefsitem,
             this.toolStripMenuItem3,
             this.splitlinedefsitem,
+            this.changeLindefIndexToolStripMenuItem,
             this.updatelightfogitem,
             this.aligntexturesitem,
             this.toolStripSeparator5,
@@ -261,6 +266,14 @@ namespace CodeImp.DoomBuilder.BuilderModes
 			this.splitlinedefsitem.Text = "S&plit Linedefs";
 			this.splitlinedefsitem.Click += new System.EventHandler(this.InvokeTaggedAction);
 			// 
+			// changeLindefIndexToolStripMenuItem
+			// 
+			this.changeLindefIndexToolStripMenuItem.Name = "changeLindefIndexToolStripMenuItem";
+			this.changeLindefIndexToolStripMenuItem.Size = new System.Drawing.Size(223, 22);
+			this.changeLindefIndexToolStripMenuItem.Tag = "changemapelementindex";
+			this.changeLindefIndexToolStripMenuItem.Text = "Change Lindef Index";
+			this.changeLindefIndexToolStripMenuItem.Click += new System.EventHandler(this.InvokeTaggedAction);
+			// 
 			// updatelightfogitem
 			// 
 			this.updatelightfogitem.Name = "updatelightfogitem";
@@ -339,6 +352,7 @@ namespace CodeImp.DoomBuilder.BuilderModes
             this.alignsectorlinedefsitem,
             this.toolStripSeparator8,
             this.makedooritem,
+            this.changeSectorIndexToolStripMenuItem,
             this.toolStripSeparator4,
             this.selectSimilarSectors});
 			this.sectorsmenu.Name = "sectorsmenu";
@@ -449,6 +463,7 @@ namespace CodeImp.DoomBuilder.BuilderModes
             this.toolStripSeparator3,
             this.alignToWallItem,
             this.pointAtCursorItem,
+            this.changeThingIndexToolStripMenuItem,
             this.toolStripSeparator6,
             this.selectSimilarThingsItem});
 			this.thingsmenu.Name = "thingsmenu";
@@ -515,6 +530,7 @@ namespace CodeImp.DoomBuilder.BuilderModes
 			// 
 			this.vertsmenu.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.placethingsv,
+            this.changeVertexIndexToolStripMenuItem,
             this.toolStripSeparator7,
             this.selectSimilarVertsItem});
 			this.vertsmenu.Name = "vertsmenu";
@@ -526,7 +542,7 @@ namespace CodeImp.DoomBuilder.BuilderModes
 			// 
 			this.placethingsv.Image = global::CodeImp.DoomBuilder.BuilderModes.Properties.Resources.PlaceThings;
 			this.placethingsv.Name = "placethingsv";
-			this.placethingsv.Size = new System.Drawing.Size(153, 22);
+			this.placethingsv.Size = new System.Drawing.Size(182, 22);
 			this.placethingsv.Tag = "placethings";
 			this.placethingsv.Text = "&Place Things...";
 			this.placethingsv.Click += new System.EventHandler(this.InvokeTaggedAction);
@@ -534,13 +550,13 @@ namespace CodeImp.DoomBuilder.BuilderModes
 			// toolStripSeparator7
 			// 
 			this.toolStripSeparator7.Name = "toolStripSeparator7";
-			this.toolStripSeparator7.Size = new System.Drawing.Size(150, 6);
+			this.toolStripSeparator7.Size = new System.Drawing.Size(179, 6);
 			// 
 			// selectSimilarVertsItem
 			// 
 			this.selectSimilarVertsItem.Image = global::CodeImp.DoomBuilder.BuilderModes.Properties.Resources.Similar;
 			this.selectSimilarVertsItem.Name = "selectSimilarVertsItem";
-			this.selectSimilarVertsItem.Size = new System.Drawing.Size(153, 22);
+			this.selectSimilarVertsItem.Size = new System.Drawing.Size(182, 22);
 			this.selectSimilarVertsItem.Tag = "selectsimilar";
 			this.selectSimilarVertsItem.Text = "Select Similar...";
 			this.selectSimilarVertsItem.Click += new System.EventHandler(this.InvokeTaggedAction);
@@ -587,40 +603,6 @@ namespace CodeImp.DoomBuilder.BuilderModes
 			this.manualstrip.TabIndex = 2;
 			this.manualstrip.Text = "toolStrip1";
 			// 
-			// buttoncopyproperties
-			// 
-			this.buttoncopyproperties.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-			this.buttoncopyproperties.Image = global::CodeImp.DoomBuilder.BuilderModes.Properties.Resources.CopyProperties;
-			this.buttoncopyproperties.ImageTransparentColor = System.Drawing.Color.Magenta;
-			this.buttoncopyproperties.Name = "buttoncopyproperties";
-			this.buttoncopyproperties.Size = new System.Drawing.Size(23, 22);
-			this.buttoncopyproperties.Tag = "classiccopyproperties";
-			this.buttoncopyproperties.Text = "Copy Properties";
-			this.buttoncopyproperties.Click += new System.EventHandler(this.InvokeTaggedAction);
-			// 
-			// buttonpasteproperties
-			// 
-			this.buttonpasteproperties.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-			this.buttonpasteproperties.Image = global::CodeImp.DoomBuilder.BuilderModes.Properties.Resources.PasteProperties;
-			this.buttonpasteproperties.ImageTransparentColor = System.Drawing.Color.Magenta;
-			this.buttonpasteproperties.Name = "buttonpasteproperties";
-			this.buttonpasteproperties.Size = new System.Drawing.Size(23, 22);
-			this.buttonpasteproperties.Tag = "classicpasteproperties";
-			this.buttonpasteproperties.Text = "Paste Properties";
-			this.buttonpasteproperties.Click += new System.EventHandler(this.InvokeTaggedAction);
-			// 
-			// buttonpastepropertiesoptions
-			// 
-			this.buttonpastepropertiesoptions.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-			this.buttonpastepropertiesoptions.Image = global::CodeImp.DoomBuilder.BuilderModes.Properties.Resources.PastePropertiesOptions;
-			this.buttonpastepropertiesoptions.ImageTransparentColor = System.Drawing.Color.Magenta;
-			this.buttonpastepropertiesoptions.Name = "buttonpastepropertiesoptions";
-			this.buttonpastepropertiesoptions.Size = new System.Drawing.Size(23, 22);
-			this.buttonpastepropertiesoptions.Tag = "classicpastepropertieswithoptions";
-			this.buttonpastepropertiesoptions.Text = "Paste Properties Special...";
-			this.buttonpastepropertiesoptions.TextAlign = System.Drawing.ContentAlignment.TopRight;
-			this.buttonpastepropertiesoptions.Click += new System.EventHandler(this.InvokeTaggedAction);
-			// 
 			// seperatorcopypaste
 			// 
 			this.seperatorcopypaste.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
@@ -655,88 +637,11 @@ namespace CodeImp.DoomBuilder.BuilderModes
 			this.separatorsectors1.Name = "separatorsectors1";
 			this.separatorsectors1.Size = new System.Drawing.Size(6, 25);
 			// 
-			// buttonMakeDoor
-			// 
-			this.buttonMakeDoor.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-			this.buttonMakeDoor.Image = global::CodeImp.DoomBuilder.BuilderModes.Properties.Resources.Door;
-			this.buttonMakeDoor.ImageTransparentColor = System.Drawing.Color.Magenta;
-			this.buttonMakeDoor.Name = "buttonMakeDoor";
-			this.buttonMakeDoor.Size = new System.Drawing.Size(23, 22);
-			this.buttonMakeDoor.Tag = "makedoor";
-			this.buttonMakeDoor.Text = "Make Door From Selection";
-			this.buttonMakeDoor.Click += new System.EventHandler(this.InvokeTaggedAction);
-			// 
 			// separatorsectors2
 			// 
 			this.separatorsectors2.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
 			this.separatorsectors2.Name = "separatorsectors2";
 			this.separatorsectors2.Size = new System.Drawing.Size(6, 25);
-			// 
-			// buttonbrightnessgradient
-			// 
-			this.buttonbrightnessgradient.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-			this.buttonbrightnessgradient.Image = global::CodeImp.DoomBuilder.BuilderModes.Properties.Resources.BrightnessGradient;
-			this.buttonbrightnessgradient.ImageTransparentColor = System.Drawing.Color.Magenta;
-			this.buttonbrightnessgradient.Name = "buttonbrightnessgradient";
-			this.buttonbrightnessgradient.Size = new System.Drawing.Size(23, 22);
-			this.buttonbrightnessgradient.Tag = "gradientbrightness";
-			this.buttonbrightnessgradient.Text = "Make Brightness Gradient";
-			this.buttonbrightnessgradient.Click += new System.EventHandler(this.InvokeTaggedAction);
-			// 
-			// buttonfloorgradient
-			// 
-			this.buttonfloorgradient.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-			this.buttonfloorgradient.Image = global::CodeImp.DoomBuilder.BuilderModes.Properties.Resources.FloorsGradient;
-			this.buttonfloorgradient.ImageTransparentColor = System.Drawing.Color.Magenta;
-			this.buttonfloorgradient.Name = "buttonfloorgradient";
-			this.buttonfloorgradient.Size = new System.Drawing.Size(23, 22);
-			this.buttonfloorgradient.Tag = "gradientfloors";
-			this.buttonfloorgradient.Text = "Make Floor Heights Gradient";
-			this.buttonfloorgradient.Click += new System.EventHandler(this.InvokeTaggedAction);
-			// 
-			// buttonceilinggradient
-			// 
-			this.buttonceilinggradient.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-			this.buttonceilinggradient.Image = global::CodeImp.DoomBuilder.BuilderModes.Properties.Resources.CeilsGradient;
-			this.buttonceilinggradient.ImageTransparentColor = System.Drawing.Color.Magenta;
-			this.buttonceilinggradient.Name = "buttonceilinggradient";
-			this.buttonceilinggradient.Size = new System.Drawing.Size(23, 22);
-			this.buttonceilinggradient.Tag = "gradientceilings";
-			this.buttonceilinggradient.Text = "Make Ceiling Heights Gradient";
-			this.buttonceilinggradient.Click += new System.EventHandler(this.InvokeTaggedAction);
-			// 
-			// buttonflipselectionh
-			// 
-			this.buttonflipselectionh.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-			this.buttonflipselectionh.Image = global::CodeImp.DoomBuilder.BuilderModes.Properties.Resources.FlipSelectionH;
-			this.buttonflipselectionh.ImageTransparentColor = System.Drawing.Color.Magenta;
-			this.buttonflipselectionh.Name = "buttonflipselectionh";
-			this.buttonflipselectionh.Size = new System.Drawing.Size(23, 22);
-			this.buttonflipselectionh.Tag = "flipselectionh";
-			this.buttonflipselectionh.Text = "Flip Selection Horizontally";
-			this.buttonflipselectionh.Click += new System.EventHandler(this.InvokeTaggedAction);
-			// 
-			// buttonflipselectionv
-			// 
-			this.buttonflipselectionv.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-			this.buttonflipselectionv.Image = global::CodeImp.DoomBuilder.BuilderModes.Properties.Resources.FlipSelectionV;
-			this.buttonflipselectionv.ImageTransparentColor = System.Drawing.Color.Magenta;
-			this.buttonflipselectionv.Name = "buttonflipselectionv";
-			this.buttonflipselectionv.Size = new System.Drawing.Size(23, 22);
-			this.buttonflipselectionv.Tag = "flipselectionv";
-			this.buttonflipselectionv.Text = "Flip Selection Vertically";
-			this.buttonflipselectionv.Click += new System.EventHandler(this.InvokeTaggedAction);
-			// 
-			// buttoncurvelinedefs
-			// 
-			this.buttoncurvelinedefs.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-			this.buttoncurvelinedefs.Image = global::CodeImp.DoomBuilder.BuilderModes.Properties.Resources.CurveLines;
-			this.buttoncurvelinedefs.ImageTransparentColor = System.Drawing.Color.Magenta;
-			this.buttoncurvelinedefs.Name = "buttoncurvelinedefs";
-			this.buttoncurvelinedefs.Size = new System.Drawing.Size(23, 22);
-			this.buttoncurvelinedefs.Tag = "curvelinesmode";
-			this.buttoncurvelinedefs.Text = "Curve Linedefs";
-			this.buttoncurvelinedefs.Click += new System.EventHandler(this.InvokeTaggedAction);
 			// 
 			// gradientModeMenu
 			// 
@@ -772,29 +677,6 @@ namespace CodeImp.DoomBuilder.BuilderModes
 			this.buttonMarqueSelectTouching.ToolTipText = "Toggle between \"select touching\" and \"select inside\"\r\nrectangular selection modes" +
     "";
 			this.buttonMarqueSelectTouching.Click += new System.EventHandler(this.buttonMarqueSelectTouching_Click);
-			// 
-			// syncthingteditbutton
-			// 
-			this.syncthingteditbutton.CheckOnClick = true;
-			this.syncthingteditbutton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-			this.syncthingteditbutton.Image = global::CodeImp.DoomBuilder.BuilderModes.Properties.Resources.SelectThingsInSectors;
-			this.syncthingteditbutton.ImageTransparentColor = System.Drawing.Color.Magenta;
-			this.syncthingteditbutton.Name = "syncthingteditbutton";
-			this.syncthingteditbutton.Size = new System.Drawing.Size(23, 22);
-			this.syncthingteditbutton.Tag = "syncedthingedit";
-			this.syncthingteditbutton.Text = "Synchronized Things Editing";
-			this.syncthingteditbutton.Click += new System.EventHandler(this.InvokeTaggedAction);
-			// 
-			// buttonAlignThingsToWall
-			// 
-			this.buttonAlignThingsToWall.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-			this.buttonAlignThingsToWall.Image = global::CodeImp.DoomBuilder.BuilderModes.Properties.Resources.AlignThings;
-			this.buttonAlignThingsToWall.ImageTransparentColor = System.Drawing.Color.Magenta;
-			this.buttonAlignThingsToWall.Name = "buttonAlignThingsToWall";
-			this.buttonAlignThingsToWall.Size = new System.Drawing.Size(23, 22);
-			this.buttonAlignThingsToWall.Tag = "thingaligntowall";
-			this.buttonAlignThingsToWall.ToolTipText = "Align Things to Nearest Linedef";
-			this.buttonAlignThingsToWall.Click += new System.EventHandler(this.InvokeTaggedAction);
 			// 
 			// buttonTextureOffsetLock
 			// 
@@ -949,6 +831,164 @@ namespace CodeImp.DoomBuilder.BuilderModes
 			this.itemsoundradii.Text = "Show Ambient Sound Radii";
 			this.itemsoundradii.Click += new System.EventHandler(this.buttonsoundradii_Click);
 			// 
+			// changeThingIndexToolStripMenuItem
+			// 
+			this.changeThingIndexToolStripMenuItem.Name = "changeThingIndexToolStripMenuItem";
+			this.changeThingIndexToolStripMenuItem.Size = new System.Drawing.Size(244, 22);
+			this.changeThingIndexToolStripMenuItem.Tag = "changemapelementindex";
+			this.changeThingIndexToolStripMenuItem.Text = "Change Thing Index";
+			this.changeThingIndexToolStripMenuItem.Click += new System.EventHandler(this.InvokeTaggedAction);
+			// 
+			// changeSectorIndexToolStripMenuItem
+			// 
+			this.changeSectorIndexToolStripMenuItem.Name = "changeSectorIndexToolStripMenuItem";
+			this.changeSectorIndexToolStripMenuItem.Size = new System.Drawing.Size(223, 22);
+			this.changeSectorIndexToolStripMenuItem.Tag = "changemapelementindex";
+			this.changeSectorIndexToolStripMenuItem.Text = "Change Sector Index";
+			this.changeSectorIndexToolStripMenuItem.Click += new System.EventHandler(this.InvokeTaggedAction);
+			// 
+			// buttoncopyproperties
+			// 
+			this.buttoncopyproperties.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+			this.buttoncopyproperties.Image = global::CodeImp.DoomBuilder.BuilderModes.Properties.Resources.CopyProperties;
+			this.buttoncopyproperties.ImageTransparentColor = System.Drawing.Color.Magenta;
+			this.buttoncopyproperties.Name = "buttoncopyproperties";
+			this.buttoncopyproperties.Size = new System.Drawing.Size(23, 22);
+			this.buttoncopyproperties.Tag = "classiccopyproperties";
+			this.buttoncopyproperties.Text = "Copy Properties";
+			this.buttoncopyproperties.Click += new System.EventHandler(this.InvokeTaggedAction);
+			// 
+			// buttonpasteproperties
+			// 
+			this.buttonpasteproperties.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+			this.buttonpasteproperties.Image = global::CodeImp.DoomBuilder.BuilderModes.Properties.Resources.PasteProperties;
+			this.buttonpasteproperties.ImageTransparentColor = System.Drawing.Color.Magenta;
+			this.buttonpasteproperties.Name = "buttonpasteproperties";
+			this.buttonpasteproperties.Size = new System.Drawing.Size(23, 22);
+			this.buttonpasteproperties.Tag = "classicpasteproperties";
+			this.buttonpasteproperties.Text = "Paste Properties";
+			this.buttonpasteproperties.Click += new System.EventHandler(this.InvokeTaggedAction);
+			// 
+			// buttonpastepropertiesoptions
+			// 
+			this.buttonpastepropertiesoptions.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+			this.buttonpastepropertiesoptions.Image = global::CodeImp.DoomBuilder.BuilderModes.Properties.Resources.PastePropertiesOptions;
+			this.buttonpastepropertiesoptions.ImageTransparentColor = System.Drawing.Color.Magenta;
+			this.buttonpastepropertiesoptions.Name = "buttonpastepropertiesoptions";
+			this.buttonpastepropertiesoptions.Size = new System.Drawing.Size(23, 22);
+			this.buttonpastepropertiesoptions.Tag = "classicpastepropertieswithoptions";
+			this.buttonpastepropertiesoptions.Text = "Paste Properties Special...";
+			this.buttonpastepropertiesoptions.TextAlign = System.Drawing.ContentAlignment.TopRight;
+			this.buttonpastepropertiesoptions.Click += new System.EventHandler(this.InvokeTaggedAction);
+			// 
+			// buttonMakeDoor
+			// 
+			this.buttonMakeDoor.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+			this.buttonMakeDoor.Image = global::CodeImp.DoomBuilder.BuilderModes.Properties.Resources.Door;
+			this.buttonMakeDoor.ImageTransparentColor = System.Drawing.Color.Magenta;
+			this.buttonMakeDoor.Name = "buttonMakeDoor";
+			this.buttonMakeDoor.Size = new System.Drawing.Size(23, 22);
+			this.buttonMakeDoor.Tag = "makedoor";
+			this.buttonMakeDoor.Text = "Make Door From Selection";
+			this.buttonMakeDoor.Click += new System.EventHandler(this.InvokeTaggedAction);
+			// 
+			// buttonbrightnessgradient
+			// 
+			this.buttonbrightnessgradient.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+			this.buttonbrightnessgradient.Image = global::CodeImp.DoomBuilder.BuilderModes.Properties.Resources.BrightnessGradient;
+			this.buttonbrightnessgradient.ImageTransparentColor = System.Drawing.Color.Magenta;
+			this.buttonbrightnessgradient.Name = "buttonbrightnessgradient";
+			this.buttonbrightnessgradient.Size = new System.Drawing.Size(23, 22);
+			this.buttonbrightnessgradient.Tag = "gradientbrightness";
+			this.buttonbrightnessgradient.Text = "Make Brightness Gradient";
+			this.buttonbrightnessgradient.Click += new System.EventHandler(this.InvokeTaggedAction);
+			// 
+			// buttonfloorgradient
+			// 
+			this.buttonfloorgradient.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+			this.buttonfloorgradient.Image = global::CodeImp.DoomBuilder.BuilderModes.Properties.Resources.FloorsGradient;
+			this.buttonfloorgradient.ImageTransparentColor = System.Drawing.Color.Magenta;
+			this.buttonfloorgradient.Name = "buttonfloorgradient";
+			this.buttonfloorgradient.Size = new System.Drawing.Size(23, 22);
+			this.buttonfloorgradient.Tag = "gradientfloors";
+			this.buttonfloorgradient.Text = "Make Floor Heights Gradient";
+			this.buttonfloorgradient.Click += new System.EventHandler(this.InvokeTaggedAction);
+			// 
+			// buttonceilinggradient
+			// 
+			this.buttonceilinggradient.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+			this.buttonceilinggradient.Image = global::CodeImp.DoomBuilder.BuilderModes.Properties.Resources.CeilsGradient;
+			this.buttonceilinggradient.ImageTransparentColor = System.Drawing.Color.Magenta;
+			this.buttonceilinggradient.Name = "buttonceilinggradient";
+			this.buttonceilinggradient.Size = new System.Drawing.Size(23, 22);
+			this.buttonceilinggradient.Tag = "gradientceilings";
+			this.buttonceilinggradient.Text = "Make Ceiling Heights Gradient";
+			this.buttonceilinggradient.Click += new System.EventHandler(this.InvokeTaggedAction);
+			// 
+			// buttonflipselectionh
+			// 
+			this.buttonflipselectionh.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+			this.buttonflipselectionh.Image = global::CodeImp.DoomBuilder.BuilderModes.Properties.Resources.FlipSelectionH;
+			this.buttonflipselectionh.ImageTransparentColor = System.Drawing.Color.Magenta;
+			this.buttonflipselectionh.Name = "buttonflipselectionh";
+			this.buttonflipselectionh.Size = new System.Drawing.Size(23, 22);
+			this.buttonflipselectionh.Tag = "flipselectionh";
+			this.buttonflipselectionh.Text = "Flip Selection Horizontally";
+			this.buttonflipselectionh.Click += new System.EventHandler(this.InvokeTaggedAction);
+			// 
+			// buttonflipselectionv
+			// 
+			this.buttonflipselectionv.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+			this.buttonflipselectionv.Image = global::CodeImp.DoomBuilder.BuilderModes.Properties.Resources.FlipSelectionV;
+			this.buttonflipselectionv.ImageTransparentColor = System.Drawing.Color.Magenta;
+			this.buttonflipselectionv.Name = "buttonflipselectionv";
+			this.buttonflipselectionv.Size = new System.Drawing.Size(23, 22);
+			this.buttonflipselectionv.Tag = "flipselectionv";
+			this.buttonflipselectionv.Text = "Flip Selection Vertically";
+			this.buttonflipselectionv.Click += new System.EventHandler(this.InvokeTaggedAction);
+			// 
+			// buttoncurvelinedefs
+			// 
+			this.buttoncurvelinedefs.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+			this.buttoncurvelinedefs.Image = global::CodeImp.DoomBuilder.BuilderModes.Properties.Resources.CurveLines;
+			this.buttoncurvelinedefs.ImageTransparentColor = System.Drawing.Color.Magenta;
+			this.buttoncurvelinedefs.Name = "buttoncurvelinedefs";
+			this.buttoncurvelinedefs.Size = new System.Drawing.Size(23, 22);
+			this.buttoncurvelinedefs.Tag = "curvelinesmode";
+			this.buttoncurvelinedefs.Text = "Curve Linedefs";
+			this.buttoncurvelinedefs.Click += new System.EventHandler(this.InvokeTaggedAction);
+			// 
+			// syncthingteditbutton
+			// 
+			this.syncthingteditbutton.CheckOnClick = true;
+			this.syncthingteditbutton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+			this.syncthingteditbutton.Image = global::CodeImp.DoomBuilder.BuilderModes.Properties.Resources.SelectThingsInSectors;
+			this.syncthingteditbutton.ImageTransparentColor = System.Drawing.Color.Magenta;
+			this.syncthingteditbutton.Name = "syncthingteditbutton";
+			this.syncthingteditbutton.Size = new System.Drawing.Size(23, 22);
+			this.syncthingteditbutton.Tag = "syncedthingedit";
+			this.syncthingteditbutton.Text = "Synchronized Things Editing";
+			this.syncthingteditbutton.Click += new System.EventHandler(this.InvokeTaggedAction);
+			// 
+			// buttonAlignThingsToWall
+			// 
+			this.buttonAlignThingsToWall.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+			this.buttonAlignThingsToWall.Image = global::CodeImp.DoomBuilder.BuilderModes.Properties.Resources.AlignThings;
+			this.buttonAlignThingsToWall.ImageTransparentColor = System.Drawing.Color.Magenta;
+			this.buttonAlignThingsToWall.Name = "buttonAlignThingsToWall";
+			this.buttonAlignThingsToWall.Size = new System.Drawing.Size(23, 22);
+			this.buttonAlignThingsToWall.Tag = "thingaligntowall";
+			this.buttonAlignThingsToWall.ToolTipText = "Align Things to Nearest Linedef";
+			this.buttonAlignThingsToWall.Click += new System.EventHandler(this.InvokeTaggedAction);
+			// 
+			// changeVertexIndexToolStripMenuItem
+			// 
+			this.changeVertexIndexToolStripMenuItem.Name = "changeVertexIndexToolStripMenuItem";
+			this.changeVertexIndexToolStripMenuItem.Size = new System.Drawing.Size(182, 22);
+			this.changeVertexIndexToolStripMenuItem.Tag = "changemapelementindex";
+			this.changeVertexIndexToolStripMenuItem.Text = "Change Vertex Index";
+			this.changeVertexIndexToolStripMenuItem.Click += new System.EventHandler(this.InvokeTaggedAction);
+			// 
 			// MenusForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
@@ -1066,5 +1106,9 @@ namespace CodeImp.DoomBuilder.BuilderModes
 		private System.Windows.Forms.ToolStripMenuItem itemsoundradii;
 		private System.Windows.Forms.ToolStripButton buttonTextureOffset3DFloorLock;
 		private System.Windows.Forms.ToolStripMenuItem selectionToImageToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem changeLindefIndexToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem changeThingIndexToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem changeSectorIndexToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem changeVertexIndexToolStripMenuItem;
 	}
 }

@@ -20,6 +20,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Diagnostics;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Collections.Concurrent;
@@ -2836,6 +2837,31 @@ namespace CodeImp.DoomBuilder.BuilderModes
 			General.Map.Grid.SetGridOrigin(0, 0);
 			General.Map.GridVisibilityChanged();
 			General.Interface.RedrawDisplay();
+		}
+
+		[BeginAction("changemapelementindex")]
+		private void ChangeMapElementIndex()
+		{
+			// Make list of selected linedefs
+			List<Sector> selected = General.Map.Map.GetSelectedSectors(true).ToList();
+			if ((selected.Count == 0) && (highlighted != null) && !highlighted.IsDisposed) selected.Add(highlighted);
+			if (selected.Count != 1)
+			{
+				General.ToastManager.ShowToast(ToastMessages.CHANGEMAPELEMENTINDEX, ToastType.WARNING, "Changing sector index failed", "You need to select or highlight exactly 1 sector.");
+				return;
+			}
+
+			ChangeMapElementIndexForm f = new ChangeMapElementIndexForm("sector", selected[0].Index, General.Map.Map.Sectors.Count - 1);
+			if (f.ShowDialog() == DialogResult.OK)
+			{
+				int newindex = f.GetNewIndex();
+				int oldindex = selected[0].Index;
+				General.Map.UndoRedo.CreateUndo("Change sector index");
+
+				selected[0].ChangeIndex(newindex);
+
+				General.ToastManager.ShowToast(ToastMessages.CHANGEMAPELEMENTINDEX, ToastType.INFO, "Successfully change sector index", $"Changed index of sector {oldindex} to {newindex}.");
+			}
 		}
 
 		#endregion

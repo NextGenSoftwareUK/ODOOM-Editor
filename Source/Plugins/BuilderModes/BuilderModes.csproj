@@ -165,6 +165,12 @@
     <Compile Include="General\Association.cs" />
     <Compile Include="General\BuilderPlug.cs" />
     <Compile Include="General\CopyStructures.cs" />
+    <Compile Include="Interface\ChangeMapElementIndexForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Interface\ChangeMapElementIndexForm.Designer.cs">
+      <DependentUpon>ChangeMapElementIndexForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Interface\ErrorCheckForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -223,6 +229,9 @@
     <Compile Include="ClassicModes\VerticesMode.cs" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Interface\ChangeMapElementIndexForm.resx">
+      <DependentUpon>ChangeMapElementIndexForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Interface\ImageExportSettingsForm.resx">
       <DependentUpon>ImageExportSettingsForm.cs</DependentUpon>
     </EmbeddedResource>

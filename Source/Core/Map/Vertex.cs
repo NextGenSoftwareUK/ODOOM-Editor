@@ -338,6 +338,16 @@ namespace CodeImp.DoomBuilder.Map
 			General.Map.IsChanged = true;
 		}
 
+		/// <summary>
+		/// Changes the thing's index to a new index.
+		/// </summary>
+		/// <param name="newindex">The new index to set</param>
+		public void ChangeIndex(int newindex)
+		{
+			General.Map.UndoRedo.RecIndexVertex(Index, newindex);
+			map?.ChangeVertexIndex(Index, newindex);
+		}
+
 		// String representation
 		public override string ToString()
 		{

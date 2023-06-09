@@ -1364,6 +1364,16 @@ namespace CodeImp.DoomBuilder.Map
 			colorPresetIndex = -1;
 		}
 
+		/// <summary>
+		/// Changes the linedef's index to a new index.
+		/// </summary>
+		/// <param name="newindex">The new index to set</param>
+		public void ChangeIndex(int newindex)
+		{
+			General.Map.UndoRedo.RecIndexLinedef(Index, newindex);
+			map?.ChangeLindefIndex(Index, newindex);
+		}
+
 		// String representation
 		public override string ToString()
 		{

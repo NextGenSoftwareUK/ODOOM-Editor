@@ -67,6 +67,10 @@ namespace CodeImp.DoomBuilder.Editing
 			AddThing,
 			RemThing,
 			PrpThing,
+			IndexLinedef,
+			IndexThing,
+			IndexSector,
+			IndexVertex,
 		}
 		
 		#endregion
@@ -425,6 +429,10 @@ namespace CodeImp.DoomBuilder.Editing
 						case StreamCodes.AddThing: PlayAddThing(ds); break;
 						case StreamCodes.RemThing: PlayRemThing(ds); break;
 						case StreamCodes.PrpThing: PlayPrpThing(ds); break;
+						case StreamCodes.IndexLinedef: PlayIndexLinedef(ds); break;
+						case StreamCodes.IndexThing: PlayIndexThing(ds); break;
+						case StreamCodes.IndexSector: PlayIndexSector(ds); break;
+						case StreamCodes.IndexVertex: PlayIndexVertex(ds); break;
 					}
 					
 					// Sanity check
@@ -1324,6 +1332,82 @@ namespace CodeImp.DoomBuilder.Editing
 			Thing t = General.Map.Map.GetThingByIndex(index);
 			t.ReadWrite(ds);
 			t.Marked = true;
+		}
+
+		internal void RecIndexLinedef(int oldindex, int newindex)
+		{
+			if (!BeginRecordData(StreamCodes.IndexLinedef)) return;
+			ss.wInt(oldindex);
+			ss.wInt(newindex);
+			EndRecordData();
+		}
+
+		private static void PlayIndexLinedef(DeserializerStream ds)
+		{
+			ds.rInt(out int oldindex);
+			ds.rInt(out int newindex);
+
+			// Record again because redo will not work otherwise (for map elements this regularly happens in BeforePropsChange
+			// oldindex and newindex are flipped here because we have to change them back
+			General.Map.UndoRedo.RecIndexLinedef(newindex, oldindex);
+			General.Map.Map.ChangeLindefIndex(newindex, oldindex);
+		}
+
+		internal void RecIndexThing(int oldindex, int newindex)
+		{
+			if (!BeginRecordData(StreamCodes.IndexThing)) return;
+			ss.wInt(oldindex);
+			ss.wInt(newindex);
+			EndRecordData();
+		}
+
+		private static void PlayIndexThing(DeserializerStream ds)
+		{
+			ds.rInt(out int oldindex);
+			ds.rInt(out int newindex);
+
+			// Record again because redo will not work otherwise (for map elements this regularly happens in BeforePropsChange
+			// oldindex and newindex are flipped here because we have to change them back
+			General.Map.UndoRedo.RecIndexThing(newindex, oldindex);
+			General.Map.Map.ChangeThingIndex(newindex, oldindex);
+		}
+
+		internal void RecIndexSector(int oldindex, int newindex)
+		{
+			if (!BeginRecordData(StreamCodes.IndexSector)) return;
+			ss.wInt(oldindex);
+			ss.wInt(newindex);
+			EndRecordData();
+		}
+
+		private static void PlayIndexSector(DeserializerStream ds)
+		{
+			ds.rInt(out int oldindex);
+			ds.rInt(out int newindex);
+
+			// Record again because redo will not work otherwise (for map elements this regularly happens in BeforePropsChange
+			// oldindex and newindex are flipped here because we have to change them back
+			General.Map.UndoRedo.RecIndexSector(newindex, oldindex);
+			General.Map.Map.ChangeSectorIndex(newindex, oldindex);
+		}
+
+		internal void RecIndexVertex(int oldindex, int newindex)
+		{
+			if (!BeginRecordData(StreamCodes.IndexVertex)) return;
+			ss.wInt(oldindex);
+			ss.wInt(newindex);
+			EndRecordData();
+		}
+
+		private static void PlayIndexVertex(DeserializerStream ds)
+		{
+			ds.rInt(out int oldindex);
+			ds.rInt(out int newindex);
+
+			// Record again because redo will not work otherwise (for map elements this regularly happens in BeforePropsChange
+			// oldindex and newindex are flipped here because we have to change them back
+			General.Map.UndoRedo.RecIndexVertex(newindex, oldindex);
+			General.Map.Map.ChangeVertexIndex(newindex, oldindex);
 		}
 
 		#endregion

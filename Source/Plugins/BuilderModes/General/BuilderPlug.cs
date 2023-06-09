@@ -45,6 +45,7 @@ namespace CodeImp.DoomBuilder.BuilderModes
 	internal class ToastMessages
 	{
 		public static readonly string VISUALSLOPING = "visualsloping";
+		public static readonly string CHANGEMAPELEMENTINDEX = "changemapelementindex";
 	}
 
 	public class BuilderPlug : Plug
@@ -257,6 +258,7 @@ namespace CodeImp.DoomBuilder.BuilderModes
 
 			// Register toasts
 			General.ToastManager.RegisterToast(ToastMessages.VISUALSLOPING, "Visual sloping", "Toasts related to visual sloping");
+			General.ToastManager.RegisterToast(ToastMessages.CHANGEMAPELEMENTINDEX, "Change map element index", "Toasts related to changing the index of map elements");
 		}
 
 		// Disposer

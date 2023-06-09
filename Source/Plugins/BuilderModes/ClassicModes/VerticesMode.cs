@@ -1219,11 +1219,36 @@ namespace CodeImp.DoomBuilder.BuilderModes
 			}
 		}
 
+		[BeginAction("changemapelementindex")]
+		private void ChangeMapElementIndex()
+		{
+			// Make list of selected linedefs
+			List<Vertex> selected = General.Map.Map.GetSelectedVertices(true).ToList();
+			if ((selected.Count == 0) && (highlighted != null) && !highlighted.IsDisposed) selected.Add(highlighted);
+			if (selected.Count != 1)
+			{
+				General.ToastManager.ShowToast(ToastMessages.CHANGEMAPELEMENTINDEX, ToastType.WARNING, "Changing vertex index failed", "You need to select or highlight exactly 1 vertex.");
+				return;
+			}
+
+			ChangeMapElementIndexForm f = new ChangeMapElementIndexForm("vertex", selected[0].Index, General.Map.Map.Vertices.Count - 1);
+			if (f.ShowDialog() == DialogResult.OK)
+			{
+				int newindex = f.GetNewIndex();
+				int oldindex = selected[0].Index;
+				General.Map.UndoRedo.CreateUndo("Change vertex index");
+
+				selected[0].ChangeIndex(newindex);
+
+				General.ToastManager.ShowToast(ToastMessages.CHANGEMAPELEMENTINDEX, ToastType.INFO, "Successfully change vertex index", $"Changed index of vertex {oldindex} to {newindex}.");
+			}
+		}
+
 		#endregion
 
 		#region ================== Action assist (mxd)
 
-			//mxd
+		//mxd
 		private static void MergeLines(ICollection<Vertex> selected, Linedef ld1, Linedef ld2, Vertex v) 
 		{
 			Vertex v1 = (ld1.Start == v) ? ld1.End : ld1.Start;

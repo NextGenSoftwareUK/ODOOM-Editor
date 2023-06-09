@@ -740,6 +740,16 @@ namespace CodeImp.DoomBuilder.Map
 			return Vector2D.Distance(p, pos);
 		}
 
+		/// <summary>
+		/// Changes the thing's index to a new index.
+		/// </summary>
+		/// <param name="newindex">The new index to set</param>
+		public void ChangeIndex(int newindex)
+		{
+			General.Map.UndoRedo.RecIndexThing(Index, newindex);
+			map?.ChangeThingIndex(Index, newindex);
+		}
+
 		#endregion
 	}
 }

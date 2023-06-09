@@ -813,7 +813,43 @@ namespace CodeImp.DoomBuilder.Map
 		{
 			RemoveItem(ref things, index, ref numthings);
 		}		
-		
+
+		private void ChangeItemIndex<T>(ref T[] array, int oldindex, int newindex, int counter) where T : MapElement
+		{
+			if (oldindex == newindex || oldindex < 0 || newindex < 0 || oldindex >= array.Length || newindex >= array.Length)
+				return;
+
+			T item = array[oldindex];
+
+			if (oldindex > newindex) // Shift everything right
+			{
+				for (int i = oldindex; i > newindex; i--)
+				{
+					array[i] = array[i - 1];
+					array[i].Index++;
+				}
+			}
+			else // Shift everything left
+			{
+				for (int i = oldindex; i < newindex; i++)
+				{
+					array[i] = array[i + 1];
+					array[i].Index--;
+				}
+			}
+
+			array[newindex] = item;
+			array[newindex].Index = newindex;
+		}
+
+		internal void ChangeLindefIndex(int oldindex, int newindex) => ChangeItemIndex(ref linedefs, oldindex, newindex, numlinedefs);
+
+		internal void ChangeThingIndex(int oldindex, int newindex) => ChangeItemIndex(ref things, oldindex, newindex, numthings);
+
+		internal void ChangeSectorIndex(int oldindex, int newindex) => ChangeItemIndex(ref sectors, oldindex, newindex, numsectors);
+
+		internal void ChangeVertexIndex(int oldindex, int newindex) => ChangeItemIndex(ref vertices, oldindex, newindex, numvertices);
+
 		#endregion
 
 		#region ================== Serialization

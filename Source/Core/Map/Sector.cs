@@ -819,6 +819,16 @@ namespace CodeImp.DoomBuilder.Map
 			return new Geometry.Plane(new Vector3D(0, 0, -1), s.CeilHeight);
 		}
 
+		/// <summary>
+		/// Changes the sector's index to a new index.
+		/// </summary>
+		/// <param name="newindex">The new index to set</param>
+		public void ChangeIndex(int newindex)
+		{
+			General.Map.UndoRedo.RecIndexSector(Index, newindex);
+			map?.ChangeSectorIndex(Index, newindex);
+		}
+
 		// String representation
 		public override string ToString()
 		{
