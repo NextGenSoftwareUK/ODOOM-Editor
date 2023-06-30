@@ -321,7 +321,10 @@ namespace CodeImp.DoomBuilder.Windows
 			if(lockpick.SelectedIndex == -1) lockpick.Text = locknumber.ToString();
 
 			// Action
-			action.Value = fl.Action;
+			if (action.Value != fl.Action)
+				action.Value = fl.Action;
+			else
+				action_ValueChanges(action, EventArgs.Empty);
 
 			//mxd. Args
 			argscontrol.SetValue(fl, true);
