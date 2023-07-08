@@ -974,6 +974,9 @@ namespace CodeImp.DoomBuilder.Rendering
                         // [ZZ] include desaturation factor
                         graphics.SetUniform(UniformName.desaturation, (float)sector.Sector.Desaturation);
 
+						// Skew
+						graphics.SetUniform(UniformName.skew, g.Skew);
+
 						// Render!
 						graphics.Draw(PrimitiveType.TriangleList, g.VertexOffset, g.Triangles);
 					}
