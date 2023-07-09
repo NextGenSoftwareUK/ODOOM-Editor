@@ -1020,7 +1020,7 @@ namespace CodeImp.DoomBuilder.Windows
 			List<MapElement> sides = new List<MapElement>(lines.Count);
 			foreach(Linedef l in lines) if(l.Front != null) sides.Add(l.Front);
 
-			if(!CustomFieldsForm.ShowDialog(this, "Front side custom fields", "sidedef", sides, General.Map.Config.SidedefFields)) return;
+			if(!CustomFieldsForm.ShowDialog(this, MakeUndo, "Front side custom fields", "sidedef", sides, General.Map.Config.SidedefFields)) return;
 
 			//Apply values
 			Sidedef fs = General.GetByIndex(sides, 0) as Sidedef;
@@ -1083,7 +1083,7 @@ namespace CodeImp.DoomBuilder.Windows
 			foreach(Linedef l in lines) if(l.Back != null) sides.Add(l.Back);
 
 			// Edit these
-			if(!CustomFieldsForm.ShowDialog(this, "Back side custom fields", "sidedef", sides, General.Map.Config.SidedefFields)) return;
+			if(!CustomFieldsForm.ShowDialog(this, MakeUndo, "Back side custom fields", "sidedef", sides, General.Map.Config.SidedefFields)) return;
 
 			//Apply values
 			Sidedef fs = General.GetByIndex(sides, 0) as Sidedef;
