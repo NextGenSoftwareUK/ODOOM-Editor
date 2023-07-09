@@ -530,20 +530,21 @@ namespace CodeImp.DoomBuilder.BuilderModes
 				else // back_floor
 					(diff, line) = GetZDiff(true, false);
 
+				Vector2D v3 = line.GetPerpendicular() * 10 + line.v1;
 
-				Plane p1 = new Plane(
+				Plane topplane = new Plane(
 					new Vector3D(line.v1, textop),
 					new Vector3D(line.v2, textop + diff),
-					new Vector3D(line.GetPerpendicular() * 10, textop),
+					new Vector3D(v3, textop),
 					false);
 
-				Plane p2 = new Plane(
+				Plane bottomplane = new Plane(
 					new Vector3D(line.v1, texbottom),
 					new Vector3D(line.v2, texbottom + diff),
-					new Vector3D(line.GetPerpendicular() * 10, texbottom),
+					new Vector3D(v3, textop),
 					true);
 
-				return (p1, p2);
+				return (topplane, bottomplane);
 
 			}
 			else // Invalid skew type
