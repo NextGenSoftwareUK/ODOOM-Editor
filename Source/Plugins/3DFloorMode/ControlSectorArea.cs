@@ -261,7 +261,6 @@ namespace CodeImp.DoomBuilder.ThreeDFloorMode
 			{
 				case Highlight.Body:
 					Vector2D diff = GridSetup.SnappedToGrid(pos, gridsize, gridsizeinv) - GridSetup.SnappedToGrid(lastpos, gridsize, gridsizeinv);
-					Debug.WriteLine("diff: " + (diff).ToString());
 					outerleft += diff.x;
 					outerright += diff.x;
 					outertop += diff.y;
@@ -389,7 +388,7 @@ namespace CodeImp.DoomBuilder.ThreeDFloorMode
 		/// <returns>true if there's an intersection, false if there isn't</returns>
 		private bool SectorInNewControlSectorSpace(int x, int y, Sector sector)
 		{
-			RectangleF rect = new RectangleF(x + 1, y - 1, gridsize - 2, gridsize - 2);
+			int margin = (int)((gridsize - sectorsize) / 2);
 			HashSet<Vertex> sectorvertices = new HashSet<Vertex>();
 
 			// Any of the sector's sidedef's linedef's vertices inside the new control sector's space?
@@ -400,16 +399,16 @@ namespace CodeImp.DoomBuilder.ThreeDFloorMode
 			}
 
 			foreach (Vertex v in sectorvertices)
-				if (rect.Contains((float)v.Position.x, (float)v.Position.y))
+				if (v.Position.x >= x + margin && v.Position.x <= x + margin + sectorsize && v.Position.y <= y - margin && v.Position.y >= y - margin - sectorsize)
 					return true;
 
 			// Any of the new vertex positions in the sector?
 			Vector2D[] points = new Vector2D[]
 			{
-				new Vector2D(x + 1, y - 1),
-				new Vector2D(x + gridsize - 1, y - 1),
-				new Vector2D(x + gridsize - 1, y + gridsize + 1),
-				new Vector2D(x + 1, y + gridsize + 1)
+				new Vector2D(x + margin, y - margin),
+				new Vector2D(x + margin + sectorsize, y - margin -sectorsize),
+		 		new Vector2D(x + margin + sectorsize, y - margin - sectorsize),
+				new Vector2D(x + margin, y -margin)
 			};
 
 			foreach (Vector2D v in points)
