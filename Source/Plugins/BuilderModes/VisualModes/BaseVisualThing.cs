@@ -657,7 +657,7 @@ namespace CodeImp.DoomBuilder.BuilderModes
 		public void OnSelectBegin() { }
 		public void OnEditBegin() { }
 		public void OnChangeTargetBrightness(bool up) { }
-		public void OnChangeTextureOffset(int horizontal, int vertical, bool doSurfaceAngleCorrection) { }
+		public bool OnChangeTextureOffset(int horizontal, int vertical, bool doSurfaceAngleCorrection) { return true; }
 		public void OnSelectTexture() { }
 		public void OnCopyTexture() { }
 		public void OnPasteTexture() { }
