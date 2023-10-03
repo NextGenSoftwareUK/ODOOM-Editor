@@ -513,7 +513,7 @@ namespace CodeImp.DoomBuilder.BuilderModes.IO
 							foreach(VisualMiddle3D m3d in part.middle3d) 
 							{
 								if(m3d.Vertices == null) continue;
-								texture = m3d.GetControlLinedef().Front.MiddleTexture;
+								texture = m3d.GetTextureName();
 								if (!skipTextures.Contains(texture))
 								{
 									CheckTextureName(ref texturegeo, ref texture);
