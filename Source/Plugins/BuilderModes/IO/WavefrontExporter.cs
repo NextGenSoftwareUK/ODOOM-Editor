@@ -517,7 +517,9 @@ namespace CodeImp.DoomBuilder.BuilderModes.IO
 								if (!skipTextures.Contains(texture))
 								{
 									CheckTextureName(ref texturegeo, ref texture);
-									texturegeo[texture].AddRange(OptimizeGeometry(m3d.Vertices, m3d.GeometryType));
+									// 3D floor sides are cut so that there are only triangles for the visible parts. Some of those might be
+									// triangles and not rectangles, so we can't optimize them into rectangles
+									texturegeo[texture].AddRange(OptimizeGeometry(m3d.Vertices, m3d.GeometryType, true));
 								}
 							}
 						}
