@@ -608,8 +608,13 @@ namespace CodeImp.DoomBuilder.BuilderModes
 				mode.RemoveSelectedObject(this);
 			}
 
-            // [ZZ] use the marking system.
-            if (clearlinedefs) General.Map.Map.ClearMarkedLinedefs(false);
+			// [ZZ] use the marking system.
+			if (clearlinedefs)
+			{
+				General.Map.Map.ClearMarkedLinedefs(false);
+				General.Map.Map.ClearMarkedSidedefs(false);
+			}
+
             Sidedef.Line.Marked = true;
 
             // Select
