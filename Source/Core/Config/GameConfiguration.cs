@@ -313,6 +313,7 @@ namespace CodeImp.DoomBuilder.Config
 		public List<FlagTranslation> ThingFlagsTranslation { get { return thingflagstranslation; } }
 		public Dictionary<string, ThingFlagsCompareGroup> ThingFlagsCompare { get { return thingflagscompare; } } //mxd
 		public Dictionary<string, string> ThingRenderStyles { get { return thingrenderstyles; } } //mxd
+		public IReadOnlyDictionary<int, ThingTypeInfo> ThingTypes { get { return things; } }
 		
 		// Linedefs
 		public IDictionary<string, string> LinedefFlags { get { return linedefflags; } }

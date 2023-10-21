@@ -1154,20 +1154,22 @@ namespace CodeImp.DoomBuilder.BuilderModes
 
 			// Find interesting things (such as sector slopes)
 			// Pass one of slope things, and determine which one are for pass two
-			//TODO: rewrite using classnames instead of numbers
 			foreach (Thing t in General.Map.Map.Things)
 			{
-				switch (t.Type)
+				if (!General.Map.Config.ThingTypes.ContainsKey(t.Type))
+					continue;
+
+				switch (General.Map.Config.ThingTypes[t.Type].ClassName.ToLowerInvariant())
 				{
 					// ========== Copy slope ==========
-					case 9511:
-					case 9510:
+					case "$copyfloorplane": // 9511
+					case "$copyceilingplane": // 9510
 						slopethingpass[1].Add(t);
 						break;
 
 					// ========== Thing line slope ==========
-					case 9501:
-					case 9500:
+					case "$slopeceilingpointline": // 9501
+					case "$slopefloorpointline": // 9500
 						if(linetags.ContainsKey(t.Args[0]))
 						{
 							// Only slope each sector once, even when multiple lines of the same sector are tagged. See https://github.com/jewalky/UltimateDoomBuilder/issues/491
@@ -1193,8 +1195,8 @@ namespace CodeImp.DoomBuilder.BuilderModes
 						break;
 
 					// ========== Thing slope ==========
-					case 9503:
-					case 9502:
+					case "$setceilingslope": // 9503
+					case "$setfloorslope": // 9502
 						t.DetermineSector(blockmap);
 						if (t.Sector != null)
 						{
@@ -1206,14 +1208,16 @@ namespace CodeImp.DoomBuilder.BuilderModes
 			}
 
 			// Pass two of slope things
-			//TODO: rewrite using classnames instead of numbers
 			foreach (Thing t in slopethingpass[1])
 			{
-				switch (t.Type)
+				if (!General.Map.Config.ThingTypes.ContainsKey(t.Type))
+					continue;
+
+				switch (General.Map.Config.ThingTypes[t.Type].ClassName.ToLowerInvariant())
 				{
 					// ========== Copy slope ==========
-					case 9511:
-					case 9510:
+					case "$copyceilingplane": // 9511
+					case "$copyfloorplane": // 9510
 						t.DetermineSector(blockmap);
 						if (t.Sector != null)
 						{
@@ -1249,11 +1253,14 @@ namespace CodeImp.DoomBuilder.BuilderModes
                             {
                                 if ((Vector2D)t.Position == v.Position)
                                 {
-                                    switch (t.Type)
-                                    {
-                                        case 1504: slopefloorthings.Add(t); break;
-                                        case 1505: slopeceilingthings.Add(t); break;
-                                    }
+									if (!General.Map.Config.ThingTypes.ContainsKey(t.Type))
+										continue;
+
+									switch (General.Map.Config.ThingTypes[t.Type].ClassName.ToLowerInvariant())
+									{
+										case "$vertexfloorz": slopefloorthings.Add(t); break; // 1504
+										case "$vertexceilingz": slopeceilingthings.Add(t); break; // 1505
+									}
                                 }
                             }
                         }
