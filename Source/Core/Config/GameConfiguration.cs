@@ -110,6 +110,7 @@ namespace CodeImp.DoomBuilder.Config
 		private readonly bool localsidedeftextureoffsets; //MaxW
 		private readonly bool effect3dfloorsupport;
 		private readonly bool planeequationsupport;
+		private readonly bool vertexheightsupport;
 		private readonly bool distinctfloorandceilingbrightness;
 		private readonly bool distinctwallbrightness;
 		private readonly bool distinctsidedefpartbrightness;
@@ -290,6 +291,7 @@ namespace CodeImp.DoomBuilder.Config
 		public bool UseLocalSidedefTextureOffsets { get { return localsidedeftextureoffsets; } } //MaxW
 		public bool Effect3DFloorSupport { get { return effect3dfloorsupport; } }
 		public bool PlaneEquationSupport { get { return planeequationsupport; } }
+		public bool VertexHeightSupport { get { return vertexheightsupport; } }
 		public bool DistinctFloorAndCeilingBrightness { get { return distinctfloorandceilingbrightness; } }
 		public bool DistinctWallBrightness { get { return distinctwallbrightness; } }
 		public bool DistinctSidedefPartBrightness { get { return distinctsidedefpartbrightness; } }
@@ -472,6 +474,7 @@ namespace CodeImp.DoomBuilder.Config
 			localsidedeftextureoffsets = (cfg.ReadSetting("localsidedeftextureoffsets", false)); //MaxW
 			effect3dfloorsupport = cfg.ReadSetting("effect3dfloorsupport", false);
 			planeequationsupport = cfg.ReadSetting("planeequationsupport", false);
+			vertexheightsupport = cfg.ReadSetting("vertexheightsupport", false);
 			sidedeftextureskewing = cfg.ReadSetting("sidedeftextureskewing", false);
 			distinctfloorandceilingbrightness = cfg.ReadSetting("distinctfloorandceilingbrightness", false);
 			distinctwallbrightness = cfg.ReadSetting("distinctwallbrightness", false);

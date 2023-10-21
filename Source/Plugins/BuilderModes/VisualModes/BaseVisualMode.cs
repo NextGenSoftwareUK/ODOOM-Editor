@@ -401,7 +401,7 @@ namespace CodeImp.DoomBuilder.BuilderModes
 			}
 
 			//mxd
-			if(General.Map.UDMF && General.Settings.GZShowVisualVertices) 
+			if(General.Map.UDMF && General.Map.Config.VertexHeightSupport && General.Settings.GZShowVisualVertices) 
 			{
 				foreach(KeyValuePair<Vertex, VisualVertexPair> pair in vertices) 
 				{
@@ -652,7 +652,7 @@ namespace CodeImp.DoomBuilder.BuilderModes
 			}
 
 			//mxd
-			if(General.Map.UDMF) 
+			if(General.Map.UDMF && General.Map.Config.VertexHeightSupport) 
 			{
 				foreach(KeyValuePair<Vertex, VisualVertexPair> pair in vertices)
 					pair.Value.Update();
@@ -1230,7 +1230,11 @@ namespace CodeImp.DoomBuilder.BuilderModes
 				// ========== Thing vertex slope, vertices with UDMF vertex offsets ==========
 				if (s.Sidedefs.Count == 3)
 				{
-					if (General.Map.UDMF) GetSectorData(s).AddEffectVertexOffset(); //mxd
+					// Apply vertex heights
+					if (General.Map.UDMF && General.Map.Config.VertexHeightSupport)
+						GetSectorData(s).AddEffectVertexOffset(); //mxd
+
+					// Check for vertex height things
 					List<Thing> slopeceilingthings = new List<Thing>(3);
 					List<Thing> slopefloorthings = new List<Thing>(3);
 
@@ -1691,7 +1695,7 @@ namespace CodeImp.DoomBuilder.BuilderModes
 				}
 
 				//mxd
-				if(General.Map.UDMF && General.Settings.GZShowVisualVertices && vertices.Count > 0) 
+				if(General.Map.UDMF && General.Map.Config.VertexHeightSupport && General.Settings.GZShowVisualVertices && vertices.Count > 0) 
 				{
 					List<VisualVertex> verts = new List<VisualVertex>();
 
