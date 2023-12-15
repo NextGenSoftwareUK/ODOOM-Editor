@@ -797,7 +797,7 @@ namespace CodeImp.DoomBuilder.Windows
 			// apply
 			// 
 			this.apply.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.apply.Location = new System.Drawing.Point(467, 573);
+			this.apply.Location = new System.Drawing.Point(467, 596);
 			this.apply.Name = "apply";
 			this.apply.Size = new System.Drawing.Size(112, 25);
 			this.apply.TabIndex = 0;
@@ -809,7 +809,7 @@ namespace CodeImp.DoomBuilder.Windows
 			// 
 			this.cancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.cancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.cancel.Location = new System.Drawing.Point(585, 573);
+			this.cancel.Location = new System.Drawing.Point(585, 596);
 			this.cancel.Name = "cancel";
 			this.cancel.Size = new System.Drawing.Size(112, 25);
 			this.cancel.TabIndex = 1;
@@ -831,10 +831,11 @@ namespace CodeImp.DoomBuilder.Windows
 			this.tabs.Controls.Add(this.tabtoasts);
 			this.tabs.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.tabs.Location = new System.Drawing.Point(11, 13);
+			this.tabs.Multiline = true;
 			this.tabs.Name = "tabs";
 			this.tabs.Padding = new System.Drawing.Point(24, 3);
 			this.tabs.SelectedIndex = 0;
-			this.tabs.Size = new System.Drawing.Size(688, 552);
+			this.tabs.Size = new System.Drawing.Size(688, 575);
 			this.tabs.TabIndex = 0;
 			this.tabs.SelectedIndexChanged += new System.EventHandler(this.tabs_SelectedIndexChanged);
 			// 
@@ -847,10 +848,10 @@ namespace CodeImp.DoomBuilder.Windows
 			this.tabinterface.Controls.Add(this.groupBox2);
 			this.tabinterface.Controls.Add(groupBox1);
 			this.tabinterface.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.tabinterface.Location = new System.Drawing.Point(4, 22);
+			this.tabinterface.Location = new System.Drawing.Point(4, 40);
 			this.tabinterface.Name = "tabinterface";
 			this.tabinterface.Padding = new System.Windows.Forms.Padding(5);
-			this.tabinterface.Size = new System.Drawing.Size(680, 526);
+			this.tabinterface.Size = new System.Drawing.Size(680, 531);
 			this.tabinterface.TabIndex = 0;
 			this.tabinterface.Text = "Interface";
 			this.tabinterface.UseVisualStyleBackColor = true;
@@ -1309,10 +1310,10 @@ namespace CodeImp.DoomBuilder.Windows
 			this.tabkeys.Controls.Add(this.listactions);
 			this.tabkeys.Controls.Add(this.actioncontrolpanel);
 			this.tabkeys.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.tabkeys.Location = new System.Drawing.Point(4, 22);
+			this.tabkeys.Location = new System.Drawing.Point(4, 40);
 			this.tabkeys.Name = "tabkeys";
 			this.tabkeys.Padding = new System.Windows.Forms.Padding(3);
-			this.tabkeys.Size = new System.Drawing.Size(680, 526);
+			this.tabkeys.Size = new System.Drawing.Size(680, 531);
 			this.tabkeys.TabIndex = 1;
 			this.tabkeys.Text = "Controls";
 			this.tabkeys.UseVisualStyleBackColor = true;
@@ -1361,7 +1362,7 @@ namespace CodeImp.DoomBuilder.Windows
 			this.listactions.Margin = new System.Windows.Forms.Padding(8, 9, 8, 9);
 			this.listactions.MultiSelect = false;
 			this.listactions.Name = "listactions";
-			this.listactions.Size = new System.Drawing.Size(370, 450);
+			this.listactions.Size = new System.Drawing.Size(370, 477);
 			this.listactions.Sorting = System.Windows.Forms.SortOrder.Ascending;
 			this.listactions.TabIndex = 0;
 			this.listactions.TabStop = false;
@@ -1399,7 +1400,7 @@ namespace CodeImp.DoomBuilder.Windows
 			this.actioncontrolpanel.Location = new System.Drawing.Point(395, 12);
 			this.actioncontrolpanel.Margin = new System.Windows.Forms.Padding(6);
 			this.actioncontrolpanel.Name = "actioncontrolpanel";
-			this.actioncontrolpanel.Size = new System.Drawing.Size(296, 505);
+			this.actioncontrolpanel.Size = new System.Drawing.Size(279, 510);
 			this.actioncontrolpanel.TabIndex = 9;
 			this.actioncontrolpanel.TabStop = false;
 			this.actioncontrolpanel.Text = " Action control ";
@@ -1411,7 +1412,7 @@ namespace CodeImp.DoomBuilder.Windows
 			this.actiondescription.Multiline = true;
 			this.actiondescription.Name = "actiondescription";
 			this.actiondescription.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-			this.actiondescription.Size = new System.Drawing.Size(266, 72);
+			this.actiondescription.Size = new System.Drawing.Size(253, 72);
 			this.actiondescription.TabIndex = 12;
 			// 
 			// keyusedlist
@@ -1423,7 +1424,7 @@ namespace CodeImp.DoomBuilder.Windows
 			this.keyusedlist.Location = new System.Drawing.Point(23, 307);
 			this.keyusedlist.Name = "keyusedlist";
 			this.keyusedlist.SelectionMode = System.Windows.Forms.SelectionMode.None;
-			this.keyusedlist.Size = new System.Drawing.Size(263, 115);
+			this.keyusedlist.Size = new System.Drawing.Size(250, 115);
 			this.keyusedlist.Sorted = true;
 			this.keyusedlist.TabIndex = 11;
 			this.keyusedlist.Visible = false;
@@ -1442,7 +1443,7 @@ namespace CodeImp.DoomBuilder.Windows
 			// 
 			this.disregardshiftlabel.Location = new System.Drawing.Point(20, 224);
 			this.disregardshiftlabel.Name = "disregardshiftlabel";
-			this.disregardshiftlabel.Size = new System.Drawing.Size(266, 47);
+			this.disregardshiftlabel.Size = new System.Drawing.Size(253, 47);
 			this.disregardshiftlabel.TabIndex = 9;
 			this.disregardshiftlabel.Tag = "The selected action uses %s to modify its behavior. These modifiers can not be us" +
     "ed in a key combination for this action.";
@@ -1499,10 +1500,10 @@ namespace CodeImp.DoomBuilder.Windows
 			this.tabcolors.Controls.Add(this.appearancegroup1);
 			this.tabcolors.Controls.Add(this.colorsgroup1);
 			this.tabcolors.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.tabcolors.Location = new System.Drawing.Point(4, 22);
+			this.tabcolors.Location = new System.Drawing.Point(4, 40);
 			this.tabcolors.Name = "tabcolors";
 			this.tabcolors.Padding = new System.Windows.Forms.Padding(5);
-			this.tabcolors.Size = new System.Drawing.Size(680, 526);
+			this.tabcolors.Size = new System.Drawing.Size(680, 531);
 			this.tabcolors.TabIndex = 2;
 			this.tabcolors.Text = "Appearance";
 			this.tabcolors.UseVisualStyleBackColor = true;
@@ -1549,7 +1550,7 @@ namespace CodeImp.DoomBuilder.Windows
 			this.appearancegroup1.Controls.Add(this.imagebrightnesslabel);
 			this.appearancegroup1.Location = new System.Drawing.Point(217, 8);
 			this.appearancegroup1.Name = "appearancegroup1";
-			this.appearancegroup1.Size = new System.Drawing.Size(475, 510);
+			this.appearancegroup1.Size = new System.Drawing.Size(455, 515);
 			this.appearancegroup1.TabIndex = 2;
 			this.appearancegroup1.TabStop = false;
 			this.appearancegroup1.Text = " Rendering ";
@@ -1799,7 +1800,7 @@ namespace CodeImp.DoomBuilder.Windows
 			this.colorsgroup1.Controls.Add(this.colorlinedefs);
 			this.colorsgroup1.Location = new System.Drawing.Point(8, 8);
 			this.colorsgroup1.Name = "colorsgroup1";
-			this.colorsgroup1.Size = new System.Drawing.Size(203, 510);
+			this.colorsgroup1.Size = new System.Drawing.Size(203, 515);
 			this.colorsgroup1.TabIndex = 0;
 			this.colorsgroup1.TabStop = false;
 			this.colorsgroup1.Text = " Colors ";
@@ -1945,9 +1946,9 @@ namespace CodeImp.DoomBuilder.Windows
 			this.tabscripteditor.Controls.Add(this.groupBox6);
 			this.tabscripteditor.Controls.Add(this.previewgroup);
 			this.tabscripteditor.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.tabscripteditor.Location = new System.Drawing.Point(4, 22);
+			this.tabscripteditor.Location = new System.Drawing.Point(4, 40);
 			this.tabscripteditor.Name = "tabscripteditor";
-			this.tabscripteditor.Size = new System.Drawing.Size(680, 526);
+			this.tabscripteditor.Size = new System.Drawing.Size(680, 531);
 			this.tabscripteditor.TabIndex = 4;
 			this.tabscripteditor.Text = "Script Editor";
 			this.tabscripteditor.UseVisualStyleBackColor = true;
@@ -2169,7 +2170,7 @@ namespace CodeImp.DoomBuilder.Windows
 			this.groupBox6.Controls.Add(this.colorconstants);
 			this.groupBox6.Location = new System.Drawing.Point(8, 8);
 			this.groupBox6.Name = "groupBox6";
-			this.groupBox6.Size = new System.Drawing.Size(203, 493);
+			this.groupBox6.Size = new System.Drawing.Size(203, 498);
 			this.groupBox6.TabIndex = 0;
 			this.groupBox6.TabStop = false;
 			this.groupBox6.Text = " Colors ";
@@ -2437,10 +2438,10 @@ namespace CodeImp.DoomBuilder.Windows
 			this.tabpasting.Controls.Add(this.label16);
 			this.tabpasting.Controls.Add(this.pasteoptions);
 			this.tabpasting.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.tabpasting.Location = new System.Drawing.Point(4, 22);
+			this.tabpasting.Location = new System.Drawing.Point(4, 40);
 			this.tabpasting.Name = "tabpasting";
 			this.tabpasting.Padding = new System.Windows.Forms.Padding(5);
-			this.tabpasting.Size = new System.Drawing.Size(680, 526);
+			this.tabpasting.Size = new System.Drawing.Size(680, 531);
 			this.tabpasting.TabIndex = 3;
 			this.tabpasting.Text = "Pasting ";
 			this.tabpasting.UseVisualStyleBackColor = true;
@@ -2464,15 +2465,15 @@ namespace CodeImp.DoomBuilder.Windows
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.pasteoptions.Location = new System.Drawing.Point(8, 53);
 			this.pasteoptions.Name = "pasteoptions";
-			this.pasteoptions.Size = new System.Drawing.Size(666, 427);
+			this.pasteoptions.Size = new System.Drawing.Size(666, 432);
 			this.pasteoptions.TabIndex = 0;
 			// 
 			// tabrecovery
 			// 
 			this.tabrecovery.Controls.Add(this.autosavegroupbox);
-			this.tabrecovery.Location = new System.Drawing.Point(4, 22);
+			this.tabrecovery.Location = new System.Drawing.Point(4, 40);
 			this.tabrecovery.Name = "tabrecovery";
-			this.tabrecovery.Size = new System.Drawing.Size(680, 526);
+			this.tabrecovery.Size = new System.Drawing.Size(680, 531);
 			this.tabrecovery.TabIndex = 6;
 			this.tabrecovery.Text = "Recovery";
 			this.tabrecovery.UseVisualStyleBackColor = true;
@@ -2608,9 +2609,9 @@ namespace CodeImp.DoomBuilder.Windows
 			this.tabtoasts.Controls.Add(this.cbToastsEnabled);
 			this.tabtoasts.Controls.Add(this.gbToastPosition);
 			this.tabtoasts.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.tabtoasts.Location = new System.Drawing.Point(4, 22);
+			this.tabtoasts.Location = new System.Drawing.Point(4, 40);
 			this.tabtoasts.Name = "tabtoasts";
-			this.tabtoasts.Size = new System.Drawing.Size(680, 526);
+			this.tabtoasts.Size = new System.Drawing.Size(680, 531);
 			this.tabtoasts.TabIndex = 5;
 			this.tabtoasts.Text = "Toasts";
 			this.tabtoasts.UseVisualStyleBackColor = true;
@@ -2762,7 +2763,7 @@ namespace CodeImp.DoomBuilder.Windows
 			this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
 			this.CancelButton = this.cancel;
-			this.ClientSize = new System.Drawing.Size(709, 610);
+			this.ClientSize = new System.Drawing.Size(709, 633);
 			this.Controls.Add(this.cancel);
 			this.Controls.Add(this.apply);
 			this.Controls.Add(this.tabs);
