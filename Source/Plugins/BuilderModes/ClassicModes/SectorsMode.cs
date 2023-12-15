@@ -87,6 +87,9 @@ namespace CodeImp.DoomBuilder.BuilderModes
 		// Sectors that will be edited
 		private ICollection<Sector> editsectors;
 
+		// Autosave
+		private bool allowautosave;
+
 		#endregion
 
 		#region ================== Properties
@@ -873,6 +876,9 @@ namespace CodeImp.DoomBuilder.BuilderModes
 			UpdateSelectedLabels();
 			UpdateOverlaySurfaces();//mxd
 			UpdateSelectionInfo(); //mxd
+
+			// By default we allow autosave
+			allowautosave = true;
 		}
 
 		// Mode disengages
@@ -1115,10 +1121,15 @@ namespace CodeImp.DoomBuilder.BuilderModes
 				{
 					if(General.Interface.IsActiveWindow)
 					{
+						// Prevent autosave while the editing dialog is shown
+						allowautosave = false;
+
 						//mxd. Show realtime vertex edit dialog
 						General.Interface.OnEditFormValuesChanged += sectorEditForm_OnValuesChanged;
 						DialogResult result = General.Interface.ShowEditSectors(editsectors);
 						General.Interface.OnEditFormValuesChanged -= sectorEditForm_OnValuesChanged;
+
+						allowautosave = true;
 
 						General.Map.Renderer2D.UpdateExtraFloorFlag(); //mxd
 
@@ -1618,6 +1629,11 @@ namespace CodeImp.DoomBuilder.BuilderModes
 			
 			// Pass to base
 			base.ToggleHighlight();
+		}
+
+		public override bool OnAutoSaveBegin()
+		{
+			return allowautosave;
 		}
 
 		//mxd

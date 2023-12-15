@@ -215,6 +215,18 @@ namespace CodeImp.DoomBuilder.Windows
 			this.tabpasting = new System.Windows.Forms.TabPage();
 			this.label16 = new System.Windows.Forms.Label();
 			this.pasteoptions = new CodeImp.DoomBuilder.Controls.PasteOptionsControl();
+			this.tabrecovery = new System.Windows.Forms.TabPage();
+			this.autosavegroupbox = new System.Windows.Forms.GroupBox();
+			this.autosavedisabledwarning = new System.Windows.Forms.Panel();
+			this.label34 = new System.Windows.Forms.Label();
+			this.pictureBox1 = new System.Windows.Forms.PictureBox();
+			this.autosavecountlabel = new System.Windows.Forms.Label();
+			this.autosavecount = new CodeImp.DoomBuilder.Controls.TransparentTrackBar();
+			this.label21 = new System.Windows.Forms.Label();
+			this.autosaveintervallabel = new System.Windows.Forms.Label();
+			this.autosaveinterval = new CodeImp.DoomBuilder.Controls.TransparentTrackBar();
+			this.label20 = new System.Windows.Forms.Label();
+			this.autosave = new System.Windows.Forms.CheckBox();
 			this.tabtoasts = new System.Windows.Forms.TabPage();
 			this.groupBox10 = new System.Windows.Forms.GroupBox();
 			this.lvToastActions = new System.Windows.Forms.ListView();
@@ -273,6 +285,12 @@ namespace CodeImp.DoomBuilder.Windows
 			this.groupBox6.SuspendLayout();
 			this.previewgroup.SuspendLayout();
 			this.tabpasting.SuspendLayout();
+			this.tabrecovery.SuspendLayout();
+			this.autosavegroupbox.SuspendLayout();
+			this.autosavedisabledwarning.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.autosavecount)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.autosaveinterval)).BeginInit();
 			this.tabtoasts.SuspendLayout();
 			this.groupBox10.SuspendLayout();
 			this.gbToastPosition.SuspendLayout();
@@ -809,6 +827,7 @@ namespace CodeImp.DoomBuilder.Windows
 			this.tabs.Controls.Add(this.tabcolors);
 			this.tabs.Controls.Add(this.tabscripteditor);
 			this.tabs.Controls.Add(this.tabpasting);
+			this.tabs.Controls.Add(this.tabrecovery);
 			this.tabs.Controls.Add(this.tabtoasts);
 			this.tabs.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.tabs.Location = new System.Drawing.Point(11, 13);
@@ -2448,6 +2467,139 @@ namespace CodeImp.DoomBuilder.Windows
 			this.pasteoptions.Size = new System.Drawing.Size(666, 427);
 			this.pasteoptions.TabIndex = 0;
 			// 
+			// tabrecovery
+			// 
+			this.tabrecovery.Controls.Add(this.autosavegroupbox);
+			this.tabrecovery.Location = new System.Drawing.Point(4, 22);
+			this.tabrecovery.Name = "tabrecovery";
+			this.tabrecovery.Size = new System.Drawing.Size(680, 526);
+			this.tabrecovery.TabIndex = 6;
+			this.tabrecovery.Text = "Recovery";
+			this.tabrecovery.UseVisualStyleBackColor = true;
+			// 
+			// autosavegroupbox
+			// 
+			this.autosavegroupbox.Controls.Add(this.autosavedisabledwarning);
+			this.autosavegroupbox.Controls.Add(this.autosavecountlabel);
+			this.autosavegroupbox.Controls.Add(this.autosavecount);
+			this.autosavegroupbox.Controls.Add(this.label21);
+			this.autosavegroupbox.Controls.Add(this.autosaveintervallabel);
+			this.autosavegroupbox.Controls.Add(this.autosaveinterval);
+			this.autosavegroupbox.Controls.Add(this.label20);
+			this.autosavegroupbox.Controls.Add(this.autosave);
+			this.autosavegroupbox.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.autosavegroupbox.Location = new System.Drawing.Point(8, 8);
+			this.autosavegroupbox.Name = "autosavegroupbox";
+			this.autosavegroupbox.Size = new System.Drawing.Size(666, 147);
+			this.autosavegroupbox.TabIndex = 0;
+			this.autosavegroupbox.TabStop = false;
+			this.autosavegroupbox.Text = "Autosave";
+			// 
+			// autosavedisabledwarning
+			// 
+			this.autosavedisabledwarning.BackColor = System.Drawing.SystemColors.Info;
+			this.autosavedisabledwarning.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.autosavedisabledwarning.Controls.Add(this.label34);
+			this.autosavedisabledwarning.Controls.Add(this.pictureBox1);
+			this.autosavedisabledwarning.ForeColor = System.Drawing.SystemColors.InfoText;
+			this.autosavedisabledwarning.Location = new System.Drawing.Point(420, 12);
+			this.autosavedisabledwarning.Name = "autosavedisabledwarning";
+			this.autosavedisabledwarning.Size = new System.Drawing.Size(240, 24);
+			this.autosavedisabledwarning.TabIndex = 7;
+			// 
+			// label34
+			// 
+			this.label34.AutoSize = true;
+			this.label34.Location = new System.Drawing.Point(25, 4);
+			this.label34.Name = "label34";
+			this.label34.Size = new System.Drawing.Size(214, 13);
+			this.label34.TabIndex = 1;
+			this.label34.Text = "It is not recommended to disable autosaves!";
+			// 
+			// pictureBox1
+			// 
+			this.pictureBox1.Image = global::CodeImp.DoomBuilder.Properties.Resources.Warning;
+			this.pictureBox1.Location = new System.Drawing.Point(3, 3);
+			this.pictureBox1.Name = "pictureBox1";
+			this.pictureBox1.Size = new System.Drawing.Size(16, 16);
+			this.pictureBox1.TabIndex = 0;
+			this.pictureBox1.TabStop = false;
+			// 
+			// autosavecountlabel
+			// 
+			this.autosavecountlabel.AutoSize = true;
+			this.autosavecountlabel.Location = new System.Drawing.Point(285, 104);
+			this.autosavecountlabel.Name = "autosavecountlabel";
+			this.autosavecountlabel.Size = new System.Drawing.Size(13, 13);
+			this.autosavecountlabel.TabIndex = 6;
+			this.autosavecountlabel.Text = "5";
+			// 
+			// autosavecount
+			// 
+			this.autosavecount.BackColor = System.Drawing.Color.Transparent;
+			this.autosavecount.Location = new System.Drawing.Point(125, 92);
+			this.autosavecount.Maximum = 50;
+			this.autosavecount.Minimum = 1;
+			this.autosavecount.Name = "autosavecount";
+			this.autosavecount.Size = new System.Drawing.Size(154, 45);
+			this.autosavecount.TabIndex = 5;
+			this.autosavecount.TickFrequency = 5;
+			this.autosavecount.TickStyle = System.Windows.Forms.TickStyle.TopLeft;
+			this.autosavecount.Value = 1;
+			this.autosavecount.ValueChanged += new System.EventHandler(this.autosavecount_ValueChanged);
+			// 
+			// label21
+			// 
+			this.label21.AutoSize = true;
+			this.label21.Location = new System.Drawing.Point(8, 104);
+			this.label21.Name = "label21";
+			this.label21.Size = new System.Drawing.Size(111, 13);
+			this.label21.TabIndex = 4;
+			this.label21.Text = "Number of autosaves:";
+			// 
+			// autosaveintervallabel
+			// 
+			this.autosaveintervallabel.AutoSize = true;
+			this.autosaveintervallabel.Location = new System.Drawing.Point(285, 53);
+			this.autosaveintervallabel.Name = "autosaveintervallabel";
+			this.autosaveintervallabel.Size = new System.Drawing.Size(52, 13);
+			this.autosaveintervallabel.TabIndex = 3;
+			this.autosaveintervallabel.Text = "5 minutes";
+			// 
+			// autosaveinterval
+			// 
+			this.autosaveinterval.BackColor = System.Drawing.Color.Transparent;
+			this.autosaveinterval.Location = new System.Drawing.Point(125, 41);
+			this.autosaveinterval.Maximum = 60;
+			this.autosaveinterval.Minimum = 1;
+			this.autosaveinterval.Name = "autosaveinterval";
+			this.autosaveinterval.Size = new System.Drawing.Size(154, 45);
+			this.autosaveinterval.TabIndex = 2;
+			this.autosaveinterval.TickFrequency = 5;
+			this.autosaveinterval.TickStyle = System.Windows.Forms.TickStyle.TopLeft;
+			this.autosaveinterval.Value = 1;
+			this.autosaveinterval.ValueChanged += new System.EventHandler(this.autosaveinterval_ValueChanged);
+			// 
+			// label20
+			// 
+			this.label20.AutoSize = true;
+			this.label20.Location = new System.Drawing.Point(27, 53);
+			this.label20.Name = "label20";
+			this.label20.Size = new System.Drawing.Size(92, 13);
+			this.label20.TabIndex = 1;
+			this.label20.Text = "Autosave interval:";
+			// 
+			// autosave
+			// 
+			this.autosave.AutoSize = true;
+			this.autosave.Location = new System.Drawing.Point(8, 19);
+			this.autosave.Name = "autosave";
+			this.autosave.Size = new System.Drawing.Size(107, 17);
+			this.autosave.TabIndex = 0;
+			this.autosave.Text = "Enable Autosave";
+			this.autosave.UseVisualStyleBackColor = true;
+			this.autosave.CheckedChanged += new System.EventHandler(this.autosave_CheckedChanged);
+			// 
 			// tabtoasts
 			// 
 			this.tabtoasts.Controls.Add(this.groupBox10);
@@ -2675,6 +2827,14 @@ namespace CodeImp.DoomBuilder.Windows
 			this.groupBox6.PerformLayout();
 			this.previewgroup.ResumeLayout(false);
 			this.tabpasting.ResumeLayout(false);
+			this.tabrecovery.ResumeLayout(false);
+			this.autosavegroupbox.ResumeLayout(false);
+			this.autosavegroupbox.PerformLayout();
+			this.autosavedisabledwarning.ResumeLayout(false);
+			this.autosavedisabledwarning.PerformLayout();
+			((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.autosavecount)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.autosaveinterval)).EndInit();
 			this.tabtoasts.ResumeLayout(false);
 			this.tabtoasts.PerformLayout();
 			this.groupBox10.ResumeLayout(false);
@@ -2877,5 +3037,17 @@ namespace CodeImp.DoomBuilder.Windows
 		private System.Windows.Forms.ColumnHeader description;
 		private System.Windows.Forms.CheckBox cbParallelizedVertexPlotting;
 		private System.Windows.Forms.CheckBox cbParallelizedLinedefPlotting;
+		private System.Windows.Forms.TabPage tabrecovery;
+		private System.Windows.Forms.GroupBox autosavegroupbox;
+		private Controls.TransparentTrackBar autosaveinterval;
+		private System.Windows.Forms.Label label20;
+		private System.Windows.Forms.CheckBox autosave;
+		private System.Windows.Forms.Label autosaveintervallabel;
+		private System.Windows.Forms.Label autosavecountlabel;
+		private Controls.TransparentTrackBar autosavecount;
+		private System.Windows.Forms.Label label21;
+		private System.Windows.Forms.Panel autosavedisabledwarning;
+		private System.Windows.Forms.Label label34;
+		private System.Windows.Forms.PictureBox pictureBox1;
 	}
 }
