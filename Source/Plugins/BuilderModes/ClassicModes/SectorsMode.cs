@@ -1329,6 +1329,7 @@ namespace CodeImp.DoomBuilder.BuilderModes
 				if((highlighted != null) && !highlighted.IsDisposed)
 				{
 					ICollection<Sector> dragsectors;
+					ICollection<Thing> dragthings = null;
 
 					// Highlighted item not selected?
 					if (!highlighted.Selected)
@@ -1336,6 +1337,11 @@ namespace CodeImp.DoomBuilder.BuilderModes
 						// Select only this sector for dragging
 						General.Map.Map.ClearSelectedSectors();
 						dragsectors = new List<Sector> { highlighted };
+
+
+						if (BuilderPlug.Me.SyncronizeThingEdit)
+							dragthings = General.Map.Map.Things.Where(t => t.Sector == highlighted).ToList();
+
 						UpdateOverlaySurfaces(); //mxd
 					}
 					else
@@ -1345,7 +1351,7 @@ namespace CodeImp.DoomBuilder.BuilderModes
 
 					// Start dragging the selection
 					if(!BuilderPlug.Me.DontMoveGeometryOutsideMapBoundary || CanDrag(dragsectors)) //mxd
-						General.Editing.ChangeMode(new DragSectorsMode(mousedownmappos, dragsectors));
+						General.Editing.ChangeMode(new DragSectorsMode(mousedownmappos, dragsectors, dragthings));
 				}
 			}
 		}
