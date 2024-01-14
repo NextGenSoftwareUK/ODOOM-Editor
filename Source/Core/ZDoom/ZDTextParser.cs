@@ -552,7 +552,7 @@ namespace CodeImp.DoomBuilder.ZDoom
 				if(reporterror) ReportError("Expected \"" + expectedtoken + "\", but got \"" + token + "\"");
 
 				// Rewind so this structure can be read again
-				DataStream.Seek(-token.Length - 1, SeekOrigin.Current);
+				DataStream.Seek(-token.Length, SeekOrigin.Current);
 				return false;
 			}
 
