@@ -36,18 +36,18 @@ namespace CodeImp.DoomBuilder.Compilers
 
 		protected class CompileContext { }
 
-        #endregion
-
-        #region ================== Constants
-
-        private const string ACS_ERROR_FILE = "acs.err";
-		
 		#endregion
-		
+
+		#region ================== Constants
+
+		private const string ACS_ERROR_FILE = "acs.err";
+
+		#endregion
+
 		#region ================== Variables
 
 		private AcsParserSE parser; //mxd
-		
+
 		#endregion
 
 		#region ================== Properties
@@ -58,7 +58,7 @@ namespace CodeImp.DoomBuilder.Compilers
 		#endregion
 
 		#region ================== Constructor
-		
+
 		// Constructor
 		public AccCompiler(CompilerInfo info) : base(info, false)
 		{
@@ -68,7 +68,7 @@ namespace CodeImp.DoomBuilder.Compilers
 		public override void Dispose()
 		{
 			// Not already disposed?
-			if(!isdisposed)
+			if (!isdisposed)
 			{
 				// Clean up
 
@@ -76,18 +76,18 @@ namespace CodeImp.DoomBuilder.Compilers
 				base.Dispose();
 			}
 		}
-		
+
 		#endregion
-		
+
 		#region ================== Methods
 
 		protected virtual CompileContext OnBeforeProcessStart(ProcessStartInfo info)
-        {
+		{
 			return new CompileContext();
 		}
 
 		protected virtual void OnCheckError(HashSet<string> includes, ProcessStartInfo processinfo, Process process, CompileContext context)
-        {
+		{
 			int line = 0;
 
 			// Now find the error file
@@ -171,7 +171,7 @@ namespace CodeImp.DoomBuilder.Compilers
 				}
 			}
 		}
-		
+
 		// This runs the compiler
 		public override bool Run()
 		{
@@ -182,10 +182,10 @@ namespace CodeImp.DoomBuilder.Compilers
 			parser = new AcsParserSE
 			{
 				IsMapScriptsLump = SourceIsMapScriptsLump,
-				OnInclude = delegate(AcsParserSE se, string includefile, AcsParserSE.IncludeType includetype)
+				OnInclude = delegate (AcsParserSE se, string includefile, AcsParserSE.IncludeType includetype)
 				{
 					TextResourceData data = General.Map.Data.GetTextResourceData(includefile);
-					if(data == null)
+					if (data == null)
 					{
 						se.ReportError("Unable to find include file \"" + includefile + "\".");
 						return false; // Fial
@@ -196,31 +196,31 @@ namespace CodeImp.DoomBuilder.Compilers
 			};
 
 			string inputfilepath = Path.Combine(this.tempdir.FullName, inputfile);
-			using(FileStream stream = File.OpenRead(inputfilepath))
+			using (FileStream stream = File.OpenRead(inputfilepath))
 			{
 				// Map SCRIPTS lump is empty. Abort the process without generating any warnings or errors. 
-				if(SourceIsMapScriptsLump && stream.Length == 0) return false;
+				if (SourceIsMapScriptsLump && stream.Length == 0) return false;
 
 				DataLocation dl = new DataLocation(DataLocation.RESOURCE_DIRECTORY, Path.GetDirectoryName(inputfilepath), false, false, false, null);
 				//mxd. TextResourceData must point to temp path when compiling WAD lumps for lump to be recognized as map lump when reporting errors...
 				TextResourceData data = new TextResourceData(stream, dl, (SourceIsMapScriptsLump ? inputfile : sourcefile));
-				if(!parser.Parse(data, info.Files, true, AcsParserSE.IncludeType.NONE, false))
+				if (!parser.Parse(data, info.Files, true, AcsParserSE.IncludeType.NONE, false))
 				{
 					// Check for errors
-					if(parser.HasError) ReportError(new CompilerError(parser.ErrorDescription, parser.ErrorSource, parser.ErrorLine));
+					if (parser.HasError) ReportError(new CompilerError(parser.ErrorDescription, parser.ErrorSource, parser.ErrorLine));
 					return true;
 				}
 			}
 
 			//mxd. External lumps should be libraries
-			if(!SourceIsMapScriptsLump && !parser.IsLibrary)
+			if (!SourceIsMapScriptsLump && !parser.IsLibrary)
 			{
 				ReportError(new CompilerError("External ACS files can only be compiled as libraries.", sourcefile));
 				return true;
 			}
 
 			//mxd. Update script names if we are compiling the map SCRIPTS lump
-			if(SourceIsMapScriptsLump)
+			if (SourceIsMapScriptsLump)
 			{
 				General.Map.UpdateScriptNames(parser);
 			}
@@ -228,22 +228,22 @@ namespace CodeImp.DoomBuilder.Compilers
 			//xabis
 			// Copy includes from the resources into the compiler's folder, preserving relative pathing and naming
 			HashSet<string> includes = parser.GetIncludes(); //mxd
-			foreach(string include in includes)
+			foreach (string include in includes)
 			{
 				// Grab the script text from the resources
 				TextResourceData data = General.Map.Data.GetTextResourceData(include);
-				if(data != null && data.Stream != null)
+				if (data != null && data.Stream != null)
 				{
 					// Pull the pk3 or directory sub folder out if applicable
 					FileInfo fi = new FileInfo(Path.Combine(this.tempdir.FullName, include));
 
 					// Do not allow files to be overwritten, either accidentally or maliciously
-					if(!fi.Exists)
+					if (!fi.Exists)
 					{
 						General.WriteLogLine("Copying script include: " + include);
 
 						// Create the directory path as needed
-						if(!string.IsNullOrEmpty(fi.DirectoryName)) Directory.CreateDirectory(fi.DirectoryName);
+						if (!string.IsNullOrEmpty(fi.DirectoryName)) Directory.CreateDirectory(fi.DirectoryName);
 
 						// Dump the script into the target file
 						BinaryReader reader = new BinaryReader(data.Stream);
@@ -260,7 +260,7 @@ namespace CodeImp.DoomBuilder.Compilers
 			args = args.Replace("%PT", this.tempdir.FullName);
 			args = args.Replace("%PS", sourcedir);
 			args = args.Replace(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar); //mxd. This fixes include path when the map is in a root directory
-			
+
 			// Setup process info
 			ProcessStartInfo processinfo = new ProcessStartInfo();
 			processinfo.Arguments = args;
@@ -272,24 +272,24 @@ namespace CodeImp.DoomBuilder.Compilers
 			processinfo.WorkingDirectory = this.workingdir;
 
 			CompileContext context = OnBeforeProcessStart(processinfo);
-			
+
 			// Output info
 			General.WriteLogLine("Running compiler...");
 			General.WriteLogLine("Program:    " + processinfo.FileName);
 			General.WriteLogLine("Arguments:  " + processinfo.Arguments);
-			
+
 			try
 			{
 				// Start the compiler
 				process = Process.Start(processinfo);
 			}
-			catch(Exception e)
+			catch (Exception e)
 			{
 				// Unable to start the compiler
 				General.ShowErrorMessage("Unable to start the compiler (" + info.Name + "). " + e.GetType().Name + ": " + e.Message, MessageBoxButtons.OK);
 				return false;
 			}
-			
+
 			// Wait for compiler to complete
 			process.WaitForExit();
 			TimeSpan deltatime = TimeSpan.FromTicks(process.ExitTime.Ticks - process.StartTime.Ticks);
@@ -297,10 +297,10 @@ namespace CodeImp.DoomBuilder.Compilers
 			General.WriteLogLine("Compile time: " + deltatime.TotalSeconds.ToString("########0.00") + " seconds");
 
 			OnCheckError(includes, processinfo, process, context);
-			
+
 			return true;
 		}
-		
+
 		#endregion
 	}
 }
