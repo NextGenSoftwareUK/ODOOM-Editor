@@ -30,11 +30,17 @@ using CodeImp.DoomBuilder.ZDoom.Scripting;
 
 namespace CodeImp.DoomBuilder.Compilers
 {
-	internal sealed class AccCompiler : Compiler
+	internal class AccCompiler : Compiler
 	{
-		#region ================== Constants
-		
-		private const string ACS_ERROR_FILE = "acs.err";
+		#region ================== Internal classes
+
+		protected class CompileContext { }
+
+        #endregion
+
+        #region ================== Constants
+
+        private const string ACS_ERROR_FILE = "acs.err";
 		
 		#endregion
 		
@@ -74,12 +80,102 @@ namespace CodeImp.DoomBuilder.Compilers
 		#endregion
 		
 		#region ================== Methods
+
+		protected virtual CompileContext OnBeforeProcessStart(ProcessStartInfo info)
+        {
+			return new CompileContext();
+		}
+
+		protected virtual void OnCheckError(HashSet<string> includes, ProcessStartInfo processinfo, Process process, CompileContext context)
+        {
+			int line = 0;
+
+			// Now find the error file
+			string errfile = Path.Combine(this.workingdir, ACS_ERROR_FILE);
+			if (File.Exists(errfile))
+			{
+				try
+				{
+					// Regex to find error lines
+					Regex errlinematcher = new Regex(":[0-9]+: ", RegexOptions.Compiled | RegexOptions.CultureInvariant);
+
+					// Read all lines
+					bool erroradded = false; //mxd
+					string[] errlines = File.ReadAllLines(errfile);
+					string temppath = this.tempdir.FullName + Path.DirectorySeparatorChar.ToString(); //mxd. Need trailing slash..
+					while (line < errlines.Length)
+					{
+						// Check line
+						string linestr = errlines[line];
+						Match match = errlinematcher.Match(linestr);
+						if (match.Success && (match.Index > 0))
+						{
+							CompilerError err = new CompilerError();
+
+							// The match without spaces and semicolon is the line number
+							string linenr = match.Value.Replace(":", "").Trim();
+							if (!int.TryParse(linenr, out err.linenumber))
+								err.linenumber = CompilerError.NO_LINE_NUMBER;
+							else
+								err.linenumber--;
+
+							// Everything before the match is the filename
+							err.filename = linestr.Substring(0, match.Index).Replace(Path.AltDirectorySeparatorChar, Path.DirectorySeparatorChar);
+
+							//mxd. Get rid of temp directory path
+							if (err.filename.StartsWith(temppath)) err.filename = err.filename.Replace(temppath, string.Empty);
+
+							if (!Path.IsPathRooted(err.filename))
+							{
+								//mxd. If the error is in an include file, try to find it in loaded resources
+								if (includes.Contains(err.filename))
+								{
+									foreach (DataReader dr in General.Map.Data.Containers)
+									{
+										if (dr is DirectoryReader && dr.FileExists(err.filename))
+										{
+											err.filename = Path.Combine(dr.Location.location, err.filename);
+											break;
+										}
+									}
+								}
+								else
+								{
+									// Add working directory to filename, so it could be recognized as map namespace lump in MapManager.CompileLump()
+									err.filename = Path.Combine(processinfo.WorkingDirectory, err.filename);
+								}
+							}
+
+							// Everything after the match is the description
+							err.description = linestr.Substring(match.Index + match.Length).Trim();
+
+							// Report the error
+							ReportError(err);
+							erroradded = true; //mxd
+						}
+
+						// Next line
+						line++;
+					}
+
+					//mxd. Some ACC errors are not properly formatted. If that's the case, threat the whole acs.err as an error...
+					if (!erroradded && errlines.Length > 0)
+					{
+						ReportError(new CompilerError(string.Join(Environment.NewLine, errlines)));
+					}
+				}
+				catch (Exception e)
+				{
+					// Error reading errors (ironic, isn't it)
+					ReportError(new CompilerError("Failed to retrieve compiler error report. " + e.GetType().Name + ": " + e.Message));
+				}
+			}
+		}
 		
 		// This runs the compiler
 		public override bool Run()
 		{
 			Process process;
-			int line = 0;
 			string sourcedir = Path.GetDirectoryName(sourcefile);
 
 			// Preprocess the file
@@ -174,6 +270,8 @@ namespace CodeImp.DoomBuilder.Compilers
 			processinfo.UseShellExecute = true;
 			processinfo.WindowStyle = ProcessWindowStyle.Hidden;
 			processinfo.WorkingDirectory = this.workingdir;
+
+			CompileContext context = OnBeforeProcessStart(processinfo);
 			
 			// Output info
 			General.WriteLogLine("Running compiler...");
@@ -197,87 +295,8 @@ namespace CodeImp.DoomBuilder.Compilers
 			TimeSpan deltatime = TimeSpan.FromTicks(process.ExitTime.Ticks - process.StartTime.Ticks);
 			General.WriteLogLine("Compiler process has finished.");
 			General.WriteLogLine("Compile time: " + deltatime.TotalSeconds.ToString("########0.00") + " seconds");
-			
-			// Now find the error file
-			string errfile = Path.Combine(this.workingdir, ACS_ERROR_FILE);
-			if(File.Exists(errfile))
-			{
-				try
-				{
-					// Regex to find error lines
-					Regex errlinematcher = new Regex(":[0-9]+: ", RegexOptions.Compiled | RegexOptions.CultureInvariant);
-					
-					// Read all lines
-					bool erroradded = false; //mxd
-					string[] errlines = File.ReadAllLines(errfile);
-					string temppath = this.tempdir.FullName + Path.DirectorySeparatorChar.ToString(); //mxd. Need trailing slash..
-					while(line < errlines.Length)
-					{
-						// Check line
-						string linestr = errlines[line];
-						Match match = errlinematcher.Match(linestr);
-						if(match.Success && (match.Index > 0))
-						{
-							CompilerError err = new CompilerError();
-							
-							// The match without spaces and semicolon is the line number
-							string linenr = match.Value.Replace(":", "").Trim();
-							if(!int.TryParse(linenr, out err.linenumber))
-								err.linenumber = CompilerError.NO_LINE_NUMBER;
-							else
-								err.linenumber--;
-							
-							// Everything before the match is the filename
-							err.filename = linestr.Substring(0, match.Index).Replace(Path.AltDirectorySeparatorChar, Path.DirectorySeparatorChar);
 
-							//mxd. Get rid of temp directory path
-							if(err.filename.StartsWith(temppath)) err.filename = err.filename.Replace(temppath, string.Empty);
-							
-							if(!Path.IsPathRooted(err.filename))
-							{
-								//mxd. If the error is in an include file, try to find it in loaded resources
-								if(includes.Contains(err.filename))
-								{
-									foreach(DataReader dr in General.Map.Data.Containers)
-									{
-										if(dr is DirectoryReader && dr.FileExists(err.filename))
-										{
-											err.filename = Path.Combine(dr.Location.location, err.filename);
-											break;
-										}
-									}
-								}
-								else
-								{
-									// Add working directory to filename, so it could be recognized as map namespace lump in MapManager.CompileLump()
-									err.filename = Path.Combine(processinfo.WorkingDirectory, err.filename);
-								}
-							}
-							
-							// Everything after the match is the description
-							err.description = linestr.Substring(match.Index + match.Length).Trim();
-							
-							// Report the error
-							ReportError(err);
-							erroradded = true; //mxd
-						}
-						
-						// Next line
-						line++;
-					}
-
-					//mxd. Some ACC errors are not properly formatted. If that's the case, threat the whole acs.err as an error...
-					if(!erroradded && errlines.Length > 0)
-					{
-						ReportError(new CompilerError(string.Join(Environment.NewLine, errlines)));
-					}
-				}
-				catch(Exception e)
-				{
-					// Error reading errors (ironic, isn't it)
-					ReportError(new CompilerError("Failed to retrieve compiler error report. " + e.GetType().Name + ": " + e.Message));
-				}
-			}
+			OnCheckError(includes, processinfo, process, context);
 			
 			return true;
 		}
