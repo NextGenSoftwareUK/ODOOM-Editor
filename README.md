@@ -21,7 +21,7 @@ __Note:__ this is experimental. None of the main developers are using Linux as a
   - **Arch:** `sudo pacman -S base-devel`
     - If you're using X11 display manager you may need to install these packages: `libx11 libxfixes`
     - If you are not using the proprietary nvidia driver you may need to install `mesa`
-- Go to a directory of your choice and clone the repository (it'll automatically create an `UltimateDoomBuilder` directory in the current directory): `git clone https://github.com/jewalky/UltimateDoomBuilder.git`
+- Go to a directory of your choice and clone the repository (it'll automatically create an `UltimateDoomBuilder` directory in the current directory): `git clone https://github.com/UltimateDoomBuilder/UltimateDoomBuilder.git`
 - Compile UDB: `cd UltimateDoomBuilder && make`
 - Run UDB: `cd Build && ./builder`
 - Alternatively, to compile UDB in debug mode:
