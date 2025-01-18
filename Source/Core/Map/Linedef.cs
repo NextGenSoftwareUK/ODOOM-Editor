@@ -805,8 +805,8 @@ namespace CodeImp.DoomBuilder.Map
 		// Plane Align (181) (see http://zdoom.org/wiki/Plane_Align
 		public bool HasActionPlaneAlign()
 		{
-			return Action > 0 && General.Map.Config.GetLinedefActionInfo(Action).Id.ToLowerInvariant() == "plane_align";
-    }
+			return Action > 0 && General.Map.Config.GetLinedefActionInfo(Action).Id?.ToLowerInvariant() == "plane_align";
+		}
 
 		// Determine if this line defines the sky upper texture transferred to a sector.
 		public bool HasSkyTransfer()
