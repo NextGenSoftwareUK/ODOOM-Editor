@@ -40,15 +40,15 @@ namespace CodeImp.DoomBuilder.Controls
 			this.thingimages = new System.Windows.Forms.ImageList(this.components);
 			this.infopanel = new System.Windows.Forms.Panel();
 			this.spritepanel = new System.Windows.Forms.Panel();
+			this.spritetex = new CodeImp.DoomBuilder.Controls.ConfigurablePictureBox();
 			this.classname = new System.Windows.Forms.LinkLabel();
 			this.labelclassname = new System.Windows.Forms.Label();
+			this.typeid = new CodeImp.DoomBuilder.Controls.NumericTextbox();
 			this.label1 = new System.Windows.Forms.Label();
 			this.tbFilter = new System.Windows.Forms.TextBox();
 			this.bClear = new System.Windows.Forms.Button();
 			this.updatetimer = new System.Windows.Forms.Timer(this.components);
 			this.typelist = new CodeImp.DoomBuilder.Controls.MultiSelectTreeview();
-			this.spritetex = new CodeImp.DoomBuilder.Controls.ConfigurablePictureBox();
-			this.typeid = new CodeImp.DoomBuilder.Controls.NumericTextbox();
 			this.infopanel.SuspendLayout();
 			this.spritepanel.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.spritetex)).BeginInit();
@@ -212,6 +212,22 @@ namespace CodeImp.DoomBuilder.Controls
 			this.spritepanel.Size = new System.Drawing.Size(68, 68);
 			this.spritepanel.TabIndex = 23;
 			// 
+			// spritetex
+			// 
+			this.spritetex.CompositingQuality = System.Drawing.Drawing2D.CompositingQuality.Default;
+			this.spritetex.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.spritetex.Highlighted = false;
+			this.spritetex.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
+			this.spritetex.Location = new System.Drawing.Point(0, 0);
+			this.spritetex.Name = "spritetex";
+			this.spritetex.PageUnit = System.Drawing.GraphicsUnit.Pixel;
+			this.spritetex.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.None;
+			this.spritetex.Size = new System.Drawing.Size(64, 64);
+			this.spritetex.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+			this.spritetex.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.Default;
+			this.spritetex.TabIndex = 0;
+			this.spritetex.TabStop = false;
+			// 
 			// classname
 			// 
 			this.classname.ActiveLinkColor = System.Drawing.SystemColors.Highlight;
@@ -234,6 +250,20 @@ namespace CodeImp.DoomBuilder.Controls
 			this.labelclassname.TabIndex = 25;
 			this.labelclassname.Text = "Class:";
 			this.labelclassname.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// typeid
+			// 
+			this.typeid.AllowDecimal = false;
+			this.typeid.AllowExpressions = false;
+			this.typeid.AllowNegative = true;
+			this.typeid.AllowRelative = false;
+			this.typeid.ForeColor = System.Drawing.SystemColors.WindowText;
+			this.typeid.ImeMode = System.Windows.Forms.ImeMode.Off;
+			this.typeid.Location = new System.Drawing.Point(60, 2);
+			this.typeid.Name = "typeid";
+			this.typeid.Size = new System.Drawing.Size(68, 20);
+			this.typeid.TabIndex = 1;
+			this.typeid.TextChanged += new System.EventHandler(this.typeid_TextChanged);
 			// 
 			// label1
 			// 
@@ -281,41 +311,12 @@ namespace CodeImp.DoomBuilder.Controls
 			this.typelist.ShowNodeToolTips = true;
 			this.typelist.Size = new System.Drawing.Size(304, 203);
 			this.typelist.TabIndex = 22;
-			this.typelist.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.typelist_MouseDoubleClick);
-			this.typelist.BeforeExpand += new System.Windows.Forms.TreeViewCancelEventHandler(this.typelist_BeforeExpand);
-			this.typelist.BeforeCollapse += new System.Windows.Forms.TreeViewCancelEventHandler(this.typelist_BeforeCollapse);
-			this.typelist.MouseEnter += new System.EventHandler(this.typelist_MouseEnter);
-			this.typelist.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.typelist_KeyPress);
 			this.typelist.SelectionsChanged += new System.EventHandler(this.typelist_SelectionsChanged);
-			// 
-			// spritetex
-			// 
-			this.spritetex.CompositingQuality = System.Drawing.Drawing2D.CompositingQuality.Default;
-			this.spritetex.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.spritetex.Highlighted = false;
-			this.spritetex.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
-			this.spritetex.Location = new System.Drawing.Point(0, 0);
-			this.spritetex.Name = "spritetex";
-			this.spritetex.PageUnit = System.Drawing.GraphicsUnit.Pixel;
-			this.spritetex.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.None;
-			this.spritetex.Size = new System.Drawing.Size(64, 64);
-			this.spritetex.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-			this.spritetex.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.Default;
-			this.spritetex.TabIndex = 0;
-			this.spritetex.TabStop = false;
-			// 
-			// typeid
-			// 
-			this.typeid.AllowDecimal = false;
-			this.typeid.AllowNegative = false;
-			this.typeid.AllowRelative = false;
-			this.typeid.ForeColor = System.Drawing.SystemColors.WindowText;
-			this.typeid.ImeMode = System.Windows.Forms.ImeMode.Off;
-			this.typeid.Location = new System.Drawing.Point(60, 2);
-			this.typeid.Name = "typeid";
-			this.typeid.Size = new System.Drawing.Size(68, 20);
-			this.typeid.TabIndex = 1;
-			this.typeid.TextChanged += new System.EventHandler(this.typeid_TextChanged);
+			this.typelist.BeforeCollapse += new System.Windows.Forms.TreeViewCancelEventHandler(this.typelist_BeforeCollapse);
+			this.typelist.BeforeExpand += new System.Windows.Forms.TreeViewCancelEventHandler(this.typelist_BeforeExpand);
+			this.typelist.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.typelist_KeyPress);
+			this.typelist.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.typelist_MouseDoubleClick);
+			this.typelist.MouseEnter += new System.EventHandler(this.typelist_MouseEnter);
 			// 
 			// ThingBrowserControl
 			// 
