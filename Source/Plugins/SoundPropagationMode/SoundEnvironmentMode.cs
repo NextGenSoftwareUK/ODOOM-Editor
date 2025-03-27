@@ -569,8 +569,7 @@ namespace CodeImp.DoomBuilder.SoundPropagationMode
 					return;
 				}
 
-				General.Settings.ApplyDefaultThingSettings(t);
-				t.Type = BuilderPlug.SOUND_ENVIROMNEMT_THING_TYPE;
+				General.Settings.ApplyCleanThingSettings(t, BuilderPlug.SOUND_ENVIROMNEMT_THING_TYPE);
 				t.Move(mousemappos);
 				t.UpdateConfiguration();
 
