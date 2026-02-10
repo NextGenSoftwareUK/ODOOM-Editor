@@ -7,3 +7,4 @@ $g.Dispose()
 $b.Save($path, [System.Drawing.Imaging.ImageFormat]::Png)
 $b.Dispose()
 Write-Output "Created $path"
+
