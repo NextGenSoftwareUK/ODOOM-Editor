@@ -12,7 +12,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("NextGen World Ltd")]
 [assembly: AssemblyProduct("ODOOM Editor")]
-[assembly: AssemblyCopyright("Copyright © 2007, 2016, 2017-2019")]
+[assembly: AssemblyCopyright("Copyright © 2026")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
