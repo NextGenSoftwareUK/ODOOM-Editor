@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <!-- .NET Standard 2.0: compatible with UDB (.NET 4.7.2), Unity, .NET 8 NativeAOT wrapper, and any modern .NET editor -->
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <RootNamespace>OASIS.Editor.SDK</RootNamespace>
+    <AssemblyName>OASISEditorSDK</AssemblyName>
+    <Version>1.0.0</Version>
+    <Description>Generic OASIS Editor SDK — plug into any map editor (UDB, TrenchBroom, NetRadiant, DarkRadiant, Mapster32). Provides the OGAsset catalog, map sidecar, STAR API client, and entity conversion tables shared by all OGEngine editors.</Description>
+    <Authors>NextGen Software Ltd</Authors>
+    <PackageId>OASISEditorSDK</PackageId>
+    <Nullable>disable</Nullable>
+    <LangVersion>8.0</LangVersion>
+  </PropertyGroup>
+
+  <!-- No external dependencies — pure .NET Standard for maximum compatibility -->
+
+</Project>
