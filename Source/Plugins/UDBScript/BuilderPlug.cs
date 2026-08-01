@@ -1,4 +1,4 @@
-#region ================== Copyright (c) 2020 Boris Iwanski
+﻿#region ================== Copyright (c) 2020 Boris Iwanski
 
 /*
  * This program is free software: you can redistribute it and/or modify
@@ -122,16 +122,22 @@ namespace CodeImp.DoomBuilder.UDBScript
 		private ToolStripMenuItem menuStarUnderTools;
 		private ToolStripMenuItem menuStarUnderView;
 		private ToolStripButton buttonStar;
-		private OASISStarPanel starPanel;
-		private Docker starDocker;
+		private OGEnginePanel ogEnginePanel;
+		private Docker ogEngineDocker;
+		private OASISPortalPanel portalPanel;
+		private Docker portalDocker;
+		private OGQuestWeaverPanel questWeaverPanel;
+		private Docker questWeaverDocker;
 		// Click-to-place: after user selects asset in STAR dialog, next map click places it
 		private int? pendingStarThingType;
 		private string pendingStarAssetName;
+		// Pending portal destination metadata — written to sidecar after placement
+		private PendingPortalData pendingPortal;
 		// OASIS display pack: optional PNGs per thing type for editor-only sprites (OQUAKE/ODOOM)
 		private readonly Dictionary<int, ImageData> thingSpriteOverrideCache = new Dictionary<int, ImageData>();
 		private readonly object thingSpriteOverrideLock = new object();
 		private static bool loggedOasisSpritePathWarning;
-		// OASIS STAR metadata: thing type -> (title, class/id), loaded from OASIS_STAR_Place_Selected.js
+		// OGEngine metadata: thing type -> (title, class/id), loaded from OASIS_STAR_Place_Selected.js
 		private readonly Dictionary<int, KeyValuePair<string, string>> thingInfoOverrideCache = new Dictionary<int, KeyValuePair<string, string>>();
 		private readonly object thingInfoOverrideLock = new object();
 		private bool thingInfoOverrideLoaded;
@@ -193,49 +199,80 @@ namespace CodeImp.DoomBuilder.UDBScript
 			try
 			{
 				var placeItem = new ToolStripMenuItem("Place ODOOM / OQUAKE asset at cursor...");
-				placeItem.Tag = "oasisstar_place_selected";
+				placeItem.Tag = "ogengine_place_selected";
 				placeItem.Click += (s, e) => General.Interface.InvokeTaggedAction(s, e);
-				var showPanelItem = new ToolStripMenuItem("Open OASIS STAR panel");
-				showPanelItem.Tag = "oasisstar_show_panel";
+				var showPanelItem = new ToolStripMenuItem("Open OGEngine panel");
+				showPanelItem.Tag = "ogengine_show_panel";
 				showPanelItem.Click += (s, e) => General.Interface.InvokeTaggedAction(s, e);
 				var convQ2D = new ToolStripMenuItem("Convert OQUAKE .map → ODOOM...");
-				convQ2D.Tag = "oasisstar_convert_quake2doom";
+				convQ2D.Tag = "ogengine_convert_quake2doom";
 				convQ2D.Click += (s, e) => General.Interface.InvokeTaggedAction(s, e);
 				var convD2Q = new ToolStripMenuItem("Convert ODOOM map → OQUAKE .map...");
-				convD2Q.Tag = "oasisstar_convert_doom2quake";
+				convD2Q.Tag = "ogengine_convert_doom2quake";
 				convD2Q.Click += (s, e) => General.Interface.InvokeTaggedAction(s, e);
 
 				menuStar = new ToolStripMenuItem("★ STAR");
 				menuStar.Name = "menuStar";
 				menuStar.DropDownItems.Add(placeItem);
 				menuStar.DropDownItems.Add(showPanelItem);
+
+				var showPortalPanelItem = new ToolStripMenuItem("Open OASIS Portal panel");
+				showPortalPanelItem.Tag = "ogengine_show_portal_panel";
+				showPortalPanelItem.Click += (s, e) => General.Interface.InvokeTaggedAction(s, e);
+				menuStar.DropDownItems.Add(showPortalPanelItem);
+
+				var showQuestWeaverItem = new ToolStripMenuItem("Open Quest Weaver panel");
+				showQuestWeaverItem.Tag = "ogengine_show_quest_weaver";
+				showQuestWeaverItem.Click += (s, e) => General.Interface.InvokeTaggedAction(s, e);
+				menuStar.DropDownItems.Add(showQuestWeaverItem);
+
 				menuStar.DropDownItems.Add(new ToolStripSeparator());
 				menuStar.DropDownItems.Add(convQ2D);
 				menuStar.DropDownItems.Add(convD2Q);
 
-				menuStarUnderTools = new ToolStripMenuItem("OASIS STAR");
-				menuStarUnderTools.DropDownItems.Add(new ToolStripMenuItem("Place ODOOM / OQUAKE asset at cursor...") { Tag = "oasisstar_place_selected" });
-				menuStarUnderTools.DropDownItems.Add(new ToolStripMenuItem("Open OASIS STAR panel") { Tag = "oasisstar_show_panel" });
+				var convQ22D = new ToolStripMenuItem("Convert OQUAKE2 .map → ODOOM...");
+				convQ22D.Tag = "ogengine_convert_q2todoom";
+				convQ22D.Click += (s, e) => General.Interface.InvokeTaggedAction(s, e);
+				menuStar.DropDownItems.Add(convQ22D);
+
+				var convD2Q2 = new ToolStripMenuItem("Convert ODOOM map → OQUAKE2 .map...");
+				convD2Q2.Tag = "ogengine_convert_doom2q2";
+				convD2Q2.Click += (s, e) => General.Interface.InvokeTaggedAction(s, e);
+				menuStar.DropDownItems.Add(convD2Q2);
+
+				var convQ32D = new ToolStripMenuItem("Convert OQUAKE3 .map → ODOOM...");
+				convQ32D.Tag = "ogengine_convert_q3todoom";
+				convQ32D.Click += (s, e) => General.Interface.InvokeTaggedAction(s, e);
+				menuStar.DropDownItems.Add(convQ32D);
+
+				var exportPortals = new ToolStripMenuItem("Export OASIS Portals → Quake .map snippet...");
+				exportPortals.Tag = "ogengine_export_portals_quake";
+				exportPortals.Click += (s, e) => General.Interface.InvokeTaggedAction(s, e);
+				menuStar.DropDownItems.Add(exportPortals);
+
+				menuStarUnderTools = new ToolStripMenuItem("OGEngine");
+				menuStarUnderTools.DropDownItems.Add(new ToolStripMenuItem("Place ODOOM / OQUAKE asset at cursor...") { Tag = "ogengine_place_selected" });
+				menuStarUnderTools.DropDownItems.Add(new ToolStripMenuItem("Open OGEngine panel") { Tag = "ogengine_show_panel" });
 				menuStarUnderTools.DropDownItems.Add(new ToolStripSeparator());
-				menuStarUnderTools.DropDownItems.Add(new ToolStripMenuItem("Convert OQUAKE .map → ODOOM...") { Tag = "oasisstar_convert_quake2doom" });
-				menuStarUnderTools.DropDownItems.Add(new ToolStripMenuItem("Convert ODOOM map → OQUAKE .map...") { Tag = "oasisstar_convert_doom2quake" });
+				menuStarUnderTools.DropDownItems.Add(new ToolStripMenuItem("Convert OQUAKE .map → ODOOM...") { Tag = "ogengine_convert_quake2doom" });
+				menuStarUnderTools.DropDownItems.Add(new ToolStripMenuItem("Convert ODOOM map → OQUAKE .map...") { Tag = "ogengine_convert_doom2quake" });
 				foreach (ToolStripItem i in menuStarUnderTools.DropDownItems)
 					if (i is ToolStripMenuItem mi && mi.Tag != null) mi.Click += (s, e) => General.Interface.InvokeTaggedAction(s, e);
 
-				menuStarUnderView = new ToolStripMenuItem("OASIS STAR");
-				menuStarUnderView.DropDownItems.Add(new ToolStripMenuItem("Place ODOOM / OQUAKE asset at cursor...") { Tag = "oasisstar_place_selected" });
-				menuStarUnderView.DropDownItems.Add(new ToolStripMenuItem("Open OASIS STAR panel") { Tag = "oasisstar_show_panel" });
+				menuStarUnderView = new ToolStripMenuItem("OGEngine");
+				menuStarUnderView.DropDownItems.Add(new ToolStripMenuItem("Place ODOOM / OQUAKE asset at cursor...") { Tag = "ogengine_place_selected" });
+				menuStarUnderView.DropDownItems.Add(new ToolStripMenuItem("Open OGEngine panel") { Tag = "ogengine_show_panel" });
 				menuStarUnderView.DropDownItems.Add(new ToolStripSeparator());
-				menuStarUnderView.DropDownItems.Add(new ToolStripMenuItem("Convert OQUAKE .map → ODOOM...") { Tag = "oasisstar_convert_quake2doom" });
-				menuStarUnderView.DropDownItems.Add(new ToolStripMenuItem("Convert ODOOM map → OQUAKE .map...") { Tag = "oasisstar_convert_doom2quake" });
+				menuStarUnderView.DropDownItems.Add(new ToolStripMenuItem("Convert OQUAKE .map → ODOOM...") { Tag = "ogengine_convert_quake2doom" });
+				menuStarUnderView.DropDownItems.Add(new ToolStripMenuItem("Convert ODOOM map → OQUAKE .map...") { Tag = "ogengine_convert_doom2quake" });
 				foreach (ToolStripItem i in menuStarUnderView.DropDownItems)
 					if (i is ToolStripMenuItem mi && mi.Tag != null) mi.Click += (s, e) => General.Interface.InvokeTaggedAction(s, e);
 
 				buttonStar = new ToolStripButton();
 				buttonStar.DisplayStyle = ToolStripItemDisplayStyle.Text;
 				buttonStar.Text = "★";
-				buttonStar.ToolTipText = "OASIS STAR – Select asset, then click on the map to place";
-				buttonStar.Tag = "oasisstar_place_selected";
+				buttonStar.ToolTipText = "OGEngine – Select asset, then click on the map to place";
+				buttonStar.Tag = "ogengine_place_selected";
 				buttonStar.Click += (s, e) => General.Interface.InvokeTaggedAction(s, e);
 
 				General.Interface.AddMenu(menuStar, CodeImp.DoomBuilder.Windows.MenuSection.Top);
@@ -349,7 +386,9 @@ namespace CodeImp.DoomBuilder.UDBScript
 				if (menuStarUnderTools != null) General.Interface.RemoveMenu(menuStarUnderTools);
 				if (menuStarUnderView != null) General.Interface.RemoveMenu(menuStarUnderView);
 				if (buttonStar != null) General.Interface.RemoveButton(buttonStar);
-				if (starDocker != null) General.Interface.RemoveDocker(starDocker);
+				if (ogEngineDocker != null) General.Interface.RemoveDocker(ogEngineDocker);
+				if (portalDocker != null) General.Interface.RemoveDocker(portalDocker);
+				if (questWeaverDocker != null) General.Interface.RemoveDocker(questWeaverDocker);
 			}
 			catch (Exception ex)
 			{
@@ -359,8 +398,12 @@ namespace CodeImp.DoomBuilder.UDBScript
 			menuStarUnderTools = null;
 			menuStarUnderView = null;
 			buttonStar = null;
-			starPanel = null;
-			starDocker = null;
+			ogEnginePanel = null;
+			ogEngineDocker = null;
+			portalPanel = null;
+			portalDocker = null;
+			questWeaverPanel = null;
+			questWeaverDocker = null;
 			base.Dispose();
 
 			// This must be called to remove bound methods for actions.
@@ -591,7 +634,7 @@ namespace CodeImp.DoomBuilder.UDBScript
 
 		/// <summary>
 		/// Runs a script by its path relative to the Scripts folder (e.g. "OASIS\\OASIS_STAR_Place_Selected.js").
-		/// Used by OASIS STAR toolbar/menu to place assets at cursor.
+		/// Used by OGEngine toolbar/menu to place assets at cursor.
 		/// </summary>
 		/// <param name="relativePath">Path relative to UDBScript/Scripts (e.g. "OASIS\\OASIS_STAR_Place_Selected.js")</param>
 		/// <returns>True if the script was found and run, false otherwise</returns>
@@ -823,6 +866,19 @@ namespace CodeImp.DoomBuilder.UDBScript
 			General.Interface.DisplayStatus(CodeImp.DoomBuilder.Windows.StatusType.Info, "OASIS STAR: Click on the map to place " + pendingStarAssetName + ".");
 		}
 
+		/// <summary>Called by OASISPortalPanel before SetPendingStarPlacement to record portal destination.</summary>
+		internal void SetPendingPortalPlacement(string destGame, string destMap, double destX, double destY, double destZ)
+		{
+			pendingPortal = new PendingPortalData
+			{
+				DestinationGame = destGame,
+				DestinationMap  = destMap,
+				DestinationX    = destX,
+				DestinationY    = destY,
+				DestinationZ    = destZ,
+			};
+		}
+
 		public override void OnEditMouseDown(MouseEventArgs e)
 		{
 			if (pendingStarThingType.HasValue && General.Map != null && General.Editing.Mode != null && e.Button == MouseButtons.Left)
@@ -875,6 +931,31 @@ namespace CodeImp.DoomBuilder.UDBScript
 						t.SetFlag("4", true);
 					}
 					General.Map.Map.Update();
+
+					// If this was a portal placement, write the destination to the sidecar file
+					if (type == OASISPortalPanel.PORTAL_THING_TYPE && pendingPortal != null)
+					{
+						try
+						{
+							OASISMapSidecar.AppendPortal(new OASISMapSidecar.PortalEntry
+							{
+								ThingId         = t.Index,
+								X               = snapped.x,
+								Y               = snapped.y,
+								DestinationGame = pendingPortal.DestinationGame,
+								DestinationMap  = pendingPortal.DestinationMap,
+								DestinationX    = pendingPortal.DestinationX,
+								DestinationY    = pendingPortal.DestinationY,
+								DestinationZ    = pendingPortal.DestinationZ,
+							});
+						}
+						catch (Exception sidecarEx)
+						{
+							General.ErrorLogger.Add(CodeImp.DoomBuilder.ErrorType.Warning, "OASIS STAR: Could not write portal sidecar: " + sidecarEx.Message);
+						}
+						pendingPortal = null;
+					}
+
 					// Rebuild things filter so the new thing appears in VisibleThings (2D view draws from filter, not Map.Things)
 					General.Map.ThingsFilter.Update();
 					General.Interface.RedrawDisplay();
@@ -885,23 +966,23 @@ namespace CodeImp.DoomBuilder.UDBScript
 			base.OnEditMouseDown(e);
 		}
 
-		[BeginAction("oasisstar_place_selected")]
-		public void OASISStarPlaceSelected()
+		[BeginAction("ogengine_place_selected")]
+		public void OGEnginePlaceSelected()
 		{
 			if (General.Map == null) return;
 			RunScriptByPath(Path.Combine("OASIS", "OASIS_STAR_Place_Selected.js"));
 		}
 
-		[BeginAction("oasisstar_show_panel")]
-		public void OASISStarShowPanel()
+		[BeginAction("ogengine_show_panel")]
+		public void OGEngineShowPanel()
 		{
-			if (starDocker == null)
+			if (ogEngineDocker == null)
 			{
 				try
 				{
-					starPanel = new OASISStarPanel(this);
-					starDocker = new Docker("oasisstar", "OASIS STAR", starPanel);
-					General.Interface.AddDocker(starDocker);
+					ogEnginePanel = new OGEnginePanel(this);
+					ogEngineDocker = new Docker("ogengine", "OGEngine", ogEnginePanel);
+					General.Interface.AddDocker(ogEngineDocker);
 				}
 				catch (Exception ex)
 				{
@@ -909,19 +990,83 @@ namespace CodeImp.DoomBuilder.UDBScript
 					return;
 				}
 			}
-			General.Interface.SelectDocker(starDocker);
+			General.Interface.SelectDocker(ogEngineDocker);
 		}
 
-		[BeginAction("oasisstar_convert_quake2doom")]
-		public void OASISStarConvertQuake2Doom()
+		[BeginAction("ogengine_convert_quake2doom")]
+		public void OGEngineConvertQuake2Doom()
 		{
 			OASISMapConverter.ConvertQuakeToDoom(General.Interface);
 		}
 
-		[BeginAction("oasisstar_convert_doom2quake")]
-		public void OASISStarConvertDoom2Quake()
+		[BeginAction("ogengine_convert_doom2quake")]
+		public void OGEngineConvertDoom2Quake()
 		{
 			OASISMapConverter.ConvertDoomToQuake(General.Interface);
+		}
+
+		[BeginAction("ogengine_convert_q2todoom")]
+		public void OGEngineConvertQ2ToDoom()
+		{
+			OASISMapConverter.ConvertQuake2ToDoom(General.Interface);
+		}
+
+		[BeginAction("ogengine_convert_doom2q2")]
+		public void OGEngineConvertDoom2Q2()
+		{
+			OASISMapConverter.ConvertDoomToQuake2(General.Interface);
+		}
+
+		[BeginAction("ogengine_convert_q3todoom")]
+		public void OGEngineConvertQ3ToDoom()
+		{
+			OASISMapConverter.ConvertQuake3ToDoom(General.Interface);
+		}
+
+		[BeginAction("ogengine_export_portals_quake")]
+		public void OGEngineExportPortalsToQuake()
+		{
+			OASISMapConverter.ExportPortalsToQuakeMap(General.Interface);
+		}
+
+		[BeginAction("ogengine_show_portal_panel")]
+		public void OGEngineShowPortalPanel()
+		{
+			if (portalDocker == null)
+			{
+				try
+				{
+					portalPanel = new OASISPortalPanel(this);
+					portalDocker = new Docker("oasisportal", "OASIS Portals", portalPanel);
+					General.Interface.AddDocker(portalDocker);
+				}
+				catch (Exception ex)
+				{
+					General.ErrorLogger.Add(CodeImp.DoomBuilder.ErrorType.Error, "OASIS Portal panel: " + ex.Message);
+					return;
+				}
+			}
+			General.Interface.SelectDocker(portalDocker);
+		}
+
+		[BeginAction("ogengine_show_quest_weaver")]
+		public void OGEngineShowQuestWeaver()
+		{
+			if (questWeaverDocker == null)
+			{
+				try
+				{
+					questWeaverPanel = new OGQuestWeaverPanel();
+					questWeaverDocker = new Docker("ogquestweaver", "Quest Weaver", questWeaverPanel);
+					General.Interface.AddDocker(questWeaverDocker);
+				}
+				catch (Exception ex)
+				{
+					General.ErrorLogger.Add(CodeImp.DoomBuilder.ErrorType.Error, "Quest Weaver panel: " + ex.Message);
+					return;
+				}
+			}
+			General.Interface.SelectDocker(questWeaverDocker);
 		}
 
 		/// <summary>
@@ -1235,6 +1380,15 @@ namespace CodeImp.DoomBuilder.UDBScript
 		}
 
 		#endregion
+
+		// ── OASIS data structures ─────────────────────────────────────────────────
+
+		private sealed class PendingPortalData
+		{
+			public string DestinationGame;
+			public string DestinationMap;
+			public double DestinationX, DestinationY, DestinationZ;
+		}
 
 		[BeginAction("udbscriptexecute")]
 		public void ScriptExecute()

@@ -95,7 +95,7 @@
     <Compile Include="API\VisualCameraWrapper.cs" />
     <Compile Include="UDBScriptSettingsAttribute.cs" />
     <Compile Include="BuilderPlug.cs" />
-    <Compile Include="Controls\OASISStarPanel.cs">
+    <Compile Include="Controls\OGEnginePanel.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Controls\ScriptDockerControl.cs">
@@ -123,6 +123,13 @@
     <Compile Include="ScriptOption.cs" />
     <Compile Include="ScriptRunner.cs" />
     <Compile Include="OASISMapConverter.cs" />
+    <Compile Include="OASISMapSidecar.cs" />
+    <Compile Include="Controls\OASISPortalPanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\OGQuestWeaverPanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="Exceptions.cs" />
     <Compile Include="Windows\MessageForm.cs">
       <SubType>Form</SubType>
@@ -205,6 +212,11 @@
       <Project>{B42D5AA0-F9A6-4234-9C4B-A05B11A64851}</Project>
       <Name>BuilderModes</Name>
       <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\..\OGEditorSDK\OGEditorSDK.csproj">
+      <Project>{76CC7677-410D-4AB7-ADDA-293E2C78E0A2}</Project>
+      <Name>OGEditorSDK</Name>
+      <Private>True</Private>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
