@@ -224,6 +224,89 @@ namespace OGEditorSDK.Native
             return WriteUtf8(cls, outBuf, bufLen);
         }
 
+        // ── Map format conversion (OGMapFormat SDK) ───────────────────────────────
+
+        [UnmanagedCallersOnly(EntryPoint = "ogeditor_list_adapters")]
+        public static int ListAdapters(byte* outBuf, int bufLen)
+        {
+            try
+            {
+                var sb = new System.Text.StringBuilder("[");
+                bool first = true;
+                foreach (var a in OGEditorSDK.MapFormat.OGMapFormatRegistry.Instance.All)
+                {
+                    if (!first) sb.Append(',');
+                    first = false;
+                    sb.Append("{\"formatId\":\"").Append(Esc(a.FormatId)).Append("\"")
+                      .Append(",\"displayName\":\"").Append(Esc(a.DisplayName)).Append("\"")
+                      .Append(",\"family\":").Append((int)a.Family)
+                      .Append(",\"extensions\":[");
+                    bool fe = true;
+                    foreach (var ext in a.FileExtensions)
+                    {
+                        if (!fe) sb.Append(',');
+                        fe = false;
+                        sb.Append("\"").Append(Esc(ext)).Append("\"");
+                    }
+                    sb.Append("]}");
+                }
+                sb.Append("]");
+                return WriteUtf8(sb.ToString(), outBuf, bufLen);
+            }
+            catch { return -3; }
+        }
+
+        [UnmanagedCallersOnly(EntryPoint = "ogeditor_conversion_fidelity")]
+        public static float ConversionFidelity(byte* srcFormatId, byte* dstFormatId)
+        {
+            try
+            {
+                string src = Marshal.PtrToStringUTF8((IntPtr)srcFormatId) ?? "";
+                string dst = Marshal.PtrToStringUTF8((IntPtr)dstFormatId) ?? "";
+                return new OGEditorSDK.MapFormat.OGMapConverter().GetFidelity(src, dst);
+            }
+            catch { return -1f; }
+        }
+
+        [UnmanagedCallersOnly(EntryPoint = "ogeditor_convert_map")]
+        public static int ConvertMap(byte* srcPath, byte* srcFormatId,
+                                     byte* dstPath, byte* dstFormatId,
+                                     byte* outResultJson, int bufLen)
+        {
+            try
+            {
+                string sp  = Marshal.PtrToStringUTF8((IntPtr)srcPath)     ?? "";
+                string sf  = Marshal.PtrToStringUTF8((IntPtr)srcFormatId) ?? "";
+                string dp  = Marshal.PtrToStringUTF8((IntPtr)dstPath)     ?? "";
+                string df  = Marshal.PtrToStringUTF8((IntPtr)dstFormatId) ?? "";
+
+                var result = new OGEditorSDK.MapFormat.OGMapConverter().Convert(sp, sf, dp, df);
+
+                var sb = new System.Text.StringBuilder();
+                sb.Append("{\"success\":").Append(result.Success ? "true" : "false");
+                sb.Append(",\"fidelity\":").Append(result.Fidelity.ToString("F3",
+                    System.Globalization.CultureInfo.InvariantCulture));
+                sb.Append(",\"diagnostics\":[");
+                bool first = true;
+                foreach (var d in result.Diagnostics)
+                {
+                    if (!first) sb.Append(',');
+                    first = false;
+                    sb.Append("{\"severity\":\"").Append(d.Severity).Append("\"")
+                      .Append(",\"message\":\"").Append(Esc(d.Message)).Append("\"")
+                      .Append("}");
+                }
+                sb.Append("]}");
+                return WriteUtf8(sb.ToString(), outResultJson, bufLen);
+            }
+            catch (Exception ex)
+            {
+                string err = "{\"success\":false,\"fidelity\":0,\"diagnostics\":[{\"severity\":\"Error\",\"message\":\"" +
+                             Esc(ex.Message) + "\"}]}";
+                return WriteUtf8(err, outResultJson, bufLen);
+            }
+        }
+
         // ── Utility ───────────────────────────────────────────────────────────────
 
         [UnmanagedCallersOnly(EntryPoint = "ogeditor_version")]

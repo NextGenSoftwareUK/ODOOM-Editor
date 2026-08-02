@@ -226,5 +226,49 @@ namespace OGEditorSDK
                 if (!_reverseCache.ContainsKey(kv.Value))
                     _reverseCache[kv.Value] = kv.Key;
         }
+
+        // ── Format-aware lookup (used by OGMapFormat pipeline) ────────────────
+
+        /// <summary>
+        /// Return the OASIS thing type for a classname in the given format adapter ID
+        /// (e.g. "quake", "quake2", "duke3d"). Returns -1 if not found.
+        /// OASIS portal enter/exit classnames always return 5900 regardless of format.
+        /// </summary>
+        public static int ClassnameToDstThingType(string classname, string srcFormatId)
+        {
+            if (string.IsNullOrEmpty(classname)) return -1;
+            if (classname.Equals("oasis_portal_enter", System.StringComparison.OrdinalIgnoreCase) ||
+                classname.Equals("oasis_portal_exit",  System.StringComparison.OrdinalIgnoreCase))
+                return 5900;
+
+            var map = GetMapForFormat(srcFormatId);
+            if (map != null && map.TryGetValue(classname, out int tt)) return tt;
+            return -1;
+        }
+
+        /// <summary>
+        /// Return the native classname for an OASIS thing type in the given destination
+        /// format adapter ID. Falls back to the cross-game reverse lookup if the format
+        /// has no specific entry.
+        /// </summary>
+        public static string ThingTypeToDstClassname(int thingType, string dstFormatId)
+        {
+            var map = GetMapForFormat(dstFormatId);
+            if (map != null)
+                foreach (var kv in map)
+                    if (kv.Value == thingType) return kv.Key;
+            return NativeClassnameForThingType(thingType);
+        }
+
+        private static IReadOnlyDictionary<string, int> GetMapForFormat(string formatId)
+        {
+            if (string.IsNullOrEmpty(formatId)) return null;
+            if (formatId.Equals("quake",  System.StringComparison.OrdinalIgnoreCase)) return QuakeClassToDoom;
+            if (formatId.Equals("quake2", System.StringComparison.OrdinalIgnoreCase)) return Quake2ClassToDoom;
+            if (formatId.Equals("quake3", System.StringComparison.OrdinalIgnoreCase)) return Quake3ClassToDoom;
+            if (formatId.Equals("duke3d", System.StringComparison.OrdinalIgnoreCase)) return DukeActorToDoom;
+            if (formatId.Equals("wolf3d", System.StringComparison.OrdinalIgnoreCase)) return WolfActorToDoom;
+            return null;  // doom, udmf, doom3 use numeric thing IDs — no classname table
+        }
     }
 }
