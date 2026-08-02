@@ -41,6 +41,7 @@ namespace CodeImp.DoomBuilder.UDBScript
         private ComboBox comboAsset;
         private Button   btnPlace;
         private Button   btnRefresh;
+        private Button   btnCompanion;
         private Panel    separator;
         private Label    lblConfig;
         private Label    lblUrl;
@@ -144,6 +145,19 @@ namespace CodeImp.DoomBuilder.UDBScript
             new System.Windows.Forms.ToolTip().SetToolTip(btnRefresh, "Refresh catalog from STAR API");
 
             y += 36;
+            btnCompanion = new Button
+            {
+                Text      = "Edit in companion editor…",
+                Location  = new Point(6, y),
+                Width     = 240,
+                Height    = 28,
+                FlatStyle = FlatStyle.Standard,
+            };
+            btnCompanion.Click += BtnCompanion_Click;
+            new System.Windows.Forms.ToolTip().SetToolTip(btnCompanion,
+                "Open current map in TrenchBroom, NetRadiant, or DarkRadiant");
+
+            y += 36;
             separator = new Panel
             {
                 Location  = new Point(6, y),
@@ -203,6 +217,7 @@ namespace CodeImp.DoomBuilder.UDBScript
             Controls.Add(comboAsset);
             Controls.Add(btnPlace);
             Controls.Add(btnRefresh);
+            Controls.Add(btnCompanion);
             Controls.Add(separator);
             Controls.Add(lblConfig);
             Controls.Add(lblUrl);
@@ -411,6 +426,90 @@ namespace CodeImp.DoomBuilder.UDBScript
                 return;
             }
             plug.SetPendingStarPlacement(selected.ThingType, selected.DisplayName);
+        }
+
+        private void BtnCompanion_Click(object sender, EventArgs e)
+        {
+            // Derive game format from the open map's config, falling back to the panel combo.
+            string cfg = General.Map?.Options?.GameConfiguration ?? SelectedGame();
+            string gameFormat;
+            if      (cfg.IndexOf("quake3",   StringComparison.OrdinalIgnoreCase) >= 0 ||
+                     cfg.Equals("OQUAKE3",   StringComparison.OrdinalIgnoreCase))
+                gameFormat = "quake3";
+            else if (cfg.IndexOf("quake2",   StringComparison.OrdinalIgnoreCase) >= 0 ||
+                     cfg.Equals("OQUAKE2",   StringComparison.OrdinalIgnoreCase))
+                gameFormat = "quake2";
+            else if (cfg.IndexOf("quake",    StringComparison.OrdinalIgnoreCase) >= 0 ||
+                     cfg.Equals("OQUAKE",    StringComparison.OrdinalIgnoreCase))
+                gameFormat = "quake";
+            else if (cfg.IndexOf("doom3bfg", StringComparison.OrdinalIgnoreCase) >= 0 ||
+                     cfg.Equals("ODOOM3BFG", StringComparison.OrdinalIgnoreCase))
+                gameFormat = "doom3bfg";
+            else if (cfg.IndexOf("doom3",    StringComparison.OrdinalIgnoreCase) >= 0 ||
+                     cfg.Equals("ODOOM3",    StringComparison.OrdinalIgnoreCase))
+                gameFormat = "doom3";
+            else
+                gameFormat = cfg;
+
+            LaunchCompanionEditor(gameFormat);
+        }
+
+        private void LaunchCompanionEditor(string gameFormat)
+        {
+            string exePath = null;
+            string args    = null;
+
+            switch (gameFormat?.ToLower())
+            {
+                case "quake":
+                case "quake2":
+                    exePath = FindCompanionEditor("TrenchBroom", "TrenchBroom.exe");
+                    args    = $"\"{General.Map?.FilePathName}\"";
+                    break;
+                case "quake3":
+                    exePath = FindCompanionEditor("NetRadiant", "radiant.exe");
+                    args    = $"\"{General.Map?.FilePathName}\"";
+                    break;
+                case "doom3":
+                case "doom3bfg":
+                    exePath = FindCompanionEditor("DarkRadiant", "darkradiant.exe");
+                    args    = $"\"{General.Map?.FilePathName}\"";
+                    break;
+                default:
+                    MessageBox.Show($"No companion editor configured for format: {gameFormat}",
+                                    "OGEngine Editor", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    return;
+            }
+
+            if (exePath == null)
+            {
+                MessageBox.Show(
+                    "Companion editor not found. Install TrenchBroom, NetRadiant, or DarkRadiant and ensure it is on PATH.",
+                    "OGEngine Editor", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo(exePath, args ?? "")
+            {
+                UseShellExecute = true
+            });
+        }
+
+        private static string FindCompanionEditor(string appName, string exeName)
+        {
+            // 1. Check PATH
+            foreach (var dir in (Environment.GetEnvironmentVariable("PATH") ?? "").Split(';'))
+            {
+                var candidate = System.IO.Path.Combine(dir.Trim(), exeName);
+                if (System.IO.File.Exists(candidate)) return candidate;
+            }
+            // 2. Check common install dirs
+            foreach (var root in new[] { @"C:\Program Files", @"C:\Program Files (x86)" })
+            {
+                var candidate = System.IO.Path.Combine(root, appName, exeName);
+                if (System.IO.File.Exists(candidate)) return candidate;
+            }
+            return null;
         }
     }
 }
