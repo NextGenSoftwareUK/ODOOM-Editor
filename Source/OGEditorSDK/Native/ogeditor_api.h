@@ -199,6 +199,50 @@ OGEDITOR_API int ogeditor_thing_type_to_classname(
     char*          outBuf,
     int            bufLen);
 
+/* ── Map format conversion (OGMapFormat SDK) ──────────────────────────────── */
+
+/**
+ * Return a JSON array listing all registered format adapters.
+ *
+ * JSON element shape:
+ *   { "formatId": "quake2", "displayName": "Quake2",
+ *     "extensions": [".map"], "family": 0 }
+ * family: 0=Brush3D, 1=Sector2D, 2=Build2D, 3=Tile2D
+ */
+OGEDITOR_API int ogeditor_list_adapters(char* outBuf, int bufLen);
+
+/**
+ * Return the estimated conversion fidelity (0.0–1.0) from srcFormat to dstFormat.
+ * 1.0 = lossless; <0.6 = significant manual cleanup required.
+ * Returns -1.0 if either format is unknown.
+ */
+OGEDITOR_API float ogeditor_conversion_fidelity(
+    const char* srcFormatId,
+    const char* dstFormatId);
+
+/**
+ * Convert a map file from one format to another.
+ *
+ * @param srcPath       Absolute path to the source map file.
+ * @param srcFormatId   Source format adapter ID (e.g. "quake2", "doom").
+ * @param dstPath       Absolute path for the output file.
+ * @param dstFormatId   Destination format adapter ID.
+ * @param outResultJson Caller-allocated buffer that receives a JSON result:
+ *   { "success": true/false, "fidelity": 0.95,
+ *     "diagnostics": [{ "severity": "Warning", "message": "..." }, …] }
+ * @param bufLen        Size of outResultJson in bytes.
+ * @return OGEDITOR_OK on success (even if diagnostics contain warnings).
+ *         OGEDITOR_ERR_IO if source could not be read or destination written.
+ *         OGEDITOR_ERR_NOT_FOUND if an adapter ID is unknown.
+ */
+OGEDITOR_API int ogeditor_convert_map(
+    const char* srcPath,
+    const char* srcFormatId,
+    const char* dstPath,
+    const char* dstFormatId,
+    char*       outResultJson,
+    int         bufLen);
+
 /* ── Utility ──────────────────────────────────────────────────────────────── */
 
 /**
