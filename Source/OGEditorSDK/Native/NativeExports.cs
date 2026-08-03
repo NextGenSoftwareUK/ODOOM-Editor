@@ -1,13 +1,13 @@
-// NativeExports.cs — [UnmanagedCallersOnly] exports for ogeditor_api.dll
+﻿// NativeExports.cs — [UnmanagedCallersOnly] exports for OGEditorClient.dll
 //
-// Each export exactly mirrors the C signature declared in ogeditor_api.h.
+// Each export exactly mirrors the C signature declared in OGEditorClient.h.
 // Compiled with NativeAOT (dotnet publish --configuration Release) to produce
-// a self-contained ogeditor_api.dll (Windows) / libogeditor_api.so (Linux)
+// a self-contained OGEditorClient.dll (Windows) / libOGEditorClient.so (Linux)
 // with no .NET runtime dependency — C++ editors load it like any Win32 DLL.
 //
 // Build:
 //   dotnet publish OGEditorSDK.Native.csproj -r win-x64 -c Release
-//   → bin\Release\net8.0\win-x64\publish\ogeditor_api.dll + ogeditor_api.h
+//   → bin\Release\net8.0\win-x64\publish\OGEditorClient.dll + OGEditorClient.h
 
 using System;
 using System.Collections.Generic;
