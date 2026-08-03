@@ -128,6 +128,8 @@ namespace CodeImp.DoomBuilder.UDBScript
 		private Docker portalDocker;
 		private OGQuestWeaverPanel questWeaverPanel;
 		private Docker questWeaverDocker;
+		private OGSTARNETQuestBuilderPanel starnetBuilderPanel;
+		private Docker starnetBuilderDocker;
 		// Click-to-place: after user selects asset in STAR dialog, next map click places it
 		private int? pendingStarThingType;
 		private string pendingStarAssetName;
@@ -226,6 +228,11 @@ namespace CodeImp.DoomBuilder.UDBScript
 				showQuestWeaverItem.Click += (s, e) => General.Interface.InvokeTaggedAction(s, e);
 				menuStar.DropDownItems.Add(showQuestWeaverItem);
 
+				var showStarnetBuilderItem = new ToolStripMenuItem("Open STARNET Quest Builder (WebView2)");
+				showStarnetBuilderItem.Tag = "ogengine_show_starnet_builder";
+				showStarnetBuilderItem.Click += (s, e) => General.Interface.InvokeTaggedAction(s, e);
+				menuStar.DropDownItems.Add(showStarnetBuilderItem);
+
 				menuStar.DropDownItems.Add(new ToolStripSeparator());
 				menuStar.DropDownItems.Add(convQ2D);
 				menuStar.DropDownItems.Add(convD2Q);
@@ -244,6 +251,16 @@ namespace CodeImp.DoomBuilder.UDBScript
 				convQ32D.Tag = "ogengine_convert_q3todoom";
 				convQ32D.Click += (s, e) => General.Interface.InvokeTaggedAction(s, e);
 				menuStar.DropDownItems.Add(convQ32D);
+
+				var convDuke2D = new ToolStripMenuItem("Import ODuke3D actor list → ODOOM...");
+				convDuke2D.Tag = "ogengine_convert_duke2doom";
+				convDuke2D.Click += (s, e) => General.Interface.InvokeTaggedAction(s, e);
+				menuStar.DropDownItems.Add(convDuke2D);
+
+				var convWolf2D = new ToolStripMenuItem("Import OWolf3D DECORATE actor list → ODOOM...");
+				convWolf2D.Tag = "ogengine_convert_wolf2doom";
+				convWolf2D.Click += (s, e) => General.Interface.InvokeTaggedAction(s, e);
+				menuStar.DropDownItems.Add(convWolf2D);
 
 				var exportPortals = new ToolStripMenuItem("Export OASIS Portals → Quake .map snippet...");
 				exportPortals.Tag = "ogengine_export_portals_quake";
@@ -389,6 +406,7 @@ namespace CodeImp.DoomBuilder.UDBScript
 				if (ogEngineDocker != null) General.Interface.RemoveDocker(ogEngineDocker);
 				if (portalDocker != null) General.Interface.RemoveDocker(portalDocker);
 				if (questWeaverDocker != null) General.Interface.RemoveDocker(questWeaverDocker);
+				if (starnetBuilderDocker != null) General.Interface.RemoveDocker(starnetBuilderDocker);
 			}
 			catch (Exception ex)
 			{
@@ -404,6 +422,8 @@ namespace CodeImp.DoomBuilder.UDBScript
 			portalDocker = null;
 			questWeaverPanel = null;
 			questWeaverDocker = null;
+			starnetBuilderPanel = null;
+			starnetBuilderDocker = null;
 			base.Dispose();
 
 			// This must be called to remove bound methods for actions.
@@ -1023,6 +1043,18 @@ namespace CodeImp.DoomBuilder.UDBScript
 			OASISMapConverter.ConvertQuake3ToDoom(General.Interface);
 		}
 
+		[BeginAction("ogengine_convert_duke2doom")]
+		public void OGEngineConvertDukeToDoom()
+		{
+			OASISMapConverter.ConvertDukeToDoom(General.Interface);
+		}
+
+		[BeginAction("ogengine_convert_wolf2doom")]
+		public void OGEngineConvertWolfToDoom()
+		{
+			OASISMapConverter.ConvertWolfToDoom(General.Interface);
+		}
+
 		[BeginAction("ogengine_export_portals_quake")]
 		public void OGEngineExportPortalsToQuake()
 		{
@@ -1047,6 +1079,26 @@ namespace CodeImp.DoomBuilder.UDBScript
 				}
 			}
 			General.Interface.SelectDocker(portalDocker);
+		}
+
+		[BeginAction("ogengine_show_starnet_builder")]
+		public void OGEngineShowStarnetBuilder()
+		{
+			if (starnetBuilderDocker == null)
+			{
+				try
+				{
+					starnetBuilderPanel = new OGSTARNETQuestBuilderPanel();
+					starnetBuilderDocker = new Docker("ogstarnetbuilder", "STARNET Builder", starnetBuilderPanel);
+					General.Interface.AddDocker(starnetBuilderDocker);
+				}
+				catch (Exception ex)
+				{
+					General.ErrorLogger.Add(CodeImp.DoomBuilder.ErrorType.Error, "STARNET Builder panel failed: " + ex.Message);
+					return;
+				}
+			}
+			General.Interface.SelectDocker(starnetBuilderDocker);
 		}
 
 		[BeginAction("ogengine_show_quest_weaver")]

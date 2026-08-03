@@ -90,8 +90,9 @@ namespace ExtractOquakeSprites
 
 		static int Main(string[] args)
 		{
-			bool listOnly = args.Length > 0 && string.Equals(args[0], "--list", StringComparison.OrdinalIgnoreCase);
-			int argStart = listOnly ? 1 : 0;
+			bool listOnly   = args.Length > 0 && string.Equals(args[0], "--list",   StringComparison.OrdinalIgnoreCase);
+			bool renderMode = args.Length > 0 && string.Equals(args[0], "--render", StringComparison.OrdinalIgnoreCase);
+			int argStart = (listOnly || renderMode) ? 1 : 0;
 			string id1Path = args.Length > argStart ? args[argStart] : ResolveDefaultId1Path();
 			string outPath = args.Length > argStart + 1 ? args[argStart + 1] : Path.Combine(
 				Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location),
@@ -101,7 +102,7 @@ namespace ExtractOquakeSprites
 			string pak0Path = Path.Combine(id1Path, "pak0.pak");
 			string pak1Path = Path.Combine(id1Path, "pak1.pak");
 
-			Console.WriteLine("OQUAKE sprite extractor");
+			Console.WriteLine("OQUAKE sprite extractor" + (renderMode ? " [MDL 3D render mode]" : " [skin crop mode]"));
 			Console.WriteLine("  id1 path: " + id1Path);
 			Console.WriteLine("  output:   " + outPath);
 			if (!File.Exists(pak0Path) && !File.Exists(pak1Path))
@@ -146,7 +147,9 @@ namespace ExtractOquakeSprites
 			var allMappings = new List<(string model, int uniqueType)>();
 			allMappings.AddRange(ModelToUniqueType);
 			allMappings.AddRange(ModelToUniqueTypeHealth);
+			// Cache parsed MDL geometry (shared by entries that reuse the same model).
 			var skinCache = new Dictionary<string, (byte[] rgba, int w, int h)>(StringComparer.OrdinalIgnoreCase);
+			var geoCache  = new Dictionary<string, (float[] verts, int[][] sv, int[][] tris, byte[] skin, int sw, int sh)>(StringComparer.OrdinalIgnoreCase);
 			int count = 0;
 			foreach (var entry in allMappings)
 			{
@@ -158,50 +161,133 @@ namespace ExtractOquakeSprites
 					Console.WriteLine("  skip " + pakName + " (type " + uniqueType + "): not in pak");
 					continue;
 				}
-				byte[] skinRgba;
-				int w, h;
-				if (skinCache.TryGetValue(pakName, out var cached))
-				{
-					skinRgba = cached.rgba;
-					w = cached.w;
-					h = cached.h;
-				}
-				else
-				{
-					string failReason;
-					skinRgba = ExtractFirstSkin(mdlData, out failReason);
-					if (skinRgba == null)
-					{
-						Console.WriteLine("  skip " + pakName + ": " + failReason);
-						continue;
-					}
-					w = BitConverter.ToInt32(mdlData, 52);
-					h = BitConverter.ToInt32(mdlData, 56);
-					skinCache[pakName] = (skinRgba, w, h);
-				}
-				int fullW = w, fullH = h;
-				byte[] fullRgba = skinRgba;
+
 				int targetMaxSize = IsCompactKeyType(uniqueType) ? TARGET_MAX_SIZE_KEYS : TARGET_MAX_SIZE_NON_KEYS;
-				ScaleToTargetSize(ref fullRgba, ref fullW, ref fullH, targetMaxSize);
-				if (IsCompactKeyType(uniqueType))
-					PrepareSpriteAlpha(ref fullRgba, fullW, fullH);
+
+				if (renderMode && !IsCompactKeyType(uniqueType))
+				{
+					// ── 3D MDL render mode ─────────────────────────────────────────
+					(float[] verts, int[][] sv, int[][] tris, byte[] skin, int sw, int sh) geo;
+					if (!geoCache.TryGetValue(pakName, out geo))
+					{
+						string parseErr;
+						geo = ParseMdlGeometry(mdlData, out parseErr);
+						if (geo.verts == null)
+						{
+							Console.WriteLine("  skip " + pakName + " (type " + uniqueType + "): MDL parse: " + parseErr);
+							continue;
+						}
+						geoCache[pakName] = geo;
+					}
+					int renderSize = targetMaxSize;
+					byte[] rendered = OQuakeMdlRenderer.Render(
+						geo.skin, geo.sw, geo.sh,
+						geo.verts, geo.sv, geo.tris,
+						renderSize, renderSize);
+					RemoveBorderConnectedBackground(rendered, renderSize, renderSize);
+					WritePng(Path.Combine(outPath, uniqueType + ".png"), renderSize, renderSize, rendered);
+					WritePng(Path.Combine(spritesFullPath, uniqueType + ".png"), renderSize, renderSize, rendered);
+					Console.WriteLine("  " + pakName + " rendered " + renderSize + "x" + renderSize + " -> " + uniqueType + ".png [MDL render]");
+					count++;
+				}
 				else
-					RemoveBorderConnectedBackground(fullRgba, fullW, fullH);
-				// Save full image to SpritesFull
-				WritePng(Path.Combine(spritesFullPath, uniqueType + ".png"), fullW, fullH, fullRgba);
-				// Crop to first half (front side) for editor Sprites folder
-				byte[] frontRgba; int frontW, frontH;
-				CropToFirstHalf(fullRgba, fullW, fullH, out frontRgba, out frontW, out frontH);
-				if (IsCompactKeyType(uniqueType))
-					PrepareSpriteAlpha(ref frontRgba, frontW, frontH);
-				else
-					RemoveBorderConnectedBackground(frontRgba, frontW, frontH);
-				WritePng(Path.Combine(outPath, uniqueType + ".png"), frontW, frontH, frontRgba);
-				Console.WriteLine("  " + pakName + " " + w + "x" + h + " -> " + uniqueType + ".png (target " + targetMaxSize + ", front " + frontW + "x" + frontH + ", full " + fullW + "x" + fullH + ")");
-				count++;
+				{
+					// ── Skin crop mode (original) ──────────────────────────────────
+					byte[] skinRgba;
+					int w, h;
+					if (skinCache.TryGetValue(pakName, out var cached))
+					{
+						skinRgba = cached.rgba;
+						w = cached.w;
+						h = cached.h;
+					}
+					else
+					{
+						string failReason;
+						skinRgba = ExtractFirstSkin(mdlData, out failReason);
+						if (skinRgba == null)
+						{
+							Console.WriteLine("  skip " + pakName + ": " + failReason);
+							continue;
+						}
+						w = BitConverter.ToInt32(mdlData, 52);
+						h = BitConverter.ToInt32(mdlData, 56);
+						skinCache[pakName] = (skinRgba, w, h);
+					}
+					int fullW = w, fullH = h;
+					byte[] fullRgba = (byte[])skinRgba.Clone();
+					ScaleToTargetSize(ref fullRgba, ref fullW, ref fullH, targetMaxSize);
+					if (IsCompactKeyType(uniqueType))
+						PrepareSpriteAlpha(ref fullRgba, fullW, fullH);
+					else
+						RemoveBorderConnectedBackground(fullRgba, fullW, fullH);
+					WritePng(Path.Combine(spritesFullPath, uniqueType + ".png"), fullW, fullH, fullRgba);
+					byte[] frontRgba; int frontW, frontH;
+					CropToFirstHalf(fullRgba, fullW, fullH, out frontRgba, out frontW, out frontH);
+					if (IsCompactKeyType(uniqueType))
+						PrepareSpriteAlpha(ref frontRgba, frontW, frontH);
+					else
+						RemoveBorderConnectedBackground(frontRgba, frontW, frontH);
+					WritePng(Path.Combine(outPath, uniqueType + ".png"), frontW, frontH, frontRgba);
+					Console.WriteLine("  " + pakName + " " + w + "x" + h + " -> " + uniqueType + ".png (front " + frontW + "x" + frontH + ")");
+					count++;
+				}
 			}
-			Console.WriteLine("Done. Wrote " + count + " front-half sprites to " + outPath + ", " + count + " full to " + spritesFullPath);
+			string modeLabel = renderMode ? "3D-rendered" : "front-half";
+			Console.WriteLine("Done. Wrote " + count + " " + modeLabel + " sprites to " + outPath);
 			return 0;
+		}
+
+		/// <summary>Parse MDL geometry for 3D rendering: skin BGRA, decoded frame 0 verts, stvert UV, triangle list.</summary>
+		static (float[] verts, int[][] sv, int[][] tris, byte[] skin, int sw, int sh) ParseMdlGeometry(byte[] mdl, out string error)
+		{
+			error = null;
+			var empty = ((float[])null, (int[][])null, (int[][])null, (byte[])null, 0, 0);
+			if (mdl.Length < 84) { error = "too short"; return empty; }
+			int ident = BitConverter.ToInt32(mdl, 0);
+			if (ident != IDPOLYHEADER) { error = "bad ident"; return empty; }
+			int ver = BitConverter.ToInt32(mdl, 4);
+			if (ver != ALIAS_VERSION) { error = "bad version " + ver; return empty; }
+
+			float[] scale = new float[]
+			{
+				BitConverter.ToSingle(mdl, 8),
+				BitConverter.ToSingle(mdl, 12),
+				BitConverter.ToSingle(mdl, 16)
+			};
+			float[] scaleOrigin = new float[]
+			{
+				BitConverter.ToSingle(mdl, 20),
+				BitConverter.ToSingle(mdl, 24),
+				BitConverter.ToSingle(mdl, 28)
+			};
+			int numskins   = BitConverter.ToInt32(mdl, 48);
+			int skinwidth  = BitConverter.ToInt32(mdl, 52);
+			int skinheight = BitConverter.ToInt32(mdl, 56);
+			int numverts   = BitConverter.ToInt32(mdl, 60);
+			int numtris    = BitConverter.ToInt32(mdl, 64);
+			int numframes  = BitConverter.ToInt32(mdl, 68);
+
+			if (skinwidth <= 0 || skinheight <= 0 || numskins < 1 || numverts < 3 || numtris < 1)
+			{ error = "bad header values"; return empty; }
+
+			string skinErr;
+			byte[] skin = ExtractFirstSkin(mdl, out skinErr);
+			if (skin == null) { error = "skin: " + skinErr; return empty; }
+
+			int stVertsOff, trisOff;
+			int frameVertsOff = OQuakeMdlRenderer.FindFrameVertsOffset(mdl, numskins, skinwidth, skinheight, numverts, numtris, numframes, out stVertsOff, out trisOff);
+			if (frameVertsOff < 0) { error = "could not find frame verts"; return empty; }
+			if (stVertsOff < 0 || trisOff < 0) { error = "bad stvert/tri offsets"; return empty; }
+			if (frameVertsOff + numverts * 4 > mdl.Length) { error = "frame verts truncated"; return empty; }
+			if (trisOff + numtris * 16 > mdl.Length) { error = "triangle data truncated"; return empty; }
+			if (stVertsOff + numverts * 12 > mdl.Length) { error = "stvert data truncated"; return empty; }
+
+			float[] verts = OQuakeMdlRenderer.DecodeFrameVerts(mdl, numverts, scale, scaleOrigin, frameVertsOff);
+			int[][] sv    = OQuakeMdlRenderer.ParseStVerts(mdl, stVertsOff, numverts);
+			int[][] tris  = OQuakeMdlRenderer.ParseTriangles(mdl, trisOff, numtris);
+
+			return (verts, sv, tris, skin, skinwidth, skinheight);
 		}
 
 		static string ResolveDefaultId1Path()
