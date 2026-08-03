@@ -79,6 +79,14 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="Microsoft.Web.WebView2.Core">
+      <HintPath>$(SolutionDir)packages\Microsoft.Web.WebView2.1.0.2739.15\lib\net45\Microsoft.Web.WebView2.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Web.WebView2.WinForms">
+      <HintPath>$(SolutionDir)packages\Microsoft.Web.WebView2.1.0.2739.15\lib\net45\Microsoft.Web.WebView2.WinForms.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="API\Angle2DWrapper.cs" />
@@ -128,6 +136,9 @@
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Controls\OGQuestWeaverPanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\OGSTARNETQuestBuilderPanel.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Exceptions.cs" />

@@ -223,6 +223,41 @@ namespace CodeImp.DoomBuilder.UDBScript
 			}
 		}
 
+		/// <summary>
+		/// Import a Wolf3D ECWolf DECORATE actor list (one classname per line) and output
+		/// Doom thing placements. DECORATE classnames are mapped via WolfActorToDoom.
+		/// </summary>
+		public static void ConvertWolfToDoom(IWin32Window owner)
+		{
+			using (var ofd = new OpenFileDialog())
+			{
+				ofd.Title = "Select ECWolf DECORATE actor list (.txt) — one classname per line";
+				ofd.Filter = "Text file (*.txt)|*.txt|All files (*.*)|*.*";
+				if (ofd.ShowDialog(owner) != DialogResult.OK) return;
+				string inPath = ofd.FileName;
+				string outPath = Path.Combine(Path.GetDirectoryName(inPath), Path.GetFileNameWithoutExtension(inPath) + "_doom_things.txt");
+				try
+				{
+					var sb = new StringBuilder();
+					sb.AppendLine("# OASIS STAR – Doom thing list from Wolf3D DECORATE actor list: " + Path.GetFileName(inPath));
+					sb.AppendLine("# Format: x y type (note: coordinates from Wolf3D grid maps are not extracted here)");
+					foreach (string line in File.ReadAllLines(inPath))
+					{
+						string actor = line.Trim();
+						if (string.IsNullOrEmpty(actor) || actor.StartsWith("#")) continue;
+						if (WolfActorToDoom.TryGetValue(actor, out int doomType))
+							sb.AppendLine("0 0 " + doomType + " # " + actor);
+					}
+					File.WriteAllText(outPath, sb.ToString());
+					General.Interface.DisplayStatus(StatusType.Info, "OASIS STAR: Exported thing list to " + outPath);
+				}
+				catch (Exception ex)
+				{
+					MessageBox.Show("Conversion failed: " + ex.Message, "OASIS STAR", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+				}
+			}
+		}
+
 		/// <summary>Convert current Doom map (or selected WAD) to Quake .map point entities.</summary>
 		public static void ConvertDoomToQuake(IWin32Window owner)
 		{
