@@ -6,12 +6,12 @@ namespace CodeImp.DoomBuilder.UDBScript
 {
 	/// <summary>
 	/// UDB docker panel that embeds the STARNET Quest Builder web app via WebView2 (Chromium/Edge).
-	/// Default URL: http://localhost:3000  — configurable via the URL bar.
+	/// Default URL: the live STARNET Quest Builder — configurable via the URL bar (e.g. http://localhost:3000/quest-builder for local dev).
 	/// Requires: Microsoft.Web.WebView2 NuGet package + WebView2 Runtime (ships with Edge / modern Windows).
 	/// </summary>
 	public sealed class OGSTARNETQuestBuilderPanel : UserControl
 	{
-		private const string DEFAULT_URL = "http://localhost:3000";
+		private const string DEFAULT_URL = "https://store.starnet.oasisomniverse.one/quest-builder";
 
 		private TableLayoutPanel layout;
 		private Panel toolbar;
